@@ -1,5 +1,5 @@
 ﻿
-using StudentCourseManagement.giaodien;
+
 using System;
 using System.Windows.Forms;
 
@@ -12,7 +12,7 @@ namespace QuanLySinhVien
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new frmDangNhap());
+            
         }
     }
 }
