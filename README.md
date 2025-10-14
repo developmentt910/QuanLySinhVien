@@ -8,3 +8,5 @@ Các thư mục chính:
 - **TienIch** – các hàm tiện ích  
 
 💡 Mỗi thành viên sẽ clone repo, tạo nhánh riêng (`feature/<tên>`) và phát triển chức năng của mình.
+dit me tk minh minh dau buoi re rach
+
