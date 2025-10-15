@@ -6,7 +6,7 @@ global using System.Threading.Tasks;
 global using Microsoft.Data.SqlClient;
 global using System.Data;
 global using Microsoft.Extensions.Configuration;
-
+global using System.Windows.Forms;
 
 
 

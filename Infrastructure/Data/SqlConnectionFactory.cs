@@ -1,13 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using Microsoft.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Threading;
-
-namespace StudentCourseManagement.Database
+﻿namespace StudentCourseManagement.Infrastructure.Data
 {
     public class SqlConnectionFactory
     {

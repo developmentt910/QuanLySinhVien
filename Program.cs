@@ -1,8 +1,5 @@
-﻿
-
-using System;
-using System.Windows.Forms;
-
+﻿using System.Windows.Forms;
+using StudentCourseManagement.Forms.Auth;
 namespace StudentCourseManagement
 {
     internal static class Program
@@ -13,7 +10,7 @@ namespace StudentCourseManagement
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new StudentCourseManagement.Forms.Auth.FrmLogin());
+            Application.Run(new FrmLogin());
         }
     }
 }

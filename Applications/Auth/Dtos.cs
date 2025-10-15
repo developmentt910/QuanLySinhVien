@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StudentCourseManagement.Application.Validation
+namespace StudentCourseManagement.Applications.Auth
 {
-    class RegexRules
+    class Dtos
     {
     }
 }

@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace StudentCourseManagement.Domain.Abstractions.Time
 {
-    interface IClock
+    public interface IClock
     {
+        DateTime UtcNow();
     }
 }

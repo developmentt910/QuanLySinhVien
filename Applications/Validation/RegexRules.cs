@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StudentCourseManagement.Domain.Entities
+namespace StudentCourseManagement.Applications.Validation
 {
-    class ẼamItem
+    class RegexRules
     {
     }
 }

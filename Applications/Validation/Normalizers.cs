@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StudentCourseManagement.Application.Security
+namespace StudentCourseManagement.Applications.Validation
 {
-    class CaptchaVerifier
+    class Normalizers
     {
     }
 }

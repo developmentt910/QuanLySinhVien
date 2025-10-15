@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StudentCourseManagement.Application.Auth
+namespace StudentCourseManagement.Applications.Security
 {
-    class PasswordChangeService
+    class CaptchaVerifier
     {
     }
 }
