@@ -1,9 +1,8 @@
-﻿
-
 using System;
+
 using System.Windows.Forms;
 
-namespace QuanLySinhVien
+namespace StudentCourseManagement
 {
     internal static class Program
     {
