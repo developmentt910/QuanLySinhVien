@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net8.0-windows</TargetFramework>
+		<UseWindowsForms>true</UseWindowsForms>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+
+		<RootNamespace>StudentCourseManagement</RootNamespace>
+		<AssemblyName>StudentCourseManagement</AssemblyName>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.2" />
+		<PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.3" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="appsettings.json" CopyToOutputDirectory="Always" />
+		<None Include="App.config" CopyToOutputDirectory="Always" />
+		<None Include="Properties\Settings.settings" />
+		<None Include="README.md" />
+		<None Include=".gitignore" />
+		<None Include="full_export.sql" />
+	</ItemGroup>
+
+</Project>
