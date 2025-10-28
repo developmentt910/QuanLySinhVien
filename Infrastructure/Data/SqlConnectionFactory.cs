@@ -1,6 +1,8 @@
-﻿namespace StudentCourseManagement.Infrastructure.Data
+﻿using System.Diagnostics;
+
+namespace StudentCourseManagement.Infrastructure.Data
 {
-    public class SqlConnectionFactory
+    public sealed class SqlConnectionFactory
     {
         private readonly string _connectionString;
         public SqlConnectionFactory(IConfiguration config)

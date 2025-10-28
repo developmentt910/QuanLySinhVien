@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace StudentCourseManagement.Domain.Abstractions.Repositories
 {
-    interface IPrivilegesWriter
+    public interface IPrivilegesWriter
     {
+        Task MarkUsedAsync(Guid privilegeId);
     }
 }

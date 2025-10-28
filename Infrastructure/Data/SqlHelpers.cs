@@ -59,6 +59,8 @@ namespace StudentCourseManagement.Infrastructure.Data
             params SqlParameter[] ps
             )
         {
+            EnsureOpen(conn);
+
             await using var cmd = new SqlCommand(sql, conn, tx)
             {
                 CommandType = commandType
@@ -89,6 +91,9 @@ namespace StudentCourseManagement.Infrastructure.Data
             params SqlParameter[] ps
             )
         {
+
+            EnsureOpen(conn);
+
             var cmd = new SqlCommand(sql, conn, tx)
             {
                 CommandType = commandType
@@ -107,7 +112,7 @@ namespace StudentCourseManagement.Infrastructure.Data
 
 
         // sql injection 
-        public static SqlParameter P(string name, object? value, SqlDbType type, int size = 0)
+        public static SqlParameter P (string name, object? value, SqlDbType type, int size = 0)
         {
             var p = new SqlParameter(name, type)
             {
@@ -115,9 +120,11 @@ namespace StudentCourseManagement.Infrastructure.Data
 
             };
 
-            if (size < 0) p.Size = size;
+            if (size > 0) p.Size = size;
             return p;
 
         }
+
+
     }
 }

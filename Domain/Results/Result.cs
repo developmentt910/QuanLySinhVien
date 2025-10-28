@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace StudentCourseManagement.Domain.Results
+﻿namespace StudentCourseManagement.Domain.Results
 {
     public readonly struct Result
     {
@@ -12,7 +6,9 @@ namespace StudentCourseManagement.Domain.Results
         public string? Error { get; }
         private Result(bool ok, string? error) { Ok = ok; Error = error; }
         public static Result Success() => new(true, null);
-        public static Result Fail(string e) => new(false, e);
+        public static Result Fail(string error) => string.IsNullOrWhiteSpace(error)
+           ? throw new ArgumentException("error must not be empty", nameof(error))
+           : new(false, error);
     }
 
     public readonly struct Result<T>

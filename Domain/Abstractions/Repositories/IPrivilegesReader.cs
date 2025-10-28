@@ -6,7 +6,14 @@ using System.Threading.Tasks;
 
 namespace StudentCourseManagement.Domain.Abstractions.Repositories
 {
-    interface IPrivilegesReader
+    public interface IPrivilegesReader
     {
+        Task<(
+            Guid Id,
+            byte[] CodeHash,
+            byte[] salt,
+            DateTime? ExpiresAtUtc,
+            bool IsUsed
+           )?> GetLastestAsync();
     }
 }

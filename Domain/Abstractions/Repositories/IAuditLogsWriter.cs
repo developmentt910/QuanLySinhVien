@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace StudentCourseManagement.Domain.Abstractions.Repositories
 {
-    interface IAuditLogsWriter
+    public interface IAuditLogsWriter
     {
+        Task WriteAsync (AuditLogEntry entry, CancellationToken ct = default);
+        Task WriteManyAsync(IEnumerable<AuditLogEntry> entries, CancellationToken ct = default);
+
     }
 }

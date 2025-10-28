@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace StudentCourseManagement.Domain.Abstractions.Services
 {
-    interface IEmailService
+    public interface IEmailService
     {
+        Task SendAsync (string toEmail, string subject, string body, CancellationToken ct = default);
     }
 }

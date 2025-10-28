@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace StudentCourseManagement.Domain.Abstractions.Repositories
 {
-    interface IOtpPinsReader
+    public interface IOtpPinsReader
     {
+        Task<(long Id, byte[] CodeHash, byte[] Salt, DateTime ExpiresAtUtc, int AttemptCount)?>
+            GetLastActiveAsync(Guid userId, string purpose, CancellationToken ct = default);
     }
 }

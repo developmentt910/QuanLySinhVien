@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace StudentCourseManagement.Domain.Abstractions.Services
 {
-    interface ICaptchaService
+    public interface ICaptchaService
     {
+        bool Verify(string token, string userInput, CancellationToken ct = default);
+        string GenerateCaptcha();
     }
 }
