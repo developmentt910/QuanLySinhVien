@@ -20,7 +20,7 @@ namespace StudentCourseManagement.Infrastructure.Repositories.SqlServer.Auth
         {
             await using var conn = await _db.OpenAsync().ConfigureAwait(false);
             const string sql = @"select top 1 Id, CodeHash, Salt, ExpiresAtUtc, CreatedAtUtc
-                                 from dbo.MaDacQuyen
+                                 from dbo.AdminPrivilegeCode
                                  order by CreatedAtUtc desc";
 
             await using var r = await SqlHelpers.ExecReaderAsync(

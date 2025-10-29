@@ -10,7 +10,7 @@ namespace StudentCourseManagement.Domain.Abstractions.Repositories
         Task LinkRosterUsedAsync(Guid rosterId, CancellationToken ct = default);    
         Task MarkEmailVerifiedAsync(Guid id, DateTime verifiedAtUtc, CancellationToken ct = default);
 
-        Task UpdateStudentAsync(User u, CancellationToken ct = default);
+        //Task UpdateStudentAsync(User u, CancellationToken ct = default);
 
     }
 }

@@ -1,6 +1,7 @@
 ﻿
 using StudentCourseManagement.Applications.Security;
 using StudentCourseManagement.Infrastructure.Repositories.SqlServer.Auth;
+using StudentCourseManagement.Presentation.Forms.Admin;
 using StudentCourseManagement.Presentation.WinForms.Bootstrap;
 
 namespace StudentCourseManagement.Forms.Auth
@@ -57,6 +58,10 @@ namespace StudentCourseManagement.Forms.Auth
             }
 
             MessageBox.Show($"Chào mừng {result.Value.FullName}!", "Đăng nhập thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            FrmAdminDashboard adminForm = new FrmAdminDashboard();
+            adminForm.FormClosed += (s, args) => this.Close();
+            adminForm.Show();
+            this.Hide();
         }
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

@@ -26,20 +26,26 @@ namespace StudentCourseManagement.Applications.Validation
             if(string.IsNullOrEmpty(code)) return string.Empty;
             return code.Trim().ToLowerInvariant();
         }
-        public static string? NormalizePhoneToVN(string input)
+        public static string NormalizePhoneToVN(string input)
         {
-           if (string.IsNullOrWhiteSpace(input)) return string.Empty;
-           var cleaned = new String(input.Where(c=> char.IsDigit(c) || c == '+').ToArray());
-           if (cleaned.StartsWith("0") && cleaned.Length == 10)
-                 return "+84" + cleaned.Substring(1);
+            if (string.IsNullOrWhiteSpace(input)) return string.Empty;
 
-            if (cleaned.StartsWith("+84")) return cleaned;
+            var cleaned = new string(input.Where(c => char.IsDigit(c) || c == '+').ToArray());
 
-            if (cleaned.StartsWith("+84") && cleaned.Length == 9)
-                return "+" + cleaned;
+            if (cleaned.StartsWith("0") && cleaned.Length == 10)
+                return "+84" + cleaned.Substring(1);
 
-            return cleaned;
-                    
+            if (cleaned.StartsWith("+84"))
+            {
+                if (cleaned.Length == 12) return cleaned;
+                if (cleaned.Length == 11) return "+84" + cleaned.Substring(3);
+            }
+
+            if (cleaned.Length == 9)
+                return "+849" + cleaned; 
+
+            return cleaned; 
         }
+
     }
 }

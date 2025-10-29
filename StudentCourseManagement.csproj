@@ -33,4 +33,8 @@
 		<None Include=".gitignore" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Applications\StudentService\" />
+	</ItemGroup>
+
 </Project>

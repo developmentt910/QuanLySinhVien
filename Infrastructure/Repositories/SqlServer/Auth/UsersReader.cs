@@ -1,4 +1,7 @@
 ﻿
+using StudentCourseManagement.Applications.Validation;
+using StudentCourseManagement.Domain.Results;
+
 namespace StudentCourseManagement.Infrastructure.Repositories.SqlServer.Auth
 {
     public sealed class UsersReader : IUsersReader
@@ -8,7 +11,7 @@ namespace StudentCourseManagement.Infrastructure.Repositories.SqlServer.Auth
 
         private const string UserColumns = @"
             Id, StudentCode, FullName, EmailNormalized,
-            PhoneE164, CCCD, Role, RosterId,
+            PhoneE164, CCCD, Role, RosterId, Gender, Address,
             PasswordHash, EmailVerified, IsLocked";
 
         public async Task<User?> FindByEmailAsync(string emailNormalized, CancellationToken ct = default)
@@ -94,6 +97,7 @@ namespace StudentCourseManagement.Infrastructure.Repositories.SqlServer.Auth
 
         public async Task<bool> StudentCodeExistsAsync(string studentCode, CancellationToken ct = default)
         {
+           
             await using var conn = await _db.OpenAsync(ct).ConfigureAwait(false);
             const string sql = @"SELECT TOP 1 1 FROM dbo.Users WHERE StudentCode = @s";
 

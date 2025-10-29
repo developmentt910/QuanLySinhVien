@@ -18,7 +18,7 @@ namespace StudentCourseManagement.Infrastructure.Repositories.SqlServer.Auth
         public async Task MarkUsedAsync(Guid privilegeId)
         {
             await using var conn = await _db.OpenAsync().ConfigureAwait(false);
-            var sql = "UPDATE dbo.MaDacQuyen SET IsUsed=1 WHERE Id=@id";
+            var sql = "UPDATE dbo.AdminPrivilegeCode SET IsUsed=1 WHERE Id=@id";
             await SqlHelpers.ExecNonQueryAsync(
                         conn,
                         tx: null,

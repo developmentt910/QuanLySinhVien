@@ -18,23 +18,24 @@ namespace StudentCourseManagement.Infrastructure.Repositories.SqlServer.Auth
         {
             await using var conn = await _db.OpenAsync(ct).ConfigureAwait(false);
 
-
             const string sql = @"
-                INSERT INTO dbo.Users (
-                    Id, StudentCode, FullName, EmailNormalized,
-                    PhoneE164, CCCD, Role, RosterId,
-                    PasswordHash, EmailVerified, IsLocked,
-                    ClassId, MajorId, SpecializationId, CohortYear,
-                    CreatedAtUtc, UpdatedAtUtc
-                )
-                OUTPUT inserted.Id
-                VALUES (
-                    @Id, @StudentCode, @FullName, @EmailNormalized,
-                    @PhoneE164, @CCCD, @Role, @RosterId,
-                    @PasswordHash, @EmailVerified, @IsLocked,
-                    @ClassId, @MajorId, @SpecializationId, @CohortYear,
-                    @CreatedAtUtc, @UpdatedAtUtc
-                );";
+        INSERT INTO dbo.Users (
+            Id, StudentCode, FullName, EmailNormalized,
+            PhoneE164, CCCD, Role, RosterId,
+            PasswordHash, EmailVerified, IsLocked,
+            Gender, Address,
+            ClassId, MajorId, SpecializationId, CohortYear,
+            CreatedAtUtc, UpdatedAtUtc
+        )
+        OUTPUT inserted.Id
+        VALUES (
+            @Id, @StudentCode, @FullName, @EmailNormalized,
+            @PhoneE164, @CCCD, @Role, @RosterId,
+            @PasswordHash, @EmailVerified, @IsLocked,
+            @Gender, @Address,
+            @ClassId, @MajorId, @SpecializationId, @CohortYear,
+            @CreatedAtUtc, @UpdatedAtUtc
+        );";
 
             var id = u.Id != Guid.Empty ? u.Id : Guid.NewGuid();
 
@@ -52,27 +53,27 @@ namespace StudentCourseManagement.Infrastructure.Repositories.SqlServer.Auth
                 SqlHelpers.P("@EmailNormalized", (object?)u.EmailNormalized ?? DBNull.Value, SqlDbType.NVarChar, 320),
                 SqlHelpers.P("@PhoneE164", (object?)u.PhoneE164 ?? DBNull.Value, SqlDbType.NVarChar, 32),
                 SqlHelpers.P("@Role", (object?)u.Role ?? "user", SqlDbType.NVarChar, 32),
-
                 SqlHelpers.P("@CCCD", (object?)u.CCCD ?? DBNull.Value, SqlDbType.Char, 12),
-
                 SqlHelpers.P("@RosterId", (object?)u.RosterId ?? DBNull.Value, SqlDbType.UniqueIdentifier),
-
                 SqlHelpers.P("@PasswordHash", (object?)u.PasswordHash ?? "", SqlDbType.NVarChar, 512),
-
                 SqlHelpers.P("@EmailVerified", u.EmailVerified, SqlDbType.Bit),
                 SqlHelpers.P("@IsLocked", u.IsLocked, SqlDbType.Bit),
-               SqlHelpers.P("@ClassId", (object?)u.ClassId ?? DBNull.Value, SqlDbType.Int),
-                SqlHelpers.P("@MajorId", (object?)u.MajorId ?? DBNull.Value, SqlDbType.Int),
-                SqlHelpers.P("@SpecializationId", (object?)u.SpecializationId ?? DBNull.Value, SqlDbType.Int),
+
+                SqlHelpers.P("@Gender", (object?)u.Gender ?? DBNull.Value, SqlDbType.NVarChar, 16),
+                SqlHelpers.P("@Address", (object?)u.Address ?? DBNull.Value, SqlDbType.NVarChar, 256),
+
+                SqlHelpers.P("@ClassId", (object?)u.ClassId ?? DBNull.Value, SqlDbType.UniqueIdentifier),
+                SqlHelpers.P("@MajorId", (object?)u.MajorId ?? DBNull.Value, SqlDbType.UniqueIdentifier),
+                SqlHelpers.P("@SpecializationId", (object?)u.SpecializationId ?? DBNull.Value, SqlDbType.UniqueIdentifier),
                 SqlHelpers.P("@CohortYear", (object?)u.CohortYear ?? DBNull.Value, SqlDbType.SmallInt),
 
                 SqlHelpers.P("@CreatedAtUtc", u.CreatedAtUtc, SqlDbType.DateTime2),
                 SqlHelpers.P("@UpdatedAtUtc", (object?)u.UpdatedAtUtc ?? u.CreatedAtUtc, SqlDbType.DateTime2)
-
             ).ConfigureAwait(false);
 
             return scalar is Guid g ? g : id;
         }
+
 
         public async Task LinkRosterUsedAsync(Guid rosterId, CancellationToken ct = default)
         {

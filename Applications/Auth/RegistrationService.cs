@@ -97,7 +97,8 @@ namespace StudentCourseManagement.Applications.Auth
                 PhoneE164 = phone,
                 Role = "user",
                 StudentCode = dto.StudentCode,
-                EmailVerified = false,
+                EmailVerified = true ,
+                
                 IsLocked = false,
                 CreatedAtUtc = _clock.UtcNow(),
                 UpdatedAtUtc = _clock.UtcNow()
@@ -113,11 +114,14 @@ namespace StudentCourseManagement.Applications.Auth
                 user.MajorId = roster.MajorId;
                 user.SpecializationId = roster.SpecializationId;
                 user.CohortYear = roster.CohortYear;
-
+                user.Gender = roster.Gender;
+                user.Address = roster.Address;
                 schoolEmail = roster.EmailSchool;
 
                 await _userW.LinkRosterUsedAsync(roster.Id, ct);
             }
+
+
 
 
             var userId = await _userW.CreateAsync(user);

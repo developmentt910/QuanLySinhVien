@@ -8,18 +8,29 @@ namespace StudentCourseManagement.Domain.Entities
 {
     public sealed class Roster
     {
-        public Guid Id { get; init; }
-        public string StudentCode { get; init; } = "";
-        public string EmailSchool { get; init; } = "";
-        public string? FullName { get; init; }
-        public bool IsUsed { get; init; }
+        public Guid Id { get; set; } = Guid.NewGuid();
+        public string StudentCode { get; set; } = null!;
+        public string EmailSchool { get; set; } = null!;
+        public string FullName { get; set; } = null!;
+        public string? Gender { get; set; }           // Nam / Nữ / Khác
+        public string? Address { get; set; }
+        public bool IsUsed { get; set; } = false;
+        public DateTime? ExpiresAtUtc { get; set; }
+        public DateTime CreatedAtUtc { get; set; } = DateTime.UtcNow;
 
-        public int? ClassId { get; set; }
-        public int? MajorId { get; set; }
-        public int? SpecializationId { get; set; }
-        public short? CohortYear { get; set; }
+        // Foreign keys
+        public Guid? ClassId { get; set; }
+        public Class? Class { get; set; }
 
-        public DateTime? ExpiresAtUtc { get; init; }
-        public DateTime CreatedAtUtc { get; init; }
+        public Guid? MajorId { get; set; }
+        public Major? Major { get; set; }
+
+        public Guid? SpecializationId { get; set; }
+        public Specialization? Specialization { get; set; }
+
+        public int? CohortYear { get; set; }   // Niên khóa
+
+        // Navigation property
+        public ICollection<User> Users { get; set; } = new List<User>();
     }
 }

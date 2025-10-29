@@ -119,20 +119,25 @@ namespace StudentCourseManagement.Infrastructure.Repositories.SqlServer.Auth
         }
 
         // Map từ SqlDataReader sang Entity
-        private static Roster Map(SqlDataReader r) => new()
+        private static Roster Map(SqlDataReader r) => new Roster
         {
-            Id = r.GetGuid("Id"),
+            Id = r.GetGuid(r.GetOrdinal("Id")),
             StudentCode = r["StudentCode"] as string ?? "",
             EmailSchool = r["EmailSchool"] as string ?? "",
             FullName = r["FullName"] as string ?? "",
-            IsUsed = r.GetBoolean("IsUsed"),
-            ClassId = r.GetInt32("ClassId"),
-            MajorId = r.GetInt32("MajorId"),
-            SpecializationId = r.GetInt32("SpecializationId"),
-            CohortYear = r.IsDBNull("CohortYear") ? null : r.GetInt16("CohortYear"),
-            ExpiresAtUtc = r.IsDBNull("ExpiresAtUtc") ? null : r.GetDateTime("ExpiresAtUtc"),
-            CreatedAtUtc = r.GetDateTime("CreatedAtUtc")
+            Gender = r["Gender"] as string ?? "",
+            Address = r["Address"] as string ?? "",
+
+            IsUsed = !r.IsDBNull(r.GetOrdinal("IsUsed")) && r.GetBoolean(r.GetOrdinal("IsUsed")),
+            ClassId = r.IsDBNull(r.GetOrdinal("ClassId")) ? null : r.GetGuid(r.GetOrdinal("ClassId")),
+            MajorId = r.IsDBNull(r.GetOrdinal("MajorId")) ? null : r.GetGuid(r.GetOrdinal("MajorId")),
+            SpecializationId = r.IsDBNull(r.GetOrdinal("SpecializationId")) ? null : r.GetGuid(r.GetOrdinal("SpecializationId")),
+
+            CohortYear = r.IsDBNull(r.GetOrdinal("CohortYear")) ? null : r.GetInt32(r.GetOrdinal("CohortYear")),
+            ExpiresAtUtc = r.IsDBNull(r.GetOrdinal("ExpiresAtUtc")) ? null : r.GetDateTime(r.GetOrdinal("ExpiresAtUtc")),
+            CreatedAtUtc = r.GetDateTime(r.GetOrdinal("CreatedAtUtc"))
         };
+
 
     }
 }
