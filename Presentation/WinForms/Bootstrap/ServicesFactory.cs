@@ -24,8 +24,7 @@ namespace StudentCourseManagement.Presentation.WinForms.Bootstrap
         public static IRosterReader CreateRosterReader() => new RosterReader(Db);
         public static IOtpPinsReader CreateOtpReader() => new OtpPinsReader(Db);
         public static IOtpPinsWriter CreateOtpWriter() => new OtpPinsWriter(Db);
-        public static IPrivilegesReader CreatePrivReader() => new PrivilegesReader(Db);
-        public static IPrivilegesWriter CreatePrivWriter() => new PrivilegesWriter(Db);
+     
         public static ILoginThrottleStore CreateThrottleStore() => new LoginThrottleStore(Db);
         public static IAuditLogsWriter CreateAuditWriter() => new AuditLogsWriter(Db);
 

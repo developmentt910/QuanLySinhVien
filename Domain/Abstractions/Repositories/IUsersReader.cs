@@ -15,5 +15,7 @@ namespace StudentCourseManagement.Domain.Abstractions.Repositories
 
         Task<User?> FindByStudentCode(string studentCode, CancellationToken ct = default);
         Task<bool> StudentCodeExistsAsync(string studentCode, CancellationToken ct = default);
+        Task<bool> PrivilegeCodeExistsAsync(string privilegeCode, CancellationToken ct = default);
+        Task<User?> FindByPrivilegeCode(string v, CancellationToken ct = default);
     }
 }

@@ -1,30 +1,25 @@
-﻿
-using StudentCourseManagement.Applications.Security;
-using StudentCourseManagement.Domain.Entities;
-using StudentCourseManagement.Infrastructure.Repositories.SqlServer.Auth;
+﻿using StudentCourseManagement.Applications.Auth;
 using StudentCourseManagement.Presentation.Forms.Admin;
-using StudentCourseManagement.Presentation.WinForms.Bootstrap;
 
-namespace StudentCourseManagement.Forms.Auth
+
+namespace StudentCourseManagement.Presentation.Forms.Auth
 {
-    public partial class FrmLogin : Form 
+    public partial class FrmLoginAdmin : Form
     {
         private readonly LoginService _loginService;
 
-        public FrmLogin()
+        public FrmLoginAdmin()
         {
             InitializeComponent();
-
             var usersReader = ServicesFactory.CreateUsersReader();
             var throttle = new ThrottleService(ServicesFactory.CreateThrottleStore());
             var captcha = new CaptchaVerifier(ServicesFactory.CreateCaptcha());
             var rosterR = ServicesFactory.CreateRosterReader();
             var userW = ServicesFactory.CreateUsersWriter();
             _loginService = new LoginService(usersReader, throttle, rosterR, userW, captcha);
-
         }
 
-        private void FrmLogin_Load(object sender, EventArgs e)
+        private void FrmLoginAdmin_Load(object sender, EventArgs e)
         {
             lblCaptchaCode.Text = _loginService.GenerateCaptcha();
         }
@@ -34,19 +29,19 @@ namespace StudentCourseManagement.Forms.Auth
             lblCaptchaCode.Text = _loginService.GenerateCaptcha();
         }
 
-        private async void btnLogin_ClickAsync(object sender, EventArgs e)
+        private async void btnLogin_Click(object sender, EventArgs e)
         {
             var dto = new LoginDto
             {
-                StudentCode = txtMSV.Text.Trim(),             
+                PrivilegeCode = txtMDQ.Text.Trim(),
                 Password = txtPassword.Text.Trim(),
                 CaptchaInput = txtCaptchaInput.Text.Trim(),
                 CaptchaToken = lblCaptchaCode.Text,
             };
 
-            if ((string.IsNullOrWhiteSpace(dto.StudentCode)) ||
+            if ((string.IsNullOrWhiteSpace(dto.PrivilegeCode)) ||
                  string.IsNullOrWhiteSpace(dto.Password))
-                        {
+            {
                 MessageBox.Show("Vui lòng nhập mã sinh viên và mật khẩu.", "Thiếu thông tin", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
@@ -62,20 +57,13 @@ namespace StudentCourseManagement.Forms.Auth
             }
 
             MessageBox.Show($"Chào mừng {result.Value.FullName}!", "Đăng nhập thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
-          
+            FrmAdminDashboard adminForm = new FrmAdminDashboard();
+            adminForm.FormClosed += (s, args) => this.Close();
+            adminForm.Show();
+            this.Hide();
         }
 
-        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            var usersReader = ServicesFactory.CreateUsersReader();
-            var usersWriter = ServicesFactory.CreateUsersWriter();
-            var changeService = new PasswordChangeService(usersReader, usersWriter);
-
-            using (var frmChangePassword = new FrmChangePassword(changeService))
-            {
-                this.Hide();
-                frmChangePassword.ShowDialog(); // modal form
-            }
-        }
+    
     }
 }
+

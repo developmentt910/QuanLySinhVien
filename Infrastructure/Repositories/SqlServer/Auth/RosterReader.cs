@@ -117,7 +117,21 @@ namespace StudentCourseManagement.Infrastructure.Repositories.SqlServer.Auth
 
             return list;
         }
+        public async Task<Roster?> FindByPrivilegeCodeAsync(string privilegeCode, CancellationToken ct = default)
+        {
+            if (string.IsNullOrWhiteSpace(privilegeCode))
+                return null;
 
+            await using var conn = await _db.OpenAsync(ct).ConfigureAwait(false);
+            const string sql = "SELECT TOP 1 * FROM dbo.Roster WHERE PrivilegeCode = @p";
+
+            await using var r = await SqlHelpers.ExecReaderAsync(
+                conn, tx: null, sql, CommandType.Text, timeoutSeconds: default, ct: ct,
+                ps: new[] { SqlHelpers.P("@p", privilegeCode, SqlDbType.NVarChar, 50) });
+
+            if (await r.ReadAsync(ct).ConfigureAwait(false)) return Map(r);
+            return null;
+        }
         // Map từ SqlDataReader sang Entity
         private static Roster Map(SqlDataReader r) => new Roster
         {
@@ -127,7 +141,8 @@ namespace StudentCourseManagement.Infrastructure.Repositories.SqlServer.Auth
             FullName = r["FullName"] as string ?? "",
             Gender = r["Gender"] as string ?? "",
             Address = r["Address"] as string ?? "",
-
+            PrivilegeCode = r["PrivilegeCode"] as string,
+            Role = r["Role"] as string ?? "user",
             IsUsed = !r.IsDBNull(r.GetOrdinal("IsUsed")) && r.GetBoolean(r.GetOrdinal("IsUsed")),
             ClassId = r.IsDBNull(r.GetOrdinal("ClassId")) ? null : r.GetGuid(r.GetOrdinal("ClassId")),
             MajorId = r.IsDBNull(r.GetOrdinal("MajorId")) ? null : r.GetGuid(r.GetOrdinal("MajorId")),

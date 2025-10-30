@@ -22,6 +22,7 @@ namespace StudentCourseManagement.Domain.Entities
         public Roster? Roster { get; set; }
 
         public string? StudentCode { get; set; }
+        public string? PrivilegeCode { get; set; }
         public Guid? ClassId { get; set; }
         public Guid? MajorId { get; set; }
         public Guid? SpecializationId { get; set; }

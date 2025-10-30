@@ -39,26 +39,27 @@
             btnRefreshCaptcha = new Button();
             linkLabel1 = new LinkLabel();
             lblCaptchaCode = new Label();
+            checkedListBox1 = new CheckedListBox();
             SuspendLayout();
             // 
             // label1
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label1.Location = new Point(274, 31);
+            label1.Location = new Point(219, 26);
             label1.Name = "label1";
-            label1.Size = new Size(284, 31);
+            label1.Size = new Size(404, 31);
             label1.TabIndex = 0;
-            label1.Text = "ĐĂNG NHẬP TÀI KHOẢN";
+            label1.Text = "ĐĂNG NHẬP TÀI KHOẢN SINH VIÊN";
             // 
             // label2
             // 
             label2.AutoSize = true;
             label2.Location = new Point(231, 96);
             label2.Name = "label2";
-            label2.Size = new Size(43, 20);
+            label2.Size = new Size(39, 20);
             label2.TabIndex = 1;
-            label2.Text = "MSV ";
+            label2.Text = "MSV";
             // 
             // label3
             // 
@@ -139,11 +140,20 @@
             lblCaptchaCode.TabIndex = 11;
             lblCaptchaCode.Text = "...................";
             // 
+            // checkedListBox1
+            // 
+            checkedListBox1.FormattingEnabled = true;
+            checkedListBox1.Location = new Point(707, 43);
+            checkedListBox1.Name = "checkedListBox1";
+            checkedListBox1.Size = new Size(8, 4);
+            checkedListBox1.TabIndex = 12;
+            // 
             // FrmLogin
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(checkedListBox1);
             Controls.Add(lblCaptchaCode);
             Controls.Add(linkLabel1);
             Controls.Add(btnRefreshCaptcha);
@@ -174,5 +184,6 @@
         private Button btnRefreshCaptcha;
         private LinkLabel linkLabel1;
         private Label lblCaptchaCode;
+        private CheckedListBox checkedListBox1;
     }
 }

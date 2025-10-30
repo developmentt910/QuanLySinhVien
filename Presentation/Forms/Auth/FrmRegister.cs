@@ -4,6 +4,7 @@ using System.Windows.Forms;
 
 using StudentCourseManagement.Applications.Dtos;
 using StudentCourseManagement.Applications.Validation;
+using StudentCourseManagement.Presentation.Forms.Auth;
 using StudentCourseManagement.Presentation.WinForms.Bootstrap;
 
 namespace StudentCourseManagement.Forms.Auth
@@ -21,8 +22,7 @@ namespace StudentCourseManagement.Forms.Auth
             _registration = new RegistrationService(
                 userR: ServicesFactory.CreateUsersReader(),
                 userW: ServicesFactory.CreateUsersWriter(),
-                privR: ServicesFactory.CreatePrivReader(),
-                privW: ServicesFactory.CreatePrivWriter(),
+              
                 otpR: ServicesFactory.CreateOtpReader(),
                 otpW: ServicesFactory.CreateOtpWriter(),
                 email: ServicesFactory.CreateEmail(),
@@ -168,44 +168,52 @@ namespace StudentCourseManagement.Forms.Auth
                 return;
             }
 
-            if (rdoStudent.Checked)
+            var dto = new RegisterDto
             {
-                var dto = new RegisterStudentDto
-                {
-                    FullName = txtFullName.Text,
-                    Password = txtPassword.Text,
-                    CCCD = txtCccd.Text.Trim(),
-                    Phone = txtPhone.Text.Trim(),
-                    Email = txtEmail.Text.Trim(),
-                    StudentCode = txtStudentCode.Text.Trim()
-                };
+                FullName = txtFullName.Text,
+                Password = txtPassword.Text,
+                CCCD = txtCccd.Text.Trim(),
+                Phone = txtPhone.Text.Trim(),
+                Email = txtEmail.Text.Trim(),
+                StudentCode = pnlStudent.Visible ? txtStudentCode.Text.Trim() : null,
+                PrivilegeCode = pnlAdmin.Visible ? txtPrivCode.Text.Trim() : null
+            };
 
-                var result = await _registration.RegisterStudentAsync(
-                    dto, schoolEmailFromRoster: null, ct: CancellationToken.None);
+            var result = await _registration.RegisterAsync(dto, schoolEmailFromRoster: null, ct: CancellationToken.None);
 
-                if (!result.Ok)
-                {
-                    var msg = result.Error ?? "Đăng ký thất bại.";
-                    MessageBox.Show(msg, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    MapServerErrorToField(msg);
-                    return;
-                }
+            if (!result.Ok)
+            {
+                var msg = result.Error ?? "Đăng ký thất bại.";
+                MessageBox.Show(msg, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MapServerErrorToField(msg);
+                return;
+            }
 
-                MessageBox.Show(
-                    "Đăng ký thành công! Mã OTP xác minh đã được gửi.\n\n" +
-                    "Nếu bạn thuộc danh sách sinh viên của trường, thông tin học vụ đã được liên kết tự động.",
-                    "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            string message;
+            if (!string.IsNullOrWhiteSpace(dto.PrivilegeCode))
+            {
+                message = "Tài khoản quản trị viên đã được tạo thành công! Mã OTP xác minh đã được gửi.";
 
-                FrmLogin frmLogin = new FrmLogin();
-                frmLogin.Show();
-                this.Hide();
+                MessageBox.Show(message, "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                FrmLoginAdmin frmLoginAdmin = new FrmLoginAdmin();
+                frmLoginAdmin.Show();
             }
             else
             {
-                MessageBox.Show("Đăng ký Quản trị viên chưa được triển khai trong RegistrationService.",
-                    "Thông tin", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                message = "Đăng ký thành công! Mã OTP xác minh đã được gửi.\n\n" +
+                          "Nếu bạn thuộc danh sách sinh viên của trường, thông tin học vụ đã được liên kết tự động.";
+
+                MessageBox.Show(message, "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                FrmLogin frmLogin = new FrmLogin();
+                frmLogin.Show();
             }
+
+            this.Hide();
         }
+
+
 
         private void MapServerErrorToField(string error)
         {

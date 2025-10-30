@@ -110,6 +110,45 @@ namespace StudentCourseManagement.Infrastructure.Repositories.SqlServer.Auth
             return v is not null;
         }
 
+        public async Task<bool> PrivilegeCodeExistsAsync(string privilegeCode, CancellationToken ct = default)
+        {
+            if (string.IsNullOrWhiteSpace(privilegeCode))
+                return false;
+
+            await using var conn = await _db.OpenAsync(ct).ConfigureAwait(false);
+            const string sql = @"SELECT TOP 1 1 FROM dbo.Users WHERE PrivilegeCode = @p";
+
+            var v = await SqlHelpers.ExecScalarAsync(
+                conn, tx: null, sql, ct: ct,
+                ps: new SqlParameter("@p", SqlDbType.NVarChar, 50)
+                { Value = (object?)privilegeCode ?? DBNull.Value }
+            ).ConfigureAwait(false);
+
+            return v is not null;
+        }
+        public async Task<User?> FindByPrivilegeCode(string privilegeCode, CancellationToken ct = default)
+        {
+            if (string.IsNullOrWhiteSpace(privilegeCode))
+                return null;
+
+            await using var conn = await _db.OpenAsync(ct).ConfigureAwait(false);
+            string sql = $@"SELECT TOP 1 {UserColumns}
+                    FROM dbo.Users
+                    WHERE PrivilegeCode = @p";
+
+            await using var r = await SqlHelpers.ExecReaderAsync(
+                conn, tx: null, sql, ct: ct,
+                ps: new SqlParameter("@p", SqlDbType.NVarChar, 32)
+                { Value = (object?)privilegeCode ?? DBNull.Value }
+            ).ConfigureAwait(false);
+
+            if (await r.ReadAsync(ct).ConfigureAwait(false))
+                return Map(r);
+
+            return null;
+        }
+
+
         private static User Map(SqlDataReader r) => new()
         {
             Id = r.GetGuid(r.GetOrdinal("Id")),

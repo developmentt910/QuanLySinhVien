@@ -11,7 +11,6 @@ namespace StudentCourseManagement.Domain.Entities
         public Guid Id { get; set; } = Guid.NewGuid();
         public string FacultyName { get; set; } = null!;
 
-        // Navigation property
-        public ICollection<Major> Majors { get; set; } = new List<Major>();
+      
     }
 }

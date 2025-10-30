@@ -11,8 +11,7 @@ namespace StudentCourseManagement.Applications.Auth
         private readonly IOtpPinsReader _otpR;
         private readonly IOtpPinsWriter _otpW;
         private readonly IUsersWriter _usersW;
-        private readonly IPrivilegesReader _privR;
-        private readonly IPrivilegesWriter _privW;
+     
         private readonly IAuditLogsWriter _audit;
         private readonly IClock _clock;
 
@@ -20,16 +19,14 @@ namespace StudentCourseManagement.Applications.Auth
             IOtpPinsReader otpR,
             IOtpPinsWriter otpW,
             IUsersWriter usersW,
-            IPrivilegesReader privR,
-            IPrivilegesWriter privW,
+           
             IAuditLogsWriter audit,
             IClock clock)
         {
             _otpR = otpR;
             _otpW = otpW;
             _usersW = usersW;
-            _privR = privR;
-            _privW = privW;
+          
             _audit = audit;
             _clock = clock;
         }

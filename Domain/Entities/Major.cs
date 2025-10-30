@@ -15,8 +15,5 @@ namespace StudentCourseManagement.Domain.Entities
         public Guid FacultyId { get; set; }
         public Faculty Faculty { get; set; } = null!;
 
-        // Navigation properties
-        public ICollection<Specialization> Specializations { get; set; } = new List<Specialization>();
-        public ICollection<Class> Classes { get; set; } = new List<Class>();
     }
 }
