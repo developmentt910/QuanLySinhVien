@@ -7,7 +7,7 @@ using StudentCourseManagement.Presentation.WinForms.Bootstrap;
 
 namespace StudentCourseManagement.Forms.Auth
 {
-    public partial class FrmLogin : Form 
+    public partial class FrmLogin : Form
     {
         private readonly LoginService _loginService;
 
@@ -38,7 +38,7 @@ namespace StudentCourseManagement.Forms.Auth
         {
             var dto = new LoginDto
             {
-                StudentCode = txtMSV.Text.Trim(),             
+                StudentCode = txtMSV.Text.Trim(),
                 Password = txtPassword.Text.Trim(),
                 CaptchaInput = txtCaptchaInput.Text.Trim(),
                 CaptchaToken = lblCaptchaCode.Text,
@@ -46,7 +46,7 @@ namespace StudentCourseManagement.Forms.Auth
 
             if ((string.IsNullOrWhiteSpace(dto.StudentCode)) ||
                  string.IsNullOrWhiteSpace(dto.Password))
-                        {
+            {
                 MessageBox.Show("Vui lòng nhập mã sinh viên và mật khẩu.", "Thiếu thông tin", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
@@ -62,20 +62,14 @@ namespace StudentCourseManagement.Forms.Auth
             }
 
             MessageBox.Show($"Chào mừng {result.Value.FullName}!", "Đăng nhập thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
-          
+
         }
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            var usersReader = ServicesFactory.CreateUsersReader();
-            var usersWriter = ServicesFactory.CreateUsersWriter();
-            var changeService = new PasswordChangeService(usersReader, usersWriter);
-
-            using (var frmChangePassword = new FrmChangePassword(changeService))
-            {
-                this.Hide();
-                frmChangePassword.ShowDialog(); // modal form
-            }
+            FrmRegister frmRegister = new FrmRegister();
+            frmRegister.Show();
+            this.Hide();
         }
     }
 }

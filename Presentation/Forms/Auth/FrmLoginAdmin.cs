@@ -34,15 +34,13 @@ namespace StudentCourseManagement.Presentation.Forms.Auth
             var dto = new LoginDto
             {
                 PrivilegeCode = txtMDQ.Text.Trim(),
-                Password = txtPassword.Text.Trim(),
                 CaptchaInput = txtCaptchaInput.Text.Trim(),
                 CaptchaToken = lblCaptchaCode.Text,
             };
 
-            if ((string.IsNullOrWhiteSpace(dto.PrivilegeCode)) ||
-                 string.IsNullOrWhiteSpace(dto.Password))
+            if (string.IsNullOrWhiteSpace(dto.PrivilegeCode))
             {
-                MessageBox.Show("Vui lòng nhập mã sinh viên và mật khẩu.", "Thiếu thông tin", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Vui lòng nhập mã đặc quyền", "Thiếu thông tin", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -63,7 +61,12 @@ namespace StudentCourseManagement.Presentation.Forms.Auth
             this.Hide();
         }
 
-    
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            FrmRegister frmRegister = new FrmRegister();
+            frmRegister.Show();
+            this.Hide();
+        }
     }
 }
 

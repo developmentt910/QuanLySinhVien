@@ -10,10 +10,8 @@ namespace StudentCourseManagement.Infrastructure.Security.Crypto
             var salt = RandomNumberGenerator.GetBytes(16);
             // 1 mang hash byte dai 32byte
             var bytes = Rfc2898DeriveBytes.Pbkdf2(password, salt, iterations, HashAlgorithmName.SHA256, 32);
-            return $"$pbkdf2-sha256 " +
-                $"${iterations} " +
-                $"${Convert.ToBase64String(salt)} " +
-                $"${Convert.ToBase64String(bytes)}";
+            return $"$pbkdf2-sha256${iterations}${Convert.ToBase64String(salt)}${Convert.ToBase64String(bytes)}";
+
         }
 
         // so sanh mk user input voi mk dc luu tru
@@ -21,16 +19,15 @@ namespace StudentCourseManagement.Infrastructure.Security.Crypto
         {
             try
             {
-                var parts = stored.Split('$', StringSplitOptions.RemoveEmptyEntries)
-                                  .Select(p => p.Trim())
-                                  .ToArray();
+                var parts = stored.Split('$', StringSplitOptions.RemoveEmptyEntries);
 
-                if (parts.Length != 4 || parts[0] != "pbkdf2-sha256")
+                if (parts.Length != 4 || parts[0].Trim() != "pbkdf2-sha256")
                     return false;
 
-                var iterations = int.Parse(parts[1]);
-                var salt = Convert.FromBase64String(parts[2]);
-                var expected = Convert.FromBase64String(parts[3]);
+                var iterations = int.Parse(parts[1].Trim());
+                var salt = Convert.FromBase64String(parts[2].Trim());
+                var expected = Convert.FromBase64String(parts[3].Trim());
+
                 var computed = Rfc2898DeriveBytes.Pbkdf2(password, salt, iterations, HashAlgorithmName.SHA256, 32);
 
                 return ConstantTimeComparer.EqualsSlow(expected, computed);
@@ -40,6 +37,8 @@ namespace StudentCourseManagement.Infrastructure.Security.Crypto
                 return false;
             }
         }
+
+
 
     }
 }

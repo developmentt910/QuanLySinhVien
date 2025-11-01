@@ -32,8 +32,9 @@ namespace StudentCourseManagement.Applications.Validation
         public static readonly Regex StudentCodeRegex =
             new(StudentCode, RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase);
 
-        public static bool IsMatch(string input, string pattern)
-            => Regex.IsMatch(input, pattern, RegexOptions.CultureInvariant | RegexOptions.IgnoreCase);
+        public static bool IsMatch(string? input, string pattern)
+    => !string.IsNullOrWhiteSpace(input) && Regex.IsMatch(input, pattern, RegexOptions.CultureInvariant | RegexOptions.IgnoreCase);
+
 
         //pattern: regex mau
     }

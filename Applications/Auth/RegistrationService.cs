@@ -51,9 +51,15 @@ namespace StudentCourseManagement.Applications.Auth
 
             if (!RegexRules.IsMatch(dto.Email, RegexRules.Email))
                 return Result<Guid>.Fail("Email không hợp lệ");
+            if (!string.IsNullOrWhiteSpace(dto.StudentCode))
+            {
+                if (string.IsNullOrWhiteSpace(dto.Password))
+                    return Result<Guid>.Fail("Mật khẩu không được để trống.");
 
-            if (!RegexRules.IsMatch(dto.Password, RegexRules.PasswordStrong))
-                return Result<Guid>.Fail("Mật khẩu chưa đủ mạnh.");
+                if (!RegexRules.IsMatch(dto.Password, RegexRules.PasswordStrong))
+                    return Result<Guid>.Fail("Mật khẩu chưa đủ mạnh.");
+            }
+
 
             if (string.IsNullOrWhiteSpace(dto.StudentCode) && string.IsNullOrWhiteSpace(dto.PrivilegeCode))
                 return Result<Guid>.Fail("Phải cung cấp MSV hoặc Mã đặc quyền.");
@@ -73,18 +79,21 @@ namespace StudentCourseManagement.Applications.Auth
                 return Result<Guid>.Fail("Mã đặc quyền này đã tồn tại.");
 
             // Hash password
-            var hash = PasswordHasher.Hash(dto.Password);
+            var hash = dto.Password != null
+                ? PasswordHasher.Hash(dto.Password)
+                : null;
 
-            var user = new User
+            User user = new User
             {
-                FullName = fullName,
+                Id = Guid.NewGuid(),
+                FullName = dto.FullName,
                 EmailNormalized = emailNorm,
                 PasswordHash = hash,
-                CCCD = dto.CCCD,
-                PhoneE164 = phone,
                 Role = !string.IsNullOrWhiteSpace(dto.PrivilegeCode) ? "admin" : "user",
                 StudentCode = dto.StudentCode,
                 PrivilegeCode = dto.PrivilegeCode,
+                CCCD = dto.CCCD,
+                PhoneE164 = Normalizers.NormalizePhoneToVN(dto.Phone),
                 EmailVerified = true,
                 IsLocked = false,
                 CreatedAtUtc = _clock.UtcNow(),
@@ -107,8 +116,30 @@ namespace StudentCourseManagement.Applications.Auth
                     await _userW.LinkRosterUsedAsync(roster.Id, ct);
                 }
             }
+            // Admin
+            else if (!string.IsNullOrWhiteSpace(dto.PrivilegeCode))
+            {
+                var roster = await _rosterR.FindByPrivilegeCodeAsync(dto.PrivilegeCode, ct);
+
+                user.PrivilegeCode = dto.PrivilegeCode;
+                user.Role = "admin";
+                user.EmailVerified = true;
+                user.IsLocked = false;
+                user.PasswordHash = null;
+                if (roster != null)
+                {
+                    user.FullName = roster.FullName;
+                    user.Gender = roster.Gender;
+                    user.Address = roster.Address;
+                    user.RosterId = roster.Id;
+                }
+            }
+
+
 
             var userId = await _userW.CreateAsync(user);
+
+
 
             // Tạo OTP
             var otp = OtpHasher.GenerateOtp6();

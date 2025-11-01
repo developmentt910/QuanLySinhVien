@@ -125,10 +125,10 @@
             linkLabel1.AutoSize = true;
             linkLabel1.Location = new Point(411, 293);
             linkLabel1.Name = "linkLabel1";
-            linkLabel1.Size = new Size(98, 20);
+            linkLabel1.Size = new Size(157, 20);
             linkLabel1.TabIndex = 10;
             linkLabel1.TabStop = true;
-            linkLabel1.Text = "Đổi mật khẩu";
+            linkLabel1.Text = "Quay về trang đăng ký";
             linkLabel1.LinkClicked += linkLabel1_LinkClicked;
             // 
             // lblCaptchaCode

@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.Data.SqlClient;
-using StudentCourseManagement.Domain.Abstractions.Repositories;
-using StudentCourseManagement.Domain.Entities;
-using StudentCourseManagement.Infrastructure.Data;
+﻿
 
 namespace StudentCourseManagement.Infrastructure.Repositories.SqlServer.Auth
 {

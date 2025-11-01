@@ -1,12 +1,4 @@
-﻿using System;
-using System.Data;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.Data.SqlClient;
-using StudentCourseManagement.Domain.Abstractions.Repositories;
-using StudentCourseManagement.Domain.Entities;
-using StudentCourseManagement.Infrastructure.Data;
-
+﻿
 namespace StudentCourseManagement.Infrastructure.Repositories.SqlServer.Auth
 {
     public sealed class UsersWriter : IUsersWriter
@@ -20,7 +12,7 @@ namespace StudentCourseManagement.Infrastructure.Repositories.SqlServer.Auth
 
             const string sql = @"
         INSERT INTO dbo.Users (
-            Id, StudentCode, FullName, EmailNormalized,
+            Id, StudentCode, PrivilegeCode, FullName, EmailNormalized,
             PhoneE164, CCCD, Role, RosterId,
             PasswordHash, EmailVerified, IsLocked,
             Gender, Address,
@@ -29,7 +21,7 @@ namespace StudentCourseManagement.Infrastructure.Repositories.SqlServer.Auth
         )
         OUTPUT inserted.Id
         VALUES (
-            @Id, @StudentCode, @FullName, @EmailNormalized,
+            @Id, @StudentCode, @PrivilegeCode, @FullName, @EmailNormalized,
             @PhoneE164, @CCCD, @Role, @RosterId,
             @PasswordHash, @EmailVerified, @IsLocked,
             @Gender, @Address,
@@ -39,40 +31,47 @@ namespace StudentCourseManagement.Infrastructure.Repositories.SqlServer.Auth
 
             var id = u.Id != Guid.Empty ? u.Id : Guid.NewGuid();
 
-            var scalar = await SqlHelpers.ExecScalarAsync(
-                conn,
-                tx: null,
-                sql,
-                CommandType.Text,
-                timeoutSeconds: default,
-                ct: ct,
-                SqlHelpers.P("@Id", id, SqlDbType.UniqueIdentifier),
+            try
+            {
+                var scalar = await SqlHelpers.ExecScalarAsync(
+                    conn,
+                    tx: null,
+                    sql,
+                    CommandType.Text,
+                    timeoutSeconds: default,
+                    ct: ct,
+                    SqlHelpers.P("@Id", id, SqlDbType.UniqueIdentifier),
+                    SqlHelpers.P("@StudentCode", (object?)u.StudentCode ?? DBNull.Value, SqlDbType.NVarChar, 50),
+                    SqlHelpers.P("@PrivilegeCode", (object?)u.PrivilegeCode ?? DBNull.Value, SqlDbType.NVarChar, 50),
+                    SqlHelpers.P("@FullName", u.FullName, SqlDbType.NVarChar, 200),
+                    SqlHelpers.P("@EmailNormalized", u.EmailNormalized, SqlDbType.NVarChar, 200),
+                    SqlHelpers.P("@PhoneE164", (object?)u.PhoneE164 ?? DBNull.Value, SqlDbType.NVarChar, 20),
+                    SqlHelpers.P("@CCCD", (object?)u.CCCD ?? DBNull.Value, SqlDbType.NVarChar, 12),
+                    SqlHelpers.P("@Role", u.Role, SqlDbType.NVarChar, 50),
+                    SqlHelpers.P("@RosterId", (object?)u.RosterId ?? DBNull.Value, SqlDbType.UniqueIdentifier),
+                    SqlHelpers.P("@PasswordHash", (object?)u.PasswordHash ?? DBNull.Value, SqlDbType.NVarChar, 256),
+                    SqlHelpers.P("@EmailVerified", u.EmailVerified, SqlDbType.Bit),
+                    SqlHelpers.P("@IsLocked", u.IsLocked, SqlDbType.Bit),
+                    SqlHelpers.P("@Gender", (object?)u.Gender ?? DBNull.Value, SqlDbType.NVarChar, 10),
+                    SqlHelpers.P("@Address", (object?)u.Address ?? DBNull.Value, SqlDbType.NVarChar, 300),
+                    SqlHelpers.P("@ClassId", (object?)u.ClassId ?? DBNull.Value, SqlDbType.UniqueIdentifier),
+                    SqlHelpers.P("@MajorId", (object?)u.MajorId ?? DBNull.Value, SqlDbType.UniqueIdentifier),
+                    SqlHelpers.P("@SpecializationId", (object?)u.SpecializationId ?? DBNull.Value, SqlDbType.UniqueIdentifier),
+                    SqlHelpers.P("@CohortYear", (object?)u.CohortYear ?? DBNull.Value, SqlDbType.Int),
+                    SqlHelpers.P("@CreatedAtUtc", u.CreatedAtUtc, SqlDbType.DateTime2),
+                    SqlHelpers.P("@UpdatedAtUtc", u.UpdatedAtUtc, SqlDbType.DateTime2)
+                ).ConfigureAwait(false);
 
-                SqlHelpers.P("@StudentCode", (object?)u.StudentCode ?? DBNull.Value, SqlDbType.NVarChar, 64),
-                SqlHelpers.P("@FullName", (object?)u.FullName ?? DBNull.Value, SqlDbType.NVarChar, 128),
-                SqlHelpers.P("@EmailNormalized", (object?)u.EmailNormalized ?? DBNull.Value, SqlDbType.NVarChar, 320),
-                SqlHelpers.P("@PhoneE164", (object?)u.PhoneE164 ?? DBNull.Value, SqlDbType.NVarChar, 32),
-                SqlHelpers.P("@Role", (object?)u.Role ?? "user", SqlDbType.NVarChar, 32),
-                SqlHelpers.P("@CCCD", (object?)u.CCCD ?? DBNull.Value, SqlDbType.Char, 12),
-                SqlHelpers.P("@RosterId", (object?)u.RosterId ?? DBNull.Value, SqlDbType.UniqueIdentifier),
-                SqlHelpers.P("@PasswordHash", (object?)u.PasswordHash ?? "", SqlDbType.NVarChar, 512),
-                SqlHelpers.P("@EmailVerified", u.EmailVerified, SqlDbType.Bit),
-                SqlHelpers.P("@IsLocked", u.IsLocked, SqlDbType.Bit),
+                if (scalar is Guid g) return g;
 
-                SqlHelpers.P("@Gender", (object?)u.Gender ?? DBNull.Value, SqlDbType.NVarChar, 16),
-                SqlHelpers.P("@Address", (object?)u.Address ?? DBNull.Value, SqlDbType.NVarChar, 256),
-
-                SqlHelpers.P("@ClassId", (object?)u.ClassId ?? DBNull.Value, SqlDbType.UniqueIdentifier),
-                SqlHelpers.P("@MajorId", (object?)u.MajorId ?? DBNull.Value, SqlDbType.UniqueIdentifier),
-                SqlHelpers.P("@SpecializationId", (object?)u.SpecializationId ?? DBNull.Value, SqlDbType.UniqueIdentifier),
-                SqlHelpers.P("@CohortYear", (object?)u.CohortYear ?? DBNull.Value, SqlDbType.SmallInt),
-
-                SqlHelpers.P("@CreatedAtUtc", u.CreatedAtUtc, SqlDbType.DateTime2),
-                SqlHelpers.P("@UpdatedAtUtc", (object?)u.UpdatedAtUtc ?? u.CreatedAtUtc, SqlDbType.DateTime2)
-            ).ConfigureAwait(false);
-
-            return scalar is Guid g ? g : id;
+                return id;
+            }
+            catch (SqlException ex) when (ex.Number == 2627) // UNIQUE violation
+            {
+                throw new InvalidOperationException("Email hoặc PrivilegeCode đã tồn tại.", ex);
+            }
         }
+
 
 
         public async Task LinkRosterUsedAsync(Guid rosterId, CancellationToken ct = default)

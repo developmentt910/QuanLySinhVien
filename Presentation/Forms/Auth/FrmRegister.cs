@@ -22,7 +22,7 @@ namespace StudentCourseManagement.Forms.Auth
             _registration = new RegistrationService(
                 userR: ServicesFactory.CreateUsersReader(),
                 userW: ServicesFactory.CreateUsersWriter(),
-              
+
                 otpR: ServicesFactory.CreateOtpReader(),
                 otpW: ServicesFactory.CreateOtpWriter(),
                 email: ServicesFactory.CreateEmail(),
@@ -74,6 +74,9 @@ namespace StudentCourseManagement.Forms.Auth
             txtStudentCode.CausesValidation = isStudent;
             txtPrivCode.CausesValidation = isAdmin;
 
+            txtPassword.Visible = pnlStudent.Visible;
+            lblPassword.Visible = isStudent;
+
             if (!isStudent) SetInlineError(txtStudentCode, null);
             if (!isAdmin) SetInlineError(txtPrivCode, null);
 
@@ -99,8 +102,8 @@ namespace StudentCourseManagement.Forms.Auth
                 Padding = new Padding(0)
             };
             inner.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            inner.RowStyles.Add(new RowStyle()); 
-            inner.RowStyles.Add(new RowStyle()); 
+            inner.RowStyles.Add(new RowStyle());
+            inner.RowStyles.Add(new RowStyle());
 
             parentTlp.Controls.Remove(box);
             box.Margin = new Padding(0, 3, 0, 0);
@@ -149,8 +152,8 @@ namespace StudentCourseManagement.Forms.Auth
             MessageBox.Show("Đi tới trang Đăng nhập.",
                 "Chuyển trang", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-            FrmLogin frmLogin = new FrmLogin();
-            frmLogin.Show();
+            FrmLoginAdmin frmLoginAdmin = new FrmLoginAdmin();
+            frmLoginAdmin.Show();
             this.Hide();
 
         }
@@ -171,7 +174,7 @@ namespace StudentCourseManagement.Forms.Auth
             var dto = new RegisterDto
             {
                 FullName = txtFullName.Text,
-                Password = txtPassword.Text,
+                Password = pnlStudent.Visible ? txtPassword.Text : null,
                 CCCD = txtCccd.Text.Trim(),
                 Phone = txtPhone.Text.Trim(),
                 Email = txtEmail.Text.Trim(),
@@ -317,6 +320,11 @@ namespace StudentCourseManagement.Forms.Auth
             else SetInlineError(txtPrivCode, null);
         }
 
-      
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            FrmLogin frmLoginStudent = new FrmLogin();
+            frmLoginStudent.Show();
+            this.Hide();
+        }
     }
 }

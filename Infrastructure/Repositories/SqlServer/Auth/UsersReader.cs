@@ -1,6 +1,4 @@
 ﻿
-using StudentCourseManagement.Applications.Validation;
-using StudentCourseManagement.Domain.Results;
 
 namespace StudentCourseManagement.Infrastructure.Repositories.SqlServer.Auth
 {
@@ -10,9 +8,11 @@ namespace StudentCourseManagement.Infrastructure.Repositories.SqlServer.Auth
         public UsersReader(SqlConnectionFactory db) => _db = db;
 
         private const string UserColumns = @"
-            Id, StudentCode, FullName, EmailNormalized,
+            Id, StudentCode, PrivilegeCode, FullName, EmailNormalized,
             PhoneE164, CCCD, Role, RosterId, Gender, Address,
             PasswordHash, EmailVerified, IsLocked";
+
+
 
         public async Task<User?> FindByEmailAsync(string emailNormalized, CancellationToken ct = default)
         {
@@ -31,7 +31,7 @@ namespace StudentCourseManagement.Infrastructure.Repositories.SqlServer.Auth
             return null;
         }
 
-        public async Task<User?> FindByStudentCode (string studentCode, CancellationToken ct = default)
+        public async Task<User?> FindByStudentCode(string studentCode, CancellationToken ct = default)
         {
             await using var conn = await _db.OpenAsync(ct).ConfigureAwait(false);
             string sql = $@"SELECT TOP 1 {UserColumns}
@@ -97,7 +97,7 @@ namespace StudentCourseManagement.Infrastructure.Repositories.SqlServer.Auth
 
         public async Task<bool> StudentCodeExistsAsync(string studentCode, CancellationToken ct = default)
         {
-           
+
             await using var conn = await _db.OpenAsync(ct).ConfigureAwait(false);
             const string sql = @"SELECT TOP 1 1 FROM dbo.Users WHERE StudentCode = @s";
 
@@ -106,7 +106,7 @@ namespace StudentCourseManagement.Infrastructure.Repositories.SqlServer.Auth
                 ps: new SqlParameter("@s", SqlDbType.NVarChar, 32)
                 { Value = (object?)studentCode ?? DBNull.Value }
             ).ConfigureAwait(false);
-                
+
             return v is not null;
         }
 
@@ -138,7 +138,7 @@ namespace StudentCourseManagement.Infrastructure.Repositories.SqlServer.Auth
 
             await using var r = await SqlHelpers.ExecReaderAsync(
                 conn, tx: null, sql, ct: ct,
-                ps: new SqlParameter("@p", SqlDbType.NVarChar, 32)
+                ps: new SqlParameter("@p", SqlDbType.NVarChar, 50)
                 { Value = (object?)privilegeCode ?? DBNull.Value }
             ).ConfigureAwait(false);
 
@@ -149,19 +149,28 @@ namespace StudentCourseManagement.Infrastructure.Repositories.SqlServer.Auth
         }
 
 
-        private static User Map(SqlDataReader r) => new()
-        {
-            Id = r.GetGuid(r.GetOrdinal("Id")),
-            StudentCode = r["StudentCode"] as string,
-            FullName = r["FullName"] as string ?? "",
-            EmailNormalized = r["EmailNormalized"] as string ?? "",
-            PhoneE164 = r["PhoneE164"] as string,
-            CCCD = r["CCCD"] as string ?? "",
-            Role = r["Role"] as string ?? "user",
-            RosterId = r.IsDBNull(r.GetOrdinal("RosterId")) ? null : r.GetGuid(r.GetOrdinal("RosterId")),
-            PasswordHash = r["PasswordHash"] as string ?? "",
-            EmailVerified = !r.IsDBNull(r.GetOrdinal("EmailVerified")) && Convert.ToBoolean(r["EmailVerified"]),
-            IsLocked = !r.IsDBNull(r.GetOrdinal("IsLocked")) && Convert.ToBoolean(r["IsLocked"]),
-        };
+
+
+          private static User Map(SqlDataReader r) => new()
+          {
+              Id = r.GetGuid(r.GetOrdinal("Id")),
+              StudentCode = r["StudentCode"] as string,
+              PrivilegeCode = r["PrivilegeCode"] as string,
+              FullName = r["FullName"] as string ?? "",
+              EmailNormalized = r["EmailNormalized"] as string ?? "",
+              PhoneE164 = r["PhoneE164"] as string,
+              CCCD = r["CCCD"] as string ?? "",
+              Role = r["Role"] as string ?? "user",
+              RosterId = r.IsDBNull(r.GetOrdinal("RosterId")) ? null : r.GetGuid(r.GetOrdinal("RosterId")),
+              PasswordHash = r.IsDBNull(r.GetOrdinal("PasswordHash"))
+                 ? null 
+                 : r.GetString(r.GetOrdinal("PasswordHash")),
+
+              EmailVerified = !r.IsDBNull(r.GetOrdinal("EmailVerified")) && Convert.ToBoolean(r["EmailVerified"]),
+              IsLocked = !r.IsDBNull(r.GetOrdinal("IsLocked")) && Convert.ToBoolean(r["IsLocked"]),
+              Gender = r["Gender"] as string,
+              Address = r["Address"] as string,
+          };
+
+    };
     }
-}

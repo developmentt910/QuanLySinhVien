@@ -30,13 +30,11 @@
         {
             label1 = new Label();
             lblMDQ = new Label();
-            txtPassword = new Label();
             sqlCommand1 = new SqlCommand();
             lblCaptchaCode = new Label();
             btnRefreshCaptcha = new Button();
             lbl = new Label();
             txtCaptchaInput = new TextBox();
-            textBox2 = new TextBox();
             txtMDQ = new TextBox();
             btnLogin = new Button();
             linkLabel1 = new LinkLabel();
@@ -61,15 +59,6 @@
             lblMDQ.TabIndex = 1;
             lblMDQ.Text = "Mã đặc quyền";
             // 
-            // txtPassword
-            // 
-            txtPassword.AutoSize = true;
-            txtPassword.Location = new Point(177, 154);
-            txtPassword.Name = "txtPassword";
-            txtPassword.Size = new Size(70, 20);
-            txtPassword.TabIndex = 2;
-            txtPassword.Text = "Mật khẩu";
-            // 
             // sqlCommand1
             // 
             sqlCommand1.CommandTimeout = 30;
@@ -78,16 +67,15 @@
             // lblCaptchaCode
             // 
             lblCaptchaCode.AutoSize = true;
-            lblCaptchaCode.Location = new Point(636, 211);
+            lblCaptchaCode.Location = new Point(637, 169);
             lblCaptchaCode.Name = "lblCaptchaCode";
-            lblCaptchaCode.Size = new Size(39, 20);
+            lblCaptchaCode.Size = new Size(0, 20);
             lblCaptchaCode.TabIndex = 7;
-            lblCaptchaCode.Text = "..........";
             lblCaptchaCode.TextAlign = ContentAlignment.TopRight;
             // 
             // btnRefreshCaptcha
             // 
-            btnRefreshCaptcha.Location = new Point(711, 211);
+            btnRefreshCaptcha.Location = new Point(709, 165);
             btnRefreshCaptcha.Name = "btnRefreshCaptcha";
             btnRefreshCaptcha.Size = new Size(32, 29);
             btnRefreshCaptcha.TabIndex = 9;
@@ -98,7 +86,7 @@
             // lbl
             // 
             lbl.AutoSize = true;
-            lbl.Location = new Point(177, 207);
+            lbl.Location = new Point(177, 162);
             lbl.Name = "lbl";
             lbl.Size = new Size(79, 20);
             lbl.TabIndex = 10;
@@ -106,17 +94,10 @@
             // 
             // txtCaptchaInput
             // 
-            txtCaptchaInput.Location = new Point(389, 204);
+            txtCaptchaInput.Location = new Point(389, 162);
             txtCaptchaInput.Name = "txtCaptchaInput";
             txtCaptchaInput.Size = new Size(207, 27);
             txtCaptchaInput.TabIndex = 11;
-            // 
-            // textBox2
-            // 
-            textBox2.Location = new Point(389, 154);
-            textBox2.Name = "textBox2";
-            textBox2.Size = new Size(207, 27);
-            textBox2.TabIndex = 12;
             // 
             // txtMDQ
             // 
@@ -127,9 +108,9 @@
             // 
             // btnLogin
             // 
-            btnLogin.Location = new Point(275, 289);
+            btnLogin.Location = new Point(249, 253);
             btnLogin.Name = "btnLogin";
-            btnLogin.Size = new Size(94, 29);
+            btnLogin.Size = new Size(154, 29);
             btnLogin.TabIndex = 14;
             btnLogin.Text = "Đăng nhập";
             btnLogin.UseVisualStyleBackColor = true;
@@ -138,12 +119,13 @@
             // linkLabel1
             // 
             linkLabel1.AutoSize = true;
-            linkLabel1.Location = new Point(451, 298);
+            linkLabel1.Location = new Point(460, 262);
             linkLabel1.Name = "linkLabel1";
-            linkLabel1.Size = new Size(109, 20);
+            linkLabel1.Size = new Size(157, 20);
             linkLabel1.TabIndex = 15;
             linkLabel1.TabStop = true;
-            linkLabel1.Text = "Quên mật khẩu";
+            linkLabel1.Text = "Quay về trang đăng ký";
+            linkLabel1.LinkClicked += linkLabel1_LinkClicked;
             // 
             // FrmLoginAdmin
             // 
@@ -153,12 +135,10 @@
             Controls.Add(linkLabel1);
             Controls.Add(btnLogin);
             Controls.Add(txtMDQ);
-            Controls.Add(textBox2);
             Controls.Add(txtCaptchaInput);
             Controls.Add(lbl);
             Controls.Add(btnRefreshCaptcha);
             Controls.Add(lblCaptchaCode);
-            Controls.Add(txtPassword);
             Controls.Add(lblMDQ);
             Controls.Add(label1);
             Name = "FrmLoginAdmin";
@@ -171,13 +151,11 @@
 
         private Label label1;
         private Label lblMDQ;
-        private Label txtPassword;
         private SqlCommand sqlCommand1;
         private Label lblCaptchaCode;
         private Button btnRefreshCaptcha;
         private Label lbl;
         private TextBox txtCaptchaInput;
-        private TextBox textBox2;
         private TextBox txtMDQ;
         private Button btnLogin;
         private LinkLabel linkLabel1;

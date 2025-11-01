@@ -46,6 +46,7 @@ namespace StudentCourseManagement.Forms.Auth
             flpActions = new FlowLayoutPanel();
             btnRegister = new Button();
             lnkToLogin = new LinkLabel();
+            linkLabel1 = new LinkLabel();
             flpRole.SuspendLayout();
             tlpInfo.SuspendLayout();
             tlpRoot.SuspendLayout();
@@ -376,6 +377,7 @@ namespace StudentCourseManagement.Forms.Auth
             flpActions.AutoSize = true;
             flpActions.Controls.Add(btnRegister);
             flpActions.Controls.Add(lnkToLogin);
+            flpActions.Controls.Add(linkLabel1);
             flpActions.Dock = DockStyle.Top;
             flpActions.Location = new Point(15, 386);
             flpActions.Name = "flpActions";
@@ -386,9 +388,10 @@ namespace StudentCourseManagement.Forms.Auth
             // btnRegister
             // 
             btnRegister.AutoSize = true;
+            btnRegister.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnRegister.Location = new Point(3, 3);
             btnRegister.Name = "btnRegister";
-            btnRegister.Size = new Size(94, 30);
+            btnRegister.Size = new Size(177, 33);
             btnRegister.TabIndex = 1;
             btnRegister.Text = "Đăng Ký";
             btnRegister.UseVisualStyleBackColor = true;
@@ -399,13 +402,24 @@ namespace StudentCourseManagement.Forms.Auth
             lnkToLogin.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             lnkToLogin.AutoSize = true;
             lnkToLogin.CausesValidation = false;
-            lnkToLogin.Location = new Point(103, 0);
+            lnkToLogin.Location = new Point(186, 0);
             lnkToLogin.Name = "lnkToLogin";
-            lnkToLogin.Size = new Size(120, 40);
+            lnkToLogin.Size = new Size(205, 40);
             lnkToLogin.TabIndex = 0;
             lnkToLogin.TabStop = true;
-            lnkToLogin.Text = "Đã có tài khoản?\r\n\r\n";
+            lnkToLogin.Text = "Đã có tài khoản Quản lý viên?\r\n\r\n";
             lnkToLogin.LinkClicked += lnkToLogin_LinkClicked;
+            // 
+            // linkLabel1
+            // 
+            linkLabel1.AutoSize = true;
+            linkLabel1.Location = new Point(397, 0);
+            linkLabel1.Name = "linkLabel1";
+            linkLabel1.Size = new Size(183, 20);
+            linkLabel1.TabIndex = 2;
+            linkLabel1.TabStop = true;
+            linkLabel1.Text = "Đã có tài khoản Sinh viên?";
+            linkLabel1.LinkClicked += linkLabel1_LinkClicked;
             // 
             // FrmRegister
             // 
@@ -467,5 +481,6 @@ namespace StudentCourseManagement.Forms.Auth
         private FlowLayoutPanel flpActions;
         private Button btnRegister;
         private LinkLabel lnkToLogin;
+        private LinkLabel linkLabel1;
     }
 }
