@@ -14,8 +14,6 @@ global using StudentCourseManagement.Domain.Abstractions.Repositories;
 global using StudentCourseManagement.Infrastructure.Repositories.SqlServer.Auth;
 
 global using StudentCourseManagement.Domain.Abstractions.Services;
-global using System.Net;
-global using System.Net.Mail;
 global using StudentCourseManagement.Applications.Time;
 
 
@@ -34,3 +32,12 @@ global using StudentCourseManagement.Applications.Dtos;
 
 global using StudentCourseManagement.Applications.Security;
 global using StudentCourseManagement.Presentation.WinForms.Bootstrap;
+
+global using System.ComponentModel;
+global using StudentCourseManagement.Applications.Validation;
+global using StudentCourseManagement.Presentation.Forms.Auth;
+
+
+global using StudentCourseManagement.Domain.Results;
+global using StudentCourseManagement.Infrastructure.Security.Crypto;
+global using StudentCourseManagement.Presentation.Forms.Admin;

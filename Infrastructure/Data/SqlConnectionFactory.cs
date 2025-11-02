@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-
+﻿
 namespace StudentCourseManagement.Infrastructure.Data
 {
     public sealed class SqlConnectionFactory

@@ -1,10 +1,4 @@
 ﻿
-using StudentCourseManagement.Applications.Security;
-using StudentCourseManagement.Domain.Entities;
-using StudentCourseManagement.Infrastructure.Repositories.SqlServer.Auth;
-using StudentCourseManagement.Presentation.Forms.Admin;
-using StudentCourseManagement.Presentation.WinForms.Bootstrap;
-
 namespace StudentCourseManagement.Forms.Auth
 {
     public partial class FrmLogin : Form

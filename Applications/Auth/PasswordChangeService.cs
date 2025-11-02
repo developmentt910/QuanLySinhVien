@@ -1,8 +1,4 @@
-﻿using StudentCourseManagement.Applications.Dtos;
-using StudentCourseManagement.Applications.Validation;
-using StudentCourseManagement.Domain.Results;
-using StudentCourseManagement.Infrastructure.Security.Crypto;
-
+﻿
 
 namespace StudentCourseManagement.Applications.Auth
 {

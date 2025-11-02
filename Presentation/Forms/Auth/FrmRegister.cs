@@ -1,11 +1,4 @@
-﻿using System.ComponentModel;
-using System.Drawing;
-using System.Windows.Forms;
-
-using StudentCourseManagement.Applications.Dtos;
-using StudentCourseManagement.Applications.Validation;
-using StudentCourseManagement.Presentation.Forms.Auth;
-using StudentCourseManagement.Presentation.WinForms.Bootstrap;
+﻿
 
 namespace StudentCourseManagement.Forms.Auth
 {

@@ -26,7 +26,6 @@ namespace StudentCourseManagement.Presentation.WinForms.Bootstrap
         public static IOtpPinsWriter CreateOtpWriter() => new OtpPinsWriter(Db);
      
         public static ILoginThrottleStore CreateThrottleStore() => new LoginThrottleStore(Db);
-        public static IAuditLogsWriter CreateAuditWriter() => new AuditLogsWriter(Db);
 
         // External stubs
         public static IEmailService CreateEmail() => new EmailServiceStub();

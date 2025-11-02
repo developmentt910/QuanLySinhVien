@@ -1,11 +1,4 @@
-﻿using StudentCourseManagement.Applications.Dtos;
-using StudentCourseManagement.Applications.Security;
-using StudentCourseManagement.Domain.Entities;
-using StudentCourseManagement.Domain.Results;
-using StudentCourseManagement.Infrastructure.Security.Crypto;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
+﻿
 
 namespace StudentCourseManagement.Applications.Auth
 {
