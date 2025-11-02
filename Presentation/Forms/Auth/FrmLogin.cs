@@ -4,6 +4,7 @@ namespace StudentCourseManagement.Forms.Auth
     public partial class FrmLogin : Form
     {
         private readonly LoginService _loginService;
+        private readonly PasswordChangeService _changeService;
 
         public FrmLogin()
         {
@@ -61,8 +62,15 @@ namespace StudentCourseManagement.Forms.Auth
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            FrmRegister frmRegister = new FrmRegister();
-            frmRegister.Show();
+            FrmChangePassword frmchangepasswprd = new FrmChangePassword(_changeService);
+            frmchangepasswprd.Show();
+            this.Hide();
+        }
+
+        private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            FrmRegister frmregister  = new FrmRegister();
+            frmregister.Show();
             this.Hide();
         }
     }

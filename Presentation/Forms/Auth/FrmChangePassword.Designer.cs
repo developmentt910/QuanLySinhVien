@@ -117,6 +117,7 @@
             linkLabel1.TabIndex = 8;
             linkLabel1.TabStop = true;
             linkLabel1.Text = "Quay lại trang chủ";
+            linkLabel1.LinkClicked += linkLabel1_LinkClicked;
             // 
             // lblMessage
             // 

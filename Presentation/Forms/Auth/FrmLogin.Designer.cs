@@ -40,6 +40,7 @@
             linkLabel1 = new LinkLabel();
             lblCaptchaCode = new Label();
             checkedListBox1 = new CheckedListBox();
+            linkLabel2 = new LinkLabel();
             SuspendLayout();
             // 
             // label1
@@ -55,7 +56,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(231, 96);
+            label2.Location = new Point(160, 96);
             label2.Name = "label2";
             label2.Size = new Size(39, 20);
             label2.TabIndex = 1;
@@ -64,7 +65,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(231, 146);
+            label3.Location = new Point(160, 146);
             label3.Name = "label3";
             label3.Size = new Size(70, 20);
             label3.TabIndex = 2;
@@ -73,7 +74,7 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(231, 202);
+            label4.Location = new Point(160, 202);
             label4.Name = "label4";
             label4.Size = new Size(79, 20);
             label4.TabIndex = 3;
@@ -91,28 +92,28 @@
             // 
             // txtMSV
             // 
-            txtMSV.Location = new Point(460, 89);
+            txtMSV.Location = new Point(391, 89);
             txtMSV.Name = "txtMSV";
-            txtMSV.Size = new Size(150, 27);
+            txtMSV.Size = new Size(232, 27);
             txtMSV.TabIndex = 5;
             // 
             // txtPassword
             // 
-            txtPassword.Location = new Point(460, 139);
+            txtPassword.Location = new Point(391, 139);
             txtPassword.Name = "txtPassword";
-            txtPassword.Size = new Size(150, 27);
+            txtPassword.Size = new Size(232, 27);
             txtPassword.TabIndex = 6;
             // 
             // txtCaptchaInput
             // 
-            txtCaptchaInput.Location = new Point(460, 195);
+            txtCaptchaInput.Location = new Point(391, 195);
             txtCaptchaInput.Name = "txtCaptchaInput";
-            txtCaptchaInput.Size = new Size(150, 27);
+            txtCaptchaInput.Size = new Size(232, 27);
             txtCaptchaInput.TabIndex = 7;
             // 
             // btnRefreshCaptcha
             // 
-            btnRefreshCaptcha.Location = new Point(719, 197);
+            btnRefreshCaptcha.Location = new Point(735, 193);
             btnRefreshCaptcha.Name = "btnRefreshCaptcha";
             btnRefreshCaptcha.Size = new Size(32, 29);
             btnRefreshCaptcha.TabIndex = 8;
@@ -125,16 +126,16 @@
             linkLabel1.AutoSize = true;
             linkLabel1.Location = new Point(411, 293);
             linkLabel1.Name = "linkLabel1";
-            linkLabel1.Size = new Size(157, 20);
+            linkLabel1.Size = new Size(98, 20);
             linkLabel1.TabIndex = 10;
             linkLabel1.TabStop = true;
-            linkLabel1.Text = "Quay về trang đăng ký";
+            linkLabel1.Text = "Đổi mật khẩu";
             linkLabel1.LinkClicked += linkLabel1_LinkClicked;
             // 
             // lblCaptchaCode
             // 
             lblCaptchaCode.AutoSize = true;
-            lblCaptchaCode.Location = new Point(624, 206);
+            lblCaptchaCode.Location = new Point(649, 198);
             lblCaptchaCode.Name = "lblCaptchaCode";
             lblCaptchaCode.Size = new Size(66, 20);
             lblCaptchaCode.TabIndex = 11;
@@ -148,11 +149,23 @@
             checkedListBox1.Size = new Size(8, 4);
             checkedListBox1.TabIndex = 12;
             // 
+            // linkLabel2
+            // 
+            linkLabel2.AutoSize = true;
+            linkLabel2.Location = new Point(557, 293);
+            linkLabel2.Name = "linkLabel2";
+            linkLabel2.Size = new Size(158, 20);
+            linkLabel2.TabIndex = 13;
+            linkLabel2.TabStop = true;
+            linkLabel2.Text = "Quay lại trang đăng ký";
+            linkLabel2.LinkClicked += linkLabel2_LinkClicked;
+            // 
             // FrmLogin
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(linkLabel2);
             Controls.Add(checkedListBox1);
             Controls.Add(lblCaptchaCode);
             Controls.Add(linkLabel1);
@@ -185,5 +198,6 @@
         private LinkLabel linkLabel1;
         private Label lblCaptchaCode;
         private CheckedListBox checkedListBox1;
+        private LinkLabel linkLabel2;
     }
 }

@@ -11,6 +11,7 @@ namespace StudentCourseManagement.Forms.Auth
             _changeService = changeService;
         }
 
+
         private void btnChange_Click(object sender, EventArgs e)
         {
             lblMessage.Visible = false;
@@ -47,6 +48,13 @@ namespace StudentCourseManagement.Forms.Auth
             txtOldPassword.Clear();
             txtNewPassword.Clear();
             txtConfirmPassword.Clear();
+        }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            FrmLogin frmlogin  = new FrmLogin();
+            frmlogin.Show();
+            this.Hide();
         }
     }
 }
