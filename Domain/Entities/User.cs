@@ -29,5 +29,8 @@ namespace StudentCourseManagement.Domain.Entities
 
         public DateTime CreatedAtUtc { get; set; } = DateTime.UtcNow;
         public DateTime UpdatedAtUtc { get; set; } = DateTime.UtcNow;
+
+        public byte[]? ProfileImage { get; set; }
+
     }
 }

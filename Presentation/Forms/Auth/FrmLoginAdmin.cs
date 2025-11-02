@@ -1,5 +1,7 @@
 ﻿
 
+using StudentCourseManagement.Applications.Services;
+
 namespace StudentCourseManagement.Presentation.Forms.Auth
 {
     public partial class FrmLoginAdmin : Form
@@ -53,7 +55,16 @@ namespace StudentCourseManagement.Presentation.Forms.Auth
             }
 
             MessageBox.Show($"Chào mừng {result.Value.FullName}!", "Đăng nhập thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            FrmAdminDashboard adminForm = new FrmAdminDashboard();
+
+            var userService = new UserService(
+                   ServicesFactory.CreateUsersReader(),
+                   ServicesFactory.CreateUsersWriter()
+               );
+
+            Guid userId = result.Value.Id;
+
+
+            FrmAdminDashboard adminForm = new FrmAdminDashboard(userService, userId);
             adminForm.FormClosed += (s, args) => this.Close();
             adminForm.Show();
             this.Hide();

@@ -8,7 +8,7 @@ namespace StudentCourseManagement.Infrastructure.Repositories.SqlServer.Auth
         public UsersReader(SqlConnectionFactory db) => _db = db;
 
         private const string UserColumns = @"
-            Id, StudentCode, PrivilegeCode, FullName, EmailNormalized,
+            Id, StudentCode, PrivilegeCode, FullName, EmailNormalized,ProfileImage,
             PhoneE164, CCCD, Role, RosterId, Gender, Address,
             PasswordHash, EmailVerified, IsLocked";
 
@@ -51,21 +51,21 @@ namespace StudentCourseManagement.Infrastructure.Repositories.SqlServer.Auth
             return null;
         }
 
-        //public async Task<User?> FindByIdAsync(Guid id, CancellationToken ct = default)
-        //{
-        //    await using var conn = await _db.OpenAsync(ct).ConfigureAwait(false);
-        //    string sql = $@"SELECT TOP 1 {UserColumns}
-        //                    FROM dbo.Users
-        //                    WHERE Id = @i";
+        public async Task<User?> FindByIdAsync(Guid id, CancellationToken ct = default)
+        {
+            await using var conn = await _db.OpenAsync(ct).ConfigureAwait(false);
+            string sql = $@"SELECT TOP 1 {UserColumns}
+                            FROM dbo.Users
+                            WHERE Id = @i";
 
-        //    await using var r = await SqlHelpers.ExecReaderAsync(
-        //        conn, tx: null, sql, ct: ct,
-        //        ps: new SqlParameter("@i", SqlDbType.UniqueIdentifier) { Value = id }
-        //    ).ConfigureAwait(false);
+            await using var r = await SqlHelpers.ExecReaderAsync(
+                conn, tx: null, sql, ct: ct,
+                ps: new SqlParameter("@i", SqlDbType.UniqueIdentifier) { Value = id }
+            ).ConfigureAwait(false);
 
-        //    if (await r.ReadAsync(ct).ConfigureAwait(false)) return Map(r);
-        //    return null;
-        //}
+            if (await r.ReadAsync(ct).ConfigureAwait(false)) return Map(r);
+            return null;
+        }
 
         public async Task<bool> EmailExistsAsync(string emailNormalized, CancellationToken ct = default)
         {
@@ -165,6 +165,10 @@ namespace StudentCourseManagement.Infrastructure.Repositories.SqlServer.Auth
               PasswordHash = r.IsDBNull(r.GetOrdinal("PasswordHash"))
                  ? null 
                  : r.GetString(r.GetOrdinal("PasswordHash")),
+              ProfileImage = r.IsDBNull(r.GetOrdinal("ProfileImage"))
+                ? null
+                : (byte[])r["ProfileImage"],
+
 
               EmailVerified = !r.IsDBNull(r.GetOrdinal("EmailVerified")) && Convert.ToBoolean(r["EmailVerified"]),
               IsLocked = !r.IsDBNull(r.GetOrdinal("IsLocked")) && Convert.ToBoolean(r["IsLocked"]),

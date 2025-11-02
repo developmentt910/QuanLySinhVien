@@ -9,8 +9,7 @@ namespace StudentCourseManagement.Domain.Abstractions.Repositories
         Task SetLockedAsync (Guid id, bool locked, CancellationToken ct = default);
         Task LinkRosterUsedAsync(Guid rosterId, CancellationToken ct = default);    
         Task MarkEmailVerifiedAsync(Guid id, DateTime verifiedAtUtc, CancellationToken ct = default);
-
-        //Task UpdateStudentAsync(User u, CancellationToken ct = default);
+        Task UpdateUserInfoAsync(User u, CancellationToken ct = default);
 
     }
 }

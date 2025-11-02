@@ -12,7 +12,7 @@ namespace StudentCourseManagement.Infrastructure.Repositories.SqlServer.Auth
 
             const string sql = @"
         INSERT INTO dbo.Users (
-            Id, StudentCode, PrivilegeCode, FullName, EmailNormalized,
+            Id, StudentCode, PrivilegeCode, FullName, EmailNormalized,ProfileImage,
             PhoneE164, CCCD, Role, RosterId,
             PasswordHash, EmailVerified, IsLocked,
             Gender, Address,
@@ -142,6 +142,34 @@ namespace StudentCourseManagement.Infrastructure.Repositories.SqlServer.Auth
             ).ConfigureAwait(false);
         }
 
+
+        public async Task UpdateUserInfoAsync(User u, CancellationToken ct = default)
+        {
+            await using var conn = await _db.OpenAsync(ct);
+
+            const string sql = @"
+                UPDATE Users
+                SET FullName = @FullName,
+                    Gender = @Gender,
+                    Address = @Address,
+                    CCCD = @CCCD,
+                    PhoneE164 = @PhoneE164,
+                    ProfileImage = @ProfileImage,
+                    UpdatedAtUtc = @UpdatedAtUtc
+                WHERE Id = @Id";
+
+            await using var cmd = new SqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("@Id", u.Id);
+            cmd.Parameters.AddWithValue("@FullName", u.FullName);
+            cmd.Parameters.AddWithValue("@Gender", (object?)u.Gender ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("@Address", (object?)u.Address ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("@CCCD", (object?)u.CCCD ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("@PhoneE164", (object?)u.PhoneE164 ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("@ProfileImage", (object?)u.ProfileImage ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("@UpdatedAtUtc", DateTime.UtcNow);
+
+            await cmd.ExecuteNonQueryAsync(ct);
+        }
 
 
 
