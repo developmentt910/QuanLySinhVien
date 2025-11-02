@@ -108,5 +108,13 @@ namespace StudentCourseManagement.Presentation.Forms.Admin
                 MessageBox.Show("Lỗi khi lưu dữ liệu: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void đăngXuấtToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmLoginAdmin frmLogin = new FrmLoginAdmin();
+            frmLogin.Show();
+
+            this.Close(); 
+        }
     }
 }

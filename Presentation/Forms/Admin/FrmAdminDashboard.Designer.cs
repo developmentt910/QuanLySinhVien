@@ -58,6 +58,7 @@
             btnUploadImage = new Button();
             btnEdit = new Button();
             btnSave = new Button();
+            đăngXuấtToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             ((ISupportInitialize)pictureBoxProfile).BeginInit();
             SuspendLayout();
@@ -73,6 +74,7 @@
             // 
             // hệThốngToolStripMenuItem
             // 
+            hệThốngToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { đăngXuấtToolStripMenuItem });
             hệThốngToolStripMenuItem.Name = "hệThốngToolStripMenuItem";
             hệThốngToolStripMenuItem.Size = new Size(85, 24);
             hệThốngToolStripMenuItem.Text = "Hệ thống";
@@ -309,6 +311,13 @@
             btnSave.TabIndex = 17;
             btnSave.Text = "Lưu";
             // 
+            // đăngXuấtToolStripMenuItem
+            // 
+            đăngXuấtToolStripMenuItem.Name = "đăngXuấtToolStripMenuItem";
+            đăngXuấtToolStripMenuItem.Size = new Size(224, 26);
+            đăngXuấtToolStripMenuItem.Text = "Đăng xuất";
+            đăngXuấtToolStripMenuItem.Click += đăngXuấtToolStripMenuItem_Click;
+            // 
             // FrmAdminDashboard
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -381,5 +390,6 @@
         private Button btnUploadImage;
         private Button btnEdit;
         private Button btnSave;
+        private ToolStripMenuItem đăngXuấtToolStripMenuItem;
     }
 }
