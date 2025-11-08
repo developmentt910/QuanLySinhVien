@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net8.0-windows</TargetFramework>
+		<UseWindowsForms>true</UseWindowsForms>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+
+		<RootNamespace>StudentCourseManagement</RootNamespace>
+		<AssemblyName>StudentCourseManagement</AssemblyName>
+		<UseWindowsForms>true</UseWindowsForms>
+
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <Compile Remove="Applications\StudentService\**" />
+	  <EmbeddedResource Remove="Applications\StudentService\**" />
+	  <None Remove="Applications\StudentService\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AppCenter" Version="5.0.7" />
+		<PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.2" />
+		<PackageReference Include="Microsoft.Extensions.Configuration" Version="9.*" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="9.*" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.*" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.3" />
+		<PackageReference Include="Microsoft.Extensions.Options" Version="8.0.2" />
+		<PackageReference Include="MSTest.TestFramework" Version="4.0.1" />
+		<PackageReference Include="xunit.extensibility.core" Version="2.9.3" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="appsettings.json" CopyToOutputDirectory="Always" />
+		<None Include="App.config" CopyToOutputDirectory="Always" />
+		<None Include="Properties\Settings.settings" />
+		<None Include="README.md" />
+		<None Include=".gitignore" />
+	</ItemGroup>
+
+</Project>
