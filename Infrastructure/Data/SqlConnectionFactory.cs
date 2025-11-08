@@ -1,4 +1,9 @@
-﻿
+﻿using Microsoft.Extensions.Configuration;
+using System;
+using System.Data.SqlClient; 
+using System.Threading;     
+using System.Threading.Tasks; 
+
 namespace StudentCourseManagement.Infrastructure.Data
 {
     public sealed class SqlConnectionFactory
@@ -10,7 +15,6 @@ namespace StudentCourseManagement.Infrastructure.Data
                 ?? throw new InvalidOperationException(
                     "Missing ConnectionStrings:DefaultConnection in appsettings.json");
         }
-
 
         // create connection 
         public SqlConnection Create()

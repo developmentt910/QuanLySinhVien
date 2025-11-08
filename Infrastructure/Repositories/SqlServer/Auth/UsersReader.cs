@@ -148,9 +148,6 @@ namespace StudentCourseManagement.Infrastructure.Repositories.SqlServer.Auth
             return null;
         }
 
-
-
-
           private static User Map(SqlDataReader r) => new()
           {
               Id = r.GetGuid(r.GetOrdinal("Id")),

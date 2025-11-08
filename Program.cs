@@ -1,5 +1,10 @@
 ﻿
 using StudentCourseManagement.Presentation.WinForms.Bootstrap;
+using Microsoft.Extensions.Configuration;
+using System;
+using System.Windows.Forms;
+using StudentCourseManagement.Presentation.Forms.Schedule;
+
 namespace StudentCourseManagement
 {
     internal static class Program
@@ -14,17 +19,13 @@ namespace StudentCourseManagement
 
             ServicesFactory.UseConfiguration(config);
 
-
-
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FrmRegister());
 
-
-
-
+            Application.Run(new FrmAdminDashboard());
+            //Application.Run(new FrmQuanLyThoiKhoaBieu());
+            //Application.Run(new FrmRegister());
         }
-
     }
 }
