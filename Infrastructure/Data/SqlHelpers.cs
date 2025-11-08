@@ -111,7 +111,7 @@ namespace StudentCourseManagement.Infrastructure.Data
         }
 
 
-        // sql injection 
+        // sql injection    
         public static SqlParameter P (string name, object? value, SqlDbType type, int size = 0)
         {
             var p = new SqlParameter(name, type)

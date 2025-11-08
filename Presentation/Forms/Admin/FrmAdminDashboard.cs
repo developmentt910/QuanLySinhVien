@@ -4,10 +4,10 @@ namespace StudentCourseManagement.Presentation.Forms.Admin
 {
     public partial class FrmAdminDashboard : Form
     {
-        private readonly UserService _userService;
+        private readonly AdminService _userService;
         private User _currentUser; // quản lý viên hiện tại
 
-        public FrmAdminDashboard(UserService userService, Guid userId)
+        public FrmAdminDashboard(AdminService userService, Guid userId)
         {
             InitializeComponent();
             _userService = userService;

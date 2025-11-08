@@ -46,7 +46,7 @@ namespace StudentCourseManagement.Forms.Auth
             flpActions = new FlowLayoutPanel();
             btnRegister = new Button();
             lnkToLogin = new LinkLabel();
-            linkLabel1 = new LinkLabel();
+            lnkToStudent = new LinkLabel();
             flpRole.SuspendLayout();
             tlpInfo.SuspendLayout();
             tlpRoot.SuspendLayout();
@@ -377,7 +377,7 @@ namespace StudentCourseManagement.Forms.Auth
             flpActions.AutoSize = true;
             flpActions.Controls.Add(btnRegister);
             flpActions.Controls.Add(lnkToLogin);
-            flpActions.Controls.Add(linkLabel1);
+            flpActions.Controls.Add(lnkToStudent);
             flpActions.Dock = DockStyle.Top;
             flpActions.Location = new Point(15, 386);
             flpActions.Name = "flpActions";
@@ -410,16 +410,16 @@ namespace StudentCourseManagement.Forms.Auth
             lnkToLogin.Text = "Đã có tài khoản Quản lý viên?\r\n\r\n";
             lnkToLogin.LinkClicked += lnkToLogin_LinkClicked;
             // 
-            // linkLabel1
+            // lnkToStudent
             // 
-            linkLabel1.AutoSize = true;
-            linkLabel1.Location = new Point(397, 0);
-            linkLabel1.Name = "linkLabel1";
-            linkLabel1.Size = new Size(183, 20);
-            linkLabel1.TabIndex = 2;
-            linkLabel1.TabStop = true;
-            linkLabel1.Text = "Đã có tài khoản Sinh viên?";
-            linkLabel1.LinkClicked += linkLabel1_LinkClicked;
+            lnkToStudent.AutoSize = true;
+            lnkToStudent.Location = new Point(397, 0);
+            lnkToStudent.Name = "lnkToStudent";
+            lnkToStudent.Size = new Size(183, 20);
+            lnkToStudent.TabIndex = 2;
+            lnkToStudent.TabStop = true;
+            lnkToStudent.Text = "Đã có tài khoản Sinh viên?";
+            lnkToStudent.LinkClicked += lnkToStudent_LinkClicked;
             // 
             // FrmRegister
             // 
@@ -481,6 +481,6 @@ namespace StudentCourseManagement.Forms.Auth
         private FlowLayoutPanel flpActions;
         private Button btnRegister;
         private LinkLabel lnkToLogin;
-        private LinkLabel linkLabel1;
+        private LinkLabel lnkToStudent;
     }
 }

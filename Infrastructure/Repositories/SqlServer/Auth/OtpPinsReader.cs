@@ -6,15 +6,16 @@ namespace StudentCourseManagement.Infrastructure.Repositories.SqlServer.Auth
     {
         private readonly SqlConnectionFactory _db;
         public OtpPinsReader(SqlConnectionFactory db) => _db = db;
+        //byte[] CodeHash, byte[] Salt,int AttemptCount
 
-        public async Task<(long Id, byte[] CodeHash, byte[] Salt, DateTime ExpiresAtUtc, int AttemptCount)?>
+        public async Task<(long Id, DateTime ExpiresAtUtc)?>
             GetLastActiveAsync(Guid userId, string purpose, CancellationToken ct = default)
         {
             await using var conn = await _db.OpenAsync(ct).ConfigureAwait(false);
-
+            //CodeHash, Salt,
             const string sql = @"
                 SELECT TOP 1 
-                       Id, CodeHash, Salt, ExpiresAtUtc, AttemptCount
+                       Id,  ExpiresAtUtc, AttemptCount
                 FROM dbo.OtpPins
                 WHERE UserId = @u
                   AND Purpose = @p
@@ -33,11 +34,12 @@ namespace StudentCourseManagement.Infrastructure.Repositories.SqlServer.Auth
             if (await r.ReadAsync(ct).ConfigureAwait(false))
             {
                 var id = r.GetInt64(r.GetOrdinal("Id"));
-                var hash = (byte[])r["CodeHash"];
-                var salt = (byte[])r["Salt"];
+                //var hash = (byte[])r["CodeHash"];
+                //var salt = (byte[])r["Salt"];
                 var exp = r.GetDateTime(r.GetOrdinal("ExpiresAtUtc"));
-                var attempts = r.GetInt32(r.GetOrdinal("AttemptCount"));
-                return (id, hash, salt, exp, attempts);
+                //var attempts = r.GetInt32(r.GetOrdinal("AttemptCount"));
+                return (id, exp);
+                //hash, salt,attempts
             }
             return null;
         }

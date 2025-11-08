@@ -1,8 +1,5 @@
-﻿using StudentCourseManagement.Applications.Dtos;
-using StudentCourseManagement.Applications.Validation;
-using StudentCourseManagement.Domain.Abstractions.Repositories;
-using StudentCourseManagement.Domain.Entities;
-using StudentCourseManagement.Domain.Results;
+﻿
+
 using StudentCourseManagement.Infrastructure.Security.Crypto;
 
 namespace StudentCourseManagement.Applications.Auth
@@ -72,6 +69,8 @@ namespace StudentCourseManagement.Applications.Auth
                 return Result<Guid>.Fail("Email đã tồn tại.");
             if (await _userR.CccdExistsAsync(dto.CCCD))
                 return Result<Guid>.Fail("CCCD đã tồn tại.");
+           
+            
             if (!string.IsNullOrWhiteSpace(dto.StudentCode) && await _userR.StudentCodeExistsAsync(dto.StudentCode))
                 return Result<Guid>.Fail("MSV này đã tồn tại.");
 
@@ -104,36 +103,41 @@ namespace StudentCourseManagement.Applications.Auth
             if (!string.IsNullOrWhiteSpace(dto.StudentCode))
             {
                 var roster = await _rosterR.FindByStudentCodeAsync(dto.StudentCode, ct);
-                if (roster != null)
-                {
-                    user.RosterId = roster.Id;
-                    user.ClassId = roster.ClassId;
-                    user.MajorId = roster.MajorId;
-                    user.SpecializationId = roster.SpecializationId;
-                    user.CohortYear = roster.CohortYear;
-                    user.Gender = roster.Gender;
-                    user.Address = roster.Address;
-                    await _userW.LinkRosterUsedAsync(roster.Id, ct);
-                }
+                if (roster == null)
+                    return Result<Guid>.Fail("Mã sinh viên không tồn tại trong hệ thống.");
+
+                user.RosterId = roster.Id;
+                user.ClassId = roster.ClassId;
+                user.MajorId = roster.MajorId;
+                user.SpecializationId = roster.SpecializationId;
+                user.CohortYear = roster.CohortYear;
+                user.Gender = roster.Gender;
+                user.Address = roster.Address;
+
+                await _userW.LinkRosterUsedAsync(roster.Id, ct);
             }
+
             // Admin
             else if (!string.IsNullOrWhiteSpace(dto.PrivilegeCode))
             {
                 var roster = await _rosterR.FindByPrivilegeCodeAsync(dto.PrivilegeCode, ct);
+                if (roster == null)
+                    return Result<Guid>.Fail("Mã đặc quyền không tồn tại trong hệ thống.");
 
-                user.PrivilegeCode = dto.PrivilegeCode;
                 user.Role = "admin";
+                user.PasswordHash = null;
                 user.EmailVerified = true;
                 user.IsLocked = false;
-                user.PasswordHash = null;
-                if (roster != null)
-                {
-                    user.FullName = roster.FullName;
-                    user.Gender = roster.Gender;
-                    user.Address = roster.Address;
-                    user.RosterId = roster.Id;
-                }
+
+                user.FullName = roster.FullName;
+                user.Gender = roster.Gender;
+                user.Address = roster.Address;
+                user.RosterId = roster.Id;
+
+                await _userW.LinkRosterUsedAsync(roster.Id, ct);
+
             }
+
 
 
 
@@ -143,9 +147,11 @@ namespace StudentCourseManagement.Applications.Auth
 
             // Tạo OTP
             var otp = OtpHasher.GenerateOtp6();
-            var (otpHash, salt) = OtpHasher.HashOtp(otp);
+            //var (otpHash, salt) = OtpHasher.HashOtp(otp);
             var expires = DateTime.UtcNow.AddMinutes(10);
-            await _otpW.CreateAsync(userId, "signup", otpHash, salt, expires);
+            //await _otpW.CreateAsync(userId, "signup", otpHash, salt, expires);
+            await _otpW.CreateAsync(userId, "signup", expires);
+
 
             var to = string.IsNullOrWhiteSpace(schoolEmailFromRoster) ? emailNorm : schoolEmailFromRoster;
             await _email.SendAsync(to, "Mã OTP xác minh đăng ký",

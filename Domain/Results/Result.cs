@@ -3,15 +3,15 @@
     public readonly struct Result
     {
         public bool Ok { get; }
-        public string? Error { get; }
-        private Result(bool ok, string? error) { Ok = ok; Error = error; }
-        public static Result Success() => new(true, null);
-        public static Result Fail(string error) => string.IsNullOrWhiteSpace(error)
-           ? throw new ArgumentException("error must not be empty", nameof(error))
-           : new(false, error);
-    }
+    public string? Error { get; }
+    private Result(bool ok, string? error) { Ok = ok; Error = error; }
+    public static Result Success() => new(true, null);
+    public static Result Fail(string error) => string.IsNullOrWhiteSpace(error)
+       ? throw new ArgumentException("error must not be empty", nameof(error))
+       : new(false, error);
+}
 
-    public readonly struct Result<T>
+public readonly struct Result<T>
     {
         public bool Ok { get; }
         public string? Error { get; }

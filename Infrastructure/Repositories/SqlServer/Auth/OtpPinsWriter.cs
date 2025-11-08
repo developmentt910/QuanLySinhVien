@@ -15,16 +15,18 @@ namespace StudentCourseManagement.Infrastructure.Repositories.SqlServer.Auth
         public async Task<long> CreateAsync(
             Guid userId, 
             string purpose, 
-            byte[] codeHash, 
-            byte[] salt, 
+            //byte[] codeHash, 
+            //byte[] salt, 
             DateTime expiresAtUtc, 
             CancellationToken ct = default)
-        {
+        {//CodeHash, Salt,AttemptCount
+            // @h, @s,0
+
             await using var conn = await _db.OpenAsync(ct).ConfigureAwait(false);
             const string sql = @"INSERT INTO dbo.OtpPins (
-                                        UserId, Purpose, CodeHash, Salt, ExpiresAtUtc, CreatedAtUtc, AttemptCount)
+                                        UserId, Purpose,  ExpiresAtUtc, CreatedAtUtc)
                                 OUTPUT INSERTED.Id
-                                VALUES (@u, @p, @h, @s, @e, SYSUTCDATETIME(), 0);";
+                                VALUES (@u, @p, @e, SYSUTCDATETIME());";
             var scalar = await SqlHelpers.ExecScalarAsync(
                 conn,
                 tx: null,
@@ -34,8 +36,8 @@ namespace StudentCourseManagement.Infrastructure.Repositories.SqlServer.Auth
                 ct: ct,
                 SqlHelpers.P("@u", userId, SqlDbType.UniqueIdentifier),
                 SqlHelpers.P("@p", purpose, SqlDbType.NVarChar, 64),
-                SqlHelpers.P("@h", codeHash, SqlDbType.VarBinary, -1),
-                SqlHelpers.P("@s", salt, SqlDbType.VarBinary, -1),
+                //SqlHelpers.P("@h", codeHash, SqlDbType.VarBinary, -1),
+                //SqlHelpers.P("@s", salt, SqlDbType.VarBinary, -1),
                 SqlHelpers.P("@e", expiresAtUtc, SqlDbType.DateTime2)
             );
 
@@ -49,42 +51,42 @@ namespace StudentCourseManagement.Infrastructure.Repositories.SqlServer.Auth
         }
 
         // danh dau opt da su dung
-        public async Task ConsumeAsync(long id, CancellationToken ct = default)
-        {
-            await using var conn = await _db.OpenAsync(ct).ConfigureAwait(false);
+        //public async Task ConsumeAsync(long id, CancellationToken ct = default)
+        //{
+        //    await using var conn = await _db.OpenAsync(ct).ConfigureAwait(false);
 
-            const string sql = @"UPDATE dbo.OtpPins
-                         SET ConsumedAtUtc = SYSUTCDATETIME()
-                         WHERE Id = @id AND ConsumedAtUtc IS NULL;";
+        //    const string sql = @"UPDATE dbo.OtpPins
+        //                 SET ConsumedAtUtc = SYSUTCDATETIME()
+        //                 WHERE Id = @id AND ConsumedAtUtc IS NULL;";
 
-            await SqlHelpers.ExecNonQueryAsync(
-                conn,
-                tx: null,
-                sql,
-                CommandType.Text,
-                timeoutSeconds: default,
-                ct: ct,
-                SqlHelpers.P("@id", id, SqlDbType.BigInt)
-            );
-        }
+        //    await SqlHelpers.ExecNonQueryAsync(
+        //        conn,
+        //        tx: null,
+        //        sql,
+        //        CommandType.Text,
+        //        timeoutSeconds: default,
+        //        ct: ct,
+        //        SqlHelpers.P("@id", id, SqlDbType.BigInt)
+        //    );
+        //}
 
 
         
 
         // tang so lan thu khi nhap sai
-        public async Task IncrementAttemptAsync(long id, CancellationToken ct = default)
-        {
-            await using var conn = await _db.OpenAsync(ct).ConfigureAwait(false);
-            const string sql = @"UPDATE dbo.OtpPins SET AttemptCount = AttemptCount + 1 WHERE Id = @id";
-            await SqlHelpers.ExecNonQueryAsync(
-                conn,
-                tx: null,
-                sql,
-                CommandType.Text,
-                timeoutSeconds: default,
-                ct: ct,
-                SqlHelpers.P("@id", id, SqlDbType.BigInt)
-            );
-        }
+        //public async Task IncrementAttemptAsync(long id, CancellationToken ct = default)
+        //{
+        //    await using var conn = await _db.OpenAsync(ct).ConfigureAwait(false);
+        //    const string sql = @"UPDATE dbo.OtpPins SET AttemptCount = AttemptCount + 1 WHERE Id = @id";
+        //    await SqlHelpers.ExecNonQueryAsync(
+        //        conn,
+        //        tx: null,
+        //        sql,
+        //        CommandType.Text,
+        //        timeoutSeconds: default,
+        //        ct: ct,
+        //        SqlHelpers.P("@id", id, SqlDbType.BigInt)
+        //    );
+        //}
     }
 }

@@ -14,22 +14,22 @@ namespace StudentCourseManagement.Infrastructure.Repositories.SqlServer.Auth
 
 
 
-        public async Task<User?> FindByEmailAsync(string emailNormalized, CancellationToken ct = default)
-        {
-            await using var conn = await _db.OpenAsync(ct).ConfigureAwait(false);
-            string sql = $@"SELECT TOP 1 {UserColumns}
-                            FROM dbo.Users
-                            WHERE EmailNormalized = @e";
+        //public async Task<User?> FindByEmailAsync(string emailNormalized, CancellationToken ct = default)
+        //{
+        //    await using var conn = await _db.OpenAsync(ct).ConfigureAwait(false);
+        //    string sql = $@"SELECT TOP 1 {UserColumns}
+        //                    FROM dbo.Users
+        //                    WHERE EmailNormalized = @e";
 
-            await using var r = await SqlHelpers.ExecReaderAsync(
-                conn, tx: null, sql, ct: ct,
-                ps: new SqlParameter("@e", SqlDbType.NVarChar, 320)
-                { Value = (object?)emailNormalized ?? DBNull.Value }
-            ).ConfigureAwait(false);
+        //    await using var r = await SqlHelpers.ExecReaderAsync(
+        //        conn, tx: null, sql, ct: ct,
+        //        ps: new SqlParameter("@e", SqlDbType.NVarChar, 320)
+        //        { Value = (object?)emailNormalized ?? DBNull.Value }
+        //    ).ConfigureAwait(false);
 
-            if (await r.ReadAsync(ct).ConfigureAwait(false)) return Map(r);
-            return null;
-        }
+        //    if (await r.ReadAsync(ct).ConfigureAwait(false)) return Map(r);
+        //    return null;
+        //}
 
         public async Task<User?> FindByStudentCode(string studentCode, CancellationToken ct = default)
         {

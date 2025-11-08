@@ -13,19 +13,19 @@ namespace StudentCourseManagement.Infrastructure.Security.Crypto
 
         }
 
-        public static (byte[] hash, byte[] salt) HashOtp(string otp)
-        {
-            var salt = RandomNumberGenerator.GetBytes(16);
-            using var h = new HMACSHA256(salt);
-            return (h.ComputeHash(Encoding.UTF8.GetBytes(otp)), salt);
+        //public static (byte[] hash, byte[] salt) HashOtp(string otp)
+        //{
+        //    var salt = RandomNumberGenerator.GetBytes(16);
+        //    using var h = new HMACSHA256(salt);
+        //    return (h.ComputeHash(Encoding.UTF8.GetBytes(otp)), salt);
 
-        }
+        //}
 
-        public static bool VerifyOtp(string otp, byte[] salt, byte[] hash)
-        {
-            using var h = new HMACSHA256(salt);
-            var test = h.ComputeHash(Encoding.UTF8.GetBytes(otp));
-            return ConstantTimeComparer.EqualsSlow(test, hash);
-        }
+        //public static bool VerifyOtp(string otp, byte[] salt, byte[] hash)
+        //{
+        //    using var h = new HMACSHA256(salt);
+        //    var test = h.ComputeHash(Encoding.UTF8.GetBytes(otp));
+        //    return ConstantTimeComparer.EqualsSlow(test, hash);
+        //}
     }
 }

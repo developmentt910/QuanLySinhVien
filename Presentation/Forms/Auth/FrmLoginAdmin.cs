@@ -56,7 +56,7 @@ namespace StudentCourseManagement.Presentation.Forms.Auth
 
             MessageBox.Show($"Chào mừng {result.Value.FullName}!", "Đăng nhập thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-            var userService = new UserService(
+            var userService = new AdminService(
                    ServicesFactory.CreateUsersReader(),
                    ServicesFactory.CreateUsersWriter()
                );

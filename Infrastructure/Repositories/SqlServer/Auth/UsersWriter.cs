@@ -21,7 +21,7 @@ namespace StudentCourseManagement.Infrastructure.Repositories.SqlServer.Auth
         )
         OUTPUT inserted.Id
         VALUES (
-            @Id, @StudentCode, @PrivilegeCode, @FullName, @EmailNormalized,
+            @Id, @StudentCode, @PrivilegeCode, @FullName, @EmailNormalized,@ProfileImage,
             @PhoneE164, @CCCD, @Role, @RosterId,
             @PasswordHash, @EmailVerified, @IsLocked,
             @Gender, @Address,
@@ -30,9 +30,6 @@ namespace StudentCourseManagement.Infrastructure.Repositories.SqlServer.Auth
         );";
 
             var id = u.Id != Guid.Empty ? u.Id : Guid.NewGuid();
-
-            try
-            {
                 var scalar = await SqlHelpers.ExecScalarAsync(
                     conn,
                     tx: null,
@@ -45,6 +42,7 @@ namespace StudentCourseManagement.Infrastructure.Repositories.SqlServer.Auth
                     SqlHelpers.P("@PrivilegeCode", (object?)u.PrivilegeCode ?? DBNull.Value, SqlDbType.NVarChar, 50),
                     SqlHelpers.P("@FullName", u.FullName, SqlDbType.NVarChar, 200),
                     SqlHelpers.P("@EmailNormalized", u.EmailNormalized, SqlDbType.NVarChar, 200),
+                    SqlHelpers.P("@ProfileImage", (object?)u.ProfileImage ?? DBNull.Value, SqlDbType.VarBinary, -1),
                     SqlHelpers.P("@PhoneE164", (object?)u.PhoneE164 ?? DBNull.Value, SqlDbType.NVarChar, 20),
                     SqlHelpers.P("@CCCD", (object?)u.CCCD ?? DBNull.Value, SqlDbType.NVarChar, 12),
                     SqlHelpers.P("@Role", u.Role, SqlDbType.NVarChar, 50),
@@ -65,15 +63,7 @@ namespace StudentCourseManagement.Infrastructure.Repositories.SqlServer.Auth
                 if (scalar is Guid g) return g;
 
                 return id;
-            }
-            catch (SqlException ex) when (ex.Number == 2627) // UNIQUE violation
-            {
-                throw new InvalidOperationException("Email hoặc PrivilegeCode đã tồn tại.", ex);
-            }
-        }
-
-
-
+        }                
         public async Task LinkRosterUsedAsync(Guid rosterId, CancellationToken ct = default)
         {
             await using var conn = await _db.OpenAsync(ct).ConfigureAwait(false);
@@ -89,38 +79,38 @@ namespace StudentCourseManagement.Infrastructure.Repositories.SqlServer.Auth
             ).ConfigureAwait(false);
         }
 
-        public async Task MarkEmailVerifiedAsync(Guid id, DateTime verifiedAtUtc, CancellationToken ct = default)
-        {
-            await using var conn = await _db.OpenAsync(ct).ConfigureAwait(false);
-            const string sql = @"UPDATE dbo.Users SET EmailVerified = 1, UpdatedAtUtc = @ts WHERE Id = @id;";
-            await SqlHelpers.ExecNonQueryAsync(
-                conn,
-                tx: null,
-                sql,
-                CommandType.Text,
-                timeoutSeconds: default,
-                ct: ct,
-                SqlHelpers.P("@id", id, SqlDbType.UniqueIdentifier),
-                SqlHelpers.P("@ts", verifiedAtUtc, SqlDbType.DateTime2)
-            ).ConfigureAwait(false);
-        }
+        //public async Task MarkEmailVerifiedAsync(Guid id, DateTime verifiedAtUtc, CancellationToken ct = default)
+        //{
+        //    await using var conn = await _db.OpenAsync(ct).ConfigureAwait(false);
+        //    const string sql = @"UPDATE dbo.Users SET EmailVerified = 1, UpdatedAtUtc = @ts WHERE Id = @id;";
+        //    await SqlHelpers.ExecNonQueryAsync(
+        //        conn,
+        //        tx: null,
+        //        sql,
+        //        CommandType.Text,
+        //        timeoutSeconds: default,
+        //        ct: ct,
+        //        SqlHelpers.P("@id", id, SqlDbType.UniqueIdentifier),
+        //        SqlHelpers.P("@ts", verifiedAtUtc, SqlDbType.DateTime2)
+        //    ).ConfigureAwait(false);
+        //}
 
-        public async Task SetLockedAsync(Guid id, bool locked, CancellationToken ct = default)
-        {
-            await using var conn = await _db.OpenAsync(ct).ConfigureAwait(false);
-            const string sql = "UPDATE dbo.Users SET IsLocked = @b, UpdatedAtUtc = @ts WHERE Id = @id;";
-            await SqlHelpers.ExecNonQueryAsync(
-                conn,
-                tx: null,
-                sql,
-                CommandType.Text,
-                timeoutSeconds: default,
-                ct: ct,
-                SqlHelpers.P("@b", locked, SqlDbType.Bit),
-                SqlHelpers.P("@ts", DateTime.UtcNow, SqlDbType.DateTime2),
-                SqlHelpers.P("@id", id, SqlDbType.UniqueIdentifier)
-            ).ConfigureAwait(false);
-        }
+        //public async Task SetLockedAsync(Guid id, bool locked, CancellationToken ct = default)
+        //{
+        //    await using var conn = await _db.OpenAsync(ct).ConfigureAwait(false);
+        //    const string sql = "UPDATE dbo.Users SET IsLocked = @b, UpdatedAtUtc = @ts WHERE Id = @id;";
+        //    await SqlHelpers.ExecNonQueryAsync(
+        //        conn,
+        //        tx: null,
+        //        sql,
+        //        CommandType.Text,
+        //        timeoutSeconds: default,
+        //        ct: ct,
+        //        SqlHelpers.P("@b", locked, SqlDbType.Bit),
+        //        SqlHelpers.P("@ts", DateTime.UtcNow, SqlDbType.DateTime2),
+        //        SqlHelpers.P("@id", id, SqlDbType.UniqueIdentifier)
+        //    ).ConfigureAwait(false);
+        //}
 
         public async Task UpdatePasswordHashAsync(Guid id, string passwordHash, CancellationToken ct = default)
         {

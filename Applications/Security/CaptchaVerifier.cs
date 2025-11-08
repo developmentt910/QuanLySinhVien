@@ -15,11 +15,11 @@ namespace StudentCourseManagement.Applications.Security
         {
             _captcha = captcha;
         }
-
+        public string Generate()
+           => _captcha.GenerateCaptcha();
         public bool Verify(string token, string userInput) 
             => _captcha.Verify(token, userInput);
 
-        public string Generate() 
-           => _captcha.GenerateCaptcha();
+        
     }
 }

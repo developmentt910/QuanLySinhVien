@@ -14,23 +14,23 @@ namespace StudentCourseManagement.Applications.Validation
 
       
 
-        public static readonly Regex FullNameRegex =
-           new(FullNameBasic, RegexOptions.Compiled | RegexOptions.CultureInvariant);
+        //public static readonly Regex FullNameRegex =
+        //   new(FullNameBasic, RegexOptions.Compiled | RegexOptions.CultureInvariant);
 
-        public static readonly Regex EmailRegex =
-            new(Email, RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase);
+        //public static readonly Regex EmailRegex =
+        //    new(Email, RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase);
 
-        public static readonly Regex PasswordStrongRegex =
-            new(PasswordStrong, RegexOptions.Compiled | RegexOptions.CultureInvariant);
+        //public static readonly Regex PasswordStrongRegex =
+        //    new(PasswordStrong, RegexOptions.Compiled | RegexOptions.CultureInvariant);
 
-        public static readonly Regex CccdRegex =
-            new(Cccd, RegexOptions.Compiled | RegexOptions.CultureInvariant);
+        //public static readonly Regex CccdRegex =
+        //    new(Cccd, RegexOptions.Compiled | RegexOptions.CultureInvariant);
 
-        public static readonly Regex Phone10DigitsRegex =
-            new(Phone10Digits, RegexOptions.Compiled | RegexOptions.CultureInvariant);
+        //public static readonly Regex Phone10DigitsRegex =
+        //    new(Phone10Digits, RegexOptions.Compiled | RegexOptions.CultureInvariant);
 
-        public static readonly Regex StudentCodeRegex =
-            new(StudentCode, RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase);
+        //public static readonly Regex StudentCodeRegex =
+        //    new(StudentCode, RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase);
 
         public static bool IsMatch(string? input, string pattern)
     => !string.IsNullOrWhiteSpace(input) && Regex.IsMatch(input, pattern, RegexOptions.CultureInvariant | RegexOptions.IgnoreCase);

@@ -8,7 +8,7 @@ namespace StudentCourseManagement.Applications.Security
         private readonly TimeSpan _window = TimeSpan.FromMinutes(10);
         private readonly int _limit = 5;
 
-        public ThrottleService(ILoginThrottleStore store)  // inject  
+        public ThrottleService(ILoginThrottleStore store) 
         {
             _store = store;
         }
