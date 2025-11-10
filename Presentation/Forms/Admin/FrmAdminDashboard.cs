@@ -114,7 +114,22 @@ namespace StudentCourseManagement.Presentation.Forms.Admin
             FrmLoginAdmin frmLogin = new FrmLoginAdmin();
             frmLogin.Show();
 
-            this.Close(); 
+            this.Close();
+        }
+
+        private void txtCCCD_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtFullName_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void FrmAdminDashboard_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
