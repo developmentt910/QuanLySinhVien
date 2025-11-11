@@ -14,10 +14,11 @@ namespace StudentCourseManagement.Presentation.Forms.Schedule
 
         private bool isAdding = false;
         private bool isEditing = false;
-
         private Guid selectedExam_ID = Guid.Empty;
-
         private bool isBindingFromGrid = false;
+
+        private Guid currentMajorId = Guid.Empty;
+        private Guid currentSpecializationId = Guid.Empty;
 
         public FrmQuanLyLichThi()
         {
@@ -33,7 +34,6 @@ namespace StudentCourseManagement.Presentation.Forms.Schedule
 
             LoadData();
             LoadKhoaData();
-            LoadMonHocData();
             LoadHinhThucThiData();
             LoadSemesterData();
 
@@ -74,9 +74,9 @@ namespace StudentCourseManagement.Presentation.Forms.Schedule
             cboLopHoc.SelectedIndex = -1;
         }
 
-        private void LoadMonHocData()
+        private void LoadMonHocData(Guid majorId, Guid specializationId)
         {
-            cboMonHoc.DataSource = _scheduleService.GetSubjects();
+            cboMonHoc.DataSource = _scheduleService.GetSubjectsBySpecialization(majorId, specializationId);
             cboMonHoc.DisplayMember = "SubjectName";
             cboMonHoc.ValueMember = "Id";
             cboMonHoc.SelectedIndex = -1;
@@ -111,6 +111,7 @@ namespace StudentCourseManagement.Presentation.Forms.Schedule
                 cboChuyenNganh.Enabled = false;
                 cboLopHoc.DataSource = null;
                 cboLopHoc.Enabled = false;
+                cboMonHoc.DataSource = null;
             }
         }
 
@@ -120,10 +121,12 @@ namespace StudentCourseManagement.Presentation.Forms.Schedule
             if (cboNganh.SelectedItem is System_Data.DataRowView drv)
             {
                 Guid majorId = (Guid)drv["Id"];
+                currentMajorId = majorId;
                 LoadChuyenNganhData(majorId);
                 cboChuyenNganh.Enabled = true;
                 cboLopHoc.DataSource = null;
                 cboLopHoc.Enabled = false;
+                cboMonHoc.DataSource = null;
             }
         }
 
@@ -133,13 +136,18 @@ namespace StudentCourseManagement.Presentation.Forms.Schedule
             if (cboChuyenNganh.SelectedItem is System_Data.DataRowView drv)
             {
                 Guid specializationId = (Guid)drv["Id"];
+                currentSpecializationId = specializationId;
                 LoadLopHocData(specializationId);
                 cboLopHoc.Enabled = true;
+
+                LoadMonHocData(currentMajorId, currentSpecializationId);
+                cboMonHoc.Enabled = true;
             }
             else
             {
                 cboLopHoc.DataSource = null;
                 cboLopHoc.Enabled = false;
+                cboMonHoc.DataSource = null;
             }
         }
 
@@ -162,23 +170,17 @@ namespace StudentCourseManagement.Presentation.Forms.Schedule
 
                 dgvLichThi.Columns["SubjectName"].DisplayIndex = 0;
                 dgvLichThi.Columns["SubjectName"].HeaderText = "Môn thi";
-
                 dgvLichThi.Columns["ClassName"].DisplayIndex = 1;
                 dgvLichThi.Columns["ClassName"].HeaderText = "Lớp";
-
                 dgvLichThi.Columns["ExamDate"].DisplayIndex = 2;
                 dgvLichThi.Columns["ExamDate"].HeaderText = "Ngày thi";
                 dgvLichThi.Columns["ExamDate"].DefaultCellStyle.Format = "dd/MM/yyyy HH:mm";
-
                 dgvLichThi.Columns["ExamDuration"].DisplayIndex = 3;
                 dgvLichThi.Columns["ExamDuration"].HeaderText = "Thời gian (phút)";
-
                 dgvLichThi.Columns["ExamType"].DisplayIndex = 4;
                 dgvLichThi.Columns["ExamType"].HeaderText = "Hình thức thi";
-
                 dgvLichThi.Columns["Room"].DisplayIndex = 5;
                 dgvLichThi.Columns["Room"].HeaderText = "Phòng thi";
-
                 dgvLichThi.Columns["SemesterDisplayName"].DisplayIndex = 6;
                 dgvLichThi.Columns["SemesterDisplayName"].HeaderText = "Học kỳ";
             }
@@ -207,6 +209,7 @@ namespace StudentCourseManagement.Presentation.Forms.Schedule
                 cboNganh.Enabled = false;
                 cboChuyenNganh.Enabled = false;
                 cboLopHoc.Enabled = false;
+                cboMonHoc.Enabled = false;
             }
         }
 
@@ -216,7 +219,7 @@ namespace StudentCourseManagement.Presentation.Forms.Schedule
             cboNganh.DataSource = null;
             cboChuyenNganh.DataSource = null;
             cboLopHoc.DataSource = null;
-            cboMonHoc.SelectedIndex = -1;
+            cboMonHoc.DataSource = null;
             cboSemester.SelectedIndex = -1;
             dtpExamDateTime.Value = DateTime.Now;
             numThoiGianLamBai.Value = 60;
@@ -247,6 +250,9 @@ namespace StudentCourseManagement.Presentation.Forms.Schedule
                 LoadLopHocData(maChuyenNganh);
                 cboLopHoc.Enabled = true;
                 cboLopHoc.SelectedValue = maLop;
+
+                LoadMonHocData(maNganh, maChuyenNganh);
+                cboMonHoc.Enabled = true;
 
                 selectedExam_ID = (Guid)row.Cells["Id"].Value;
                 cboMonHoc.SelectedValue = (Guid)row.Cells["SubjectId"].Value;
@@ -287,6 +293,7 @@ namespace StudentCourseManagement.Presentation.Forms.Schedule
             cboNganh.Enabled = true;
             cboChuyenNganh.Enabled = true;
             cboLopHoc.Enabled = true;
+            cboMonHoc.Enabled = true; 
         }
 
         private void btnXoa_Click(object sender, EventArgs e)

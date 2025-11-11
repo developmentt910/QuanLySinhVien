@@ -107,6 +107,8 @@
             // 
             // cboChuyenNganh
             // 
+            this.cboChuyenNganh.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.cboChuyenNganh.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cboChuyenNganh.FormattingEnabled = true;
             this.cboChuyenNganh.Location = new System.Drawing.Point(147, 148);
             this.cboChuyenNganh.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
@@ -126,6 +128,8 @@
             // 
             // cboNganh
             // 
+            this.cboNganh.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.cboNganh.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cboNganh.FormattingEnabled = true;
             this.cboNganh.Location = new System.Drawing.Point(147, 101);
             this.cboNganh.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
@@ -145,6 +149,8 @@
             // 
             // cboKhoa
             // 
+            this.cboKhoa.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.cboKhoa.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cboKhoa.FormattingEnabled = true;
             this.cboKhoa.Location = new System.Drawing.Point(147, 51);
             this.cboKhoa.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
@@ -268,6 +274,8 @@
             // 
             // cboMonHoc
             // 
+            this.cboMonHoc.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.cboMonHoc.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cboMonHoc.FormattingEnabled = true;
             this.cboMonHoc.Location = new System.Drawing.Point(492, 51);
             this.cboMonHoc.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
@@ -286,6 +294,8 @@
             // 
             // cboLopHoc
             // 
+            this.cboLopHoc.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.cboLopHoc.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cboLopHoc.FormattingEnabled = true;
             this.cboLopHoc.Location = new System.Drawing.Point(147, 198);
             this.cboLopHoc.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);

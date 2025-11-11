@@ -80,7 +80,8 @@ namespace StudentCourseManagement.Infrastructure.Repositories.SqlServer.Academic
                 LEFT JOIN dbo.Specialization s ON c.SpecializationId = s.Id
                 LEFT JOIN dbo.Major m ON s.MajorId = m.Id
                 LEFT JOIN dbo.Subject sub ON lt.SubjectId = sub.Id
-                LEFT JOIN dbo.Semester sem ON lt.SemesterId = sem.Id";
+                LEFT JOIN dbo.Semester sem ON lt.SemesterId = sem.Id
+                ORDER BY lt.ExamDate, sub.SubjectName";
 
             return GetData(query);
         }

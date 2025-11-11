@@ -63,13 +63,13 @@ namespace StudentCourseManagement.Infrastructure.Repositories.SqlServer.Academic
 
         public DataTable GetFaculties()
         {
-            string query = "SELECT Id, FacultyName FROM dbo.Faculty";
+            string query = "SELECT Id, FacultyName FROM dbo.Faculty ORDER BY FacultyName";
             return GetData(query);
         }
 
         public DataTable GetMajorsByFaculty(string facultyId)
         {
-            string query = "SELECT Id, MajorName FROM dbo.Major WHERE FacultyId = @FacultyId";
+            string query = "SELECT Id, MajorName FROM dbo.Major WHERE FacultyId = @FacultyId ORDER BY MajorName";
             var parameters = new[]
             {
                 new SqlParameter("@FacultyId", SqlDbType.UniqueIdentifier) { Value = new Guid(facultyId) }
@@ -79,7 +79,7 @@ namespace StudentCourseManagement.Infrastructure.Repositories.SqlServer.Academic
 
         public DataTable GetSpecializationsByMajor(string majorId)
         {
-            string query = "SELECT Id, SpecializationName FROM dbo.Specialization WHERE MajorId = @MajorId";
+            string query = "SELECT Id, SpecializationName FROM dbo.Specialization WHERE MajorId = @MajorId ORDER BY SpecializationName";
             var parameters = new[]
             {
                 new SqlParameter("@MajorId", SqlDbType.UniqueIdentifier) { Value = new Guid(majorId) }
@@ -89,7 +89,7 @@ namespace StudentCourseManagement.Infrastructure.Repositories.SqlServer.Academic
 
         public DataTable GetClassesBySpecialization(string specializationId)
         {
-            string query = "SELECT Id, ClassName FROM dbo.Class WHERE SpecializationId = @SpecializationId";
+            string query = "SELECT Id, ClassName FROM dbo.Class WHERE SpecializationId = @SpecializationId ORDER BY ClassName";
             var parameters = new[]
             {
                 new SqlParameter("@SpecializationId", SqlDbType.UniqueIdentifier) { Value = new Guid(specializationId) }
@@ -99,7 +99,7 @@ namespace StudentCourseManagement.Infrastructure.Repositories.SqlServer.Academic
 
         public DataTable GetSemesters()
         {
-            string query = "SELECT Id, (SemesterName + ' (' + AcademicYear + ')') AS DisplayName FROM dbo.Semester";
+            string query = "SELECT Id, (SemesterName + ' (' + AcademicYear + ')') AS DisplayName FROM dbo.Semester ORDER BY AcademicYear, SemesterName";
             return GetData(query);
         }
 
@@ -115,7 +115,8 @@ namespace StudentCourseManagement.Infrastructure.Repositories.SqlServer.Academic
                 JOIN dbo.Subject sub ON s.SubjectId = sub.Id
                 JOIN dbo.Semester sem ON s.SemesterId = sem.Id
                 JOIN dbo.Class c ON s.ClassId = c.Id
-                WHERE s.ClassId = @ClassId AND s.SemesterId = @SemesterId";
+                WHERE s.ClassId = @ClassId AND s.SemesterId = @SemesterId
+                ORDER BY s.LessonDate, s.StartPeriod";
 
             var parameters = new[]
             {
@@ -124,19 +125,24 @@ namespace StudentCourseManagement.Infrastructure.Repositories.SqlServer.Academic
             };
             return GetData(query, parameters);
         }
-
-        public DataTable GetAvailableSubjects(string classId, string semesterId)
+        public DataTable GetAvailableSubjects(string classId, string semesterId, Guid majorId, Guid specializationId)
         {
             string query = @"
                 SELECT Id, SubjectName, SubjectCode, Credit, LectureHours, PracticeHours 
                 FROM dbo.Subject
-                WHERE Id NOT IN 
-                    (SELECT SubjectId FROM dbo.Schedule WHERE ClassId = @ClassId AND SemesterId = @SemesterId)";
+                WHERE 
+                    MajorId = @MajorId 
+                    AND (SpecializationId IS NULL OR SpecializationId = @SpecializationId)
+                    AND Id NOT IN 
+                        (SELECT SubjectId FROM dbo.Schedule WHERE ClassId = @ClassId AND SemesterId = @SemesterId)
+                ORDER BY SubjectName";
 
             var parameters = new[]
             {
                 new SqlParameter("@ClassId", SqlDbType.UniqueIdentifier) { Value = new Guid(classId) },
-                new SqlParameter("@SemesterId", SqlDbType.UniqueIdentifier) { Value = new Guid(semesterId) }
+                new SqlParameter("@SemesterId", SqlDbType.UniqueIdentifier) { Value = new Guid(semesterId) },
+                new SqlParameter("@MajorId", SqlDbType.UniqueIdentifier) { Value = majorId },
+                new SqlParameter("@SpecializationId", SqlDbType.UniqueIdentifier) { Value = specializationId }
             };
             return GetData(query, parameters);
         }
@@ -198,14 +204,39 @@ namespace StudentCourseManagement.Infrastructure.Repositories.SqlServer.Academic
                 new SqlParameter("@EndPeriod", endPeriod),
                 new SqlParameter("@ScheduleId", SqlDbType.UniqueIdentifier) { Value = new Guid(scheduleId) }
             };
-
             ExecuteCommand(query, parameters);
         }
-
-        public DataTable GetSubjects()
+        public DataTable GetSubjectsBySpecialization(Guid majorId, Guid specializationId)
         {
-            string query = "SELECT Id, SubjectName FROM dbo.Subject";
-            return GetData(query);
+            string query = @"
+                SELECT Id, SubjectName 
+                FROM dbo.Subject 
+                WHERE MajorId = @MajorId 
+                  AND (SpecializationId IS NULL OR SpecializationId = @SpecializationId)
+                ORDER BY SubjectName";
+
+            var parameters = new[]
+            {
+                new SqlParameter("@MajorId", SqlDbType.UniqueIdentifier) { Value = majorId },
+                new SqlParameter("@SpecializationId", SqlDbType.UniqueIdentifier) { Value = specializationId }
+            };
+            return GetData(query, parameters);
+        }
+        public DataTable GetAllSubjectDetailsBySpecialization(Guid majorId, Guid specializationId)
+        {
+            string query = @"
+                SELECT Id, SubjectCode, SubjectName, Credit, LectureHours, PracticeHours 
+                FROM dbo.Subject 
+                WHERE MajorId = @MajorId 
+                  AND (SpecializationId IS NULL OR SpecializationId = @SpecializationId)
+                ORDER BY SubjectName";
+
+            var parameters = new[]
+            {
+                new SqlParameter("@MajorId", SqlDbType.UniqueIdentifier) { Value = majorId },
+                new SqlParameter("@SpecializationId", SqlDbType.UniqueIdentifier) { Value = specializationId }
+            };
+            return GetData(query, parameters);
         }
     }
 }

@@ -10,8 +10,9 @@ namespace StudentCourseManagement.Presentation.Forms.Schedule
     {
         private string currentClassId = "";
         private string currentSemesterId = "";
+        private Guid currentMajorId = Guid.Empty;
+        private Guid currentSpecializationId = Guid.Empty;
         private DataTable dtAvailableSubjects = new DataTable();
-
         private readonly IScheduleService _scheduleService;
 
         public FrmQuanLyThoiKhoaBieu()
@@ -64,15 +65,16 @@ namespace StudentCourseManagement.Presentation.Forms.Schedule
         }
         private void cboNganh_SelectedIndexChanged(object sender, EventArgs e)
         {
-            string? majorId = null;
+            string? majorIdStr = null;
             if (cboNganh.SelectedItem is DataRowView drv)
             {
-                majorId = drv["Id"]?.ToString();
+                majorIdStr = drv["Id"]?.ToString();
             }
 
-            if (!string.IsNullOrEmpty(majorId))
+            if (!string.IsNullOrEmpty(majorIdStr))
             {
-                cboChuyenNganh.DataSource = _scheduleService.GetSpecializationsByMajor(majorId);
+                currentMajorId = new Guid(majorIdStr);
+                cboChuyenNganh.DataSource = _scheduleService.GetSpecializationsByMajor(majorIdStr);
                 cboChuyenNganh.DisplayMember = "SpecializationName";
                 cboChuyenNganh.ValueMember = "Id";
                 cboChuyenNganh.SelectedIndex = -1;
@@ -80,29 +82,40 @@ namespace StudentCourseManagement.Presentation.Forms.Schedule
             }
             else
             {
+                currentMajorId = Guid.Empty;
                 cboChuyenNganh.Enabled = false;
                 cboLopHoc.Enabled = false;
             }
         }
+
         private void cboChuyenNganh_SelectedIndexChanged(object sender, EventArgs e)
         {
-            string? specializationId = null;
+            string? specializationIdStr = null;
             if (cboChuyenNganh.SelectedItem is DataRowView drv)
             {
-                specializationId = drv["Id"]?.ToString();
+                specializationIdStr = drv["Id"]?.ToString();
             }
 
-            if (!string.IsNullOrEmpty(specializationId))
+            if (!string.IsNullOrEmpty(specializationIdStr))
             {
-                cboLopHoc.DataSource = _scheduleService.GetClassesBySpecialization(specializationId);
+                currentSpecializationId = new Guid(specializationIdStr);
+                cboLopHoc.DataSource = _scheduleService.GetClassesBySpecialization(specializationIdStr);
                 cboLopHoc.DisplayMember = "ClassName";
                 cboLopHoc.ValueMember = "Id";
                 cboLopHoc.SelectedIndex = -1;
                 cboLopHoc.Enabled = true;
+
+                // Tải môn học (nếu đã tải TKB)
+                if (!string.IsNullOrEmpty(currentClassId) && !string.IsNullOrEmpty(currentSemesterId))
+                {
+                    LoadAvailableSubjects();
+                }
             }
             else
             {
+                currentSpecializationId = Guid.Empty;
                 cboLopHoc.Enabled = false;
+                cboMonHoc.DataSource = null; // Xóa môn học
             }
         }
 
@@ -154,11 +167,8 @@ namespace StudentCourseManagement.Presentation.Forms.Schedule
             currentSemesterId = semesterId;
 
             LoadScheduleData(currentClassId, currentSemesterId);
-
-            LoadAvailableSubjects(currentClassId, currentSemesterId);
-
+            LoadAvailableSubjects();
             groupBoxAdd.Enabled = true;
-
             ResetInputFields();
         }
 
@@ -170,10 +180,8 @@ namespace StudentCourseManagement.Presentation.Forms.Schedule
             {
                 dgvSchedules.Columns["Id"].Visible = false;
                 dgvSchedules.Columns["SubjectId"].Visible = false;
-
                 dgvSchedules.Columns["ClassName"].HeaderText = "Lớp";
                 dgvSchedules.Columns["ClassName"].DisplayIndex = 0;
-
                 dgvSchedules.Columns["SubjectCode"].HeaderText = "Mã Môn Học";
                 dgvSchedules.Columns["SubjectName"].HeaderText = "Tên Môn Học";
                 dgvSchedules.Columns["TeacherName"].HeaderText = "Giáo viên";
@@ -188,9 +196,26 @@ namespace StudentCourseManagement.Presentation.Forms.Schedule
             }
         }
 
-        private void LoadAvailableSubjects(string classId, string semesterId)
+        // [SỬA] Cập nhật hàm này
+        private void LoadAvailableSubjects()
         {
-            dtAvailableSubjects = _scheduleService.GetAvailableSubjects(classId, semesterId);
+            // Kiểm tra xem đã có đủ thông tin để lọc chưa
+            if (string.IsNullOrEmpty(currentClassId) ||
+                string.IsNullOrEmpty(currentSemesterId) ||
+                currentMajorId == Guid.Empty ||
+                currentSpecializationId == Guid.Empty)
+            {
+                cboMonHoc.DataSource = null;
+                return;
+            }
+
+            // Gọi hàm mới với đầy đủ tham số
+            dtAvailableSubjects = _scheduleService.GetAvailableSubjects(
+                currentClassId,
+                currentSemesterId,
+                currentMajorId,
+                currentSpecializationId);
+
             cboMonHoc.DataSource = dtAvailableSubjects;
             cboMonHoc.DisplayMember = "SubjectName";
             cboMonHoc.ValueMember = "Id";
@@ -248,6 +273,7 @@ namespace StudentCourseManagement.Presentation.Forms.Schedule
                                          currentSemesterId, lessonDate, startPeriod, endPeriod);
 
             LoadScheduleData(currentClassId, currentSemesterId);
+            LoadAvailableSubjects();
         }
 
         private void btnRemove_Click(object sender, EventArgs e)
@@ -275,7 +301,7 @@ namespace StudentCourseManagement.Presentation.Forms.Schedule
             _scheduleService.RemoveSchedule(scheduleId);
 
             LoadScheduleData(currentClassId, currentSemesterId);
-            LoadAvailableSubjects(currentClassId, currentSemesterId);
+            LoadAvailableSubjects();
         }
 
         private void dgvSchedules_CellClick(object sender, DataGridViewCellEventArgs e)

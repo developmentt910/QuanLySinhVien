@@ -24,8 +24,6 @@ namespace StudentCourseManagement
             Application.SetCompatibleTextRenderingDefault(false);
 
             Application.Run(new FrmAdminDashboard());
-            //Application.Run(new FrmQuanLyThoiKhoaBieu());
-            //Application.Run(new FrmRegister());
         }
     }
 }

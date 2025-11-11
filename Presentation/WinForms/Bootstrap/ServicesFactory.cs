@@ -8,6 +8,8 @@ using StudentCourseManagement.Domain.Abstractions.Repositories;
 using StudentCourseManagement.Domain.Abstractions.Services;
 using StudentCourseManagement.Infrastructure.Repositories.SqlServer.Academic;
 using StudentCourseManagement.Applications.Schedule;
+using StudentCourseManagement.Applications.Curriculum;
+using StudentCourseManagement.Applications.Class;
 using System;
 
 namespace StudentCourseManagement.Presentation.WinForms.Bootstrap
@@ -41,12 +43,20 @@ namespace StudentCourseManagement.Presentation.WinForms.Bootstrap
         public static ICaptchaService CreateCaptcha() => new StubCaptchaService();
         public static IClock CreateClock() => new SystemClock();
 
-        //PHẦN CHO SCHEDULE 
+        //THÊM MỚI CHO SCHEDULE 
         public static IScheduleRepository CreateScheduleRepository() => new ScheduleRepository(Db);
         public static IScheduleService CreateScheduleService() => new ScheduleService(CreateScheduleRepository());
 
         //THÊM MỚI CHO EXAM
         public static IExamScheduleRepository CreateExamScheduleRepository() => new ExamScheduleRepository(Db);
         public static IExamScheduleService CreateExamScheduleService() => new ExamScheduleService(CreateExamScheduleRepository());
+
+        //THÊM MỚI CHO CURRICULUM
+        public static ICurriculumRepository CreateCurriculumRepository() => new CurriculumRepository(Db);
+        public static ICurriculumService CreateCurriculumService() => new CurriculumService(CreateCurriculumRepository());
+
+        //THÊM MỚI CHO CLASS
+        public static IClassRepository CreateClassRepository() => new ClassRepository(Db);
+        public static IClassService CreateClassService() => new ClassService(CreateClassRepository());
     }
 }

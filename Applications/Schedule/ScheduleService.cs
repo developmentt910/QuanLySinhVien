@@ -8,6 +8,7 @@ namespace StudentCourseManagement.Applications.Schedule
     public class ScheduleService : IScheduleService
     {
         private readonly IScheduleRepository _scheduleRepository;
+
         public ScheduleService(IScheduleRepository scheduleRepository)
         {
             _scheduleRepository = scheduleRepository;
@@ -42,10 +43,9 @@ namespace StudentCourseManagement.Applications.Schedule
         {
             return _scheduleRepository.GetSchedules(classId, semesterId);
         }
-
-        public DataTable GetAvailableSubjects(string classId, string semesterId)
+        public DataTable GetAvailableSubjects(string classId, string semesterId, Guid majorId, Guid specializationId)
         {
-            return _scheduleRepository.GetAvailableSubjects(classId, semesterId);
+            return _scheduleRepository.GetAvailableSubjects(classId, semesterId, majorId, specializationId);
         }
 
         public void AddSchedule(string classId, string subjectId, string teacherName, string room, string semesterId, DateTime lessonDate, int startPeriod, int endPeriod)
@@ -62,9 +62,13 @@ namespace StudentCourseManagement.Applications.Schedule
         {
             _scheduleRepository.UpdateSchedule(scheduleId, subjectId, teacherName, room, lessonDate, startPeriod, endPeriod);
         }
-        public DataTable GetSubjects()
+        public DataTable GetSubjectsBySpecialization(Guid majorId, Guid specializationId)
         {
-            return _scheduleRepository.GetSubjects();
+            return _scheduleRepository.GetSubjectsBySpecialization(majorId, specializationId);
+        }
+        public DataTable GetAllSubjectDetailsBySpecialization(Guid majorId, Guid specializationId)
+        {
+            return _scheduleRepository.GetAllSubjectDetailsBySpecialization(majorId, specializationId);
         }
     }
 }
