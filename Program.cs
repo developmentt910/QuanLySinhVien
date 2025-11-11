@@ -1,5 +1,8 @@
-﻿
+﻿using System;
+using System.Windows.Forms;
+using Microsoft.Extensions.Configuration;
 using StudentCourseManagement.Presentation.WinForms.Bootstrap;
+using StudentCourseManagement.Presentation.Forms.Admin;
 namespace StudentCourseManagement
 {
     internal static class Program
@@ -19,7 +22,9 @@ namespace StudentCourseManagement
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FrmRegister());
+            //Application.Run(new FrmRegister());
+            Application.Run(new FrmAdminDashboard());
+
 
 
 
