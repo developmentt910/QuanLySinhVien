@@ -1,5 +1,6 @@
 ﻿
 
+
 namespace StudentCourseManagement.Infrastructure.Repositories.SqlServer.Auth
 {
     public sealed class UsersReader : IUsersReader
@@ -151,30 +152,30 @@ namespace StudentCourseManagement.Infrastructure.Repositories.SqlServer.Auth
 
 
 
-          private static User Map(SqlDataReader r) => new()
-          {
-              Id = r.GetGuid(r.GetOrdinal("Id")),
-              StudentCode = r["StudentCode"] as string,
-              PrivilegeCode = r["PrivilegeCode"] as string,
-              FullName = r["FullName"] as string ?? "",
-              EmailNormalized = r["EmailNormalized"] as string ?? "",
-              PhoneE164 = r["PhoneE164"] as string,
-              CCCD = r["CCCD"] as string ?? "",
-              Role = r["Role"] as string ?? "user",
-              RosterId = r.IsDBNull(r.GetOrdinal("RosterId")) ? null : r.GetGuid(r.GetOrdinal("RosterId")),
-              PasswordHash = r.IsDBNull(r.GetOrdinal("PasswordHash"))
-                 ? null 
-                 : r.GetString(r.GetOrdinal("PasswordHash")),
-              ProfileImage = r.IsDBNull(r.GetOrdinal("ProfileImage"))
-                ? null
-                : (byte[])r["ProfileImage"],
+        private static User Map(SqlDataReader r) => new()
+        {
+            Id = r.GetGuid(r.GetOrdinal("Id")),
+            StudentCode = r["StudentCode"] as string,
+            PrivilegeCode = r["PrivilegeCode"] as string,
+            FullName = r["FullName"] as string ?? "",
+            EmailNormalized = r["EmailNormalized"] as string ?? "",
+            PhoneE164 = r["PhoneE164"] as string,
+            CCCD = r["CCCD"] as string ?? "",
+            Role = r["Role"] as string ?? "user",
+            RosterId = r.IsDBNull(r.GetOrdinal("RosterId")) ? null : r.GetGuid(r.GetOrdinal("RosterId")),
+            PasswordHash = r.IsDBNull(r.GetOrdinal("PasswordHash"))
+               ? null
+               : r.GetString(r.GetOrdinal("PasswordHash")),
+            ProfileImage = r.IsDBNull(r.GetOrdinal("ProfileImage"))
+              ? null
+              : (byte[])r["ProfileImage"],
 
 
-              EmailVerified = !r.IsDBNull(r.GetOrdinal("EmailVerified")) && Convert.ToBoolean(r["EmailVerified"]),
-              IsLocked = !r.IsDBNull(r.GetOrdinal("IsLocked")) && Convert.ToBoolean(r["IsLocked"]),
-              Gender = r["Gender"] as string,
-              Address = r["Address"] as string,
-          };
+            EmailVerified = !r.IsDBNull(r.GetOrdinal("EmailVerified")) && Convert.ToBoolean(r["EmailVerified"]),
+            IsLocked = !r.IsDBNull(r.GetOrdinal("IsLocked")) && Convert.ToBoolean(r["IsLocked"]),
+            Gender = r["Gender"] as string,
+            Address = r["Address"] as string,
+        };
 
     };
-    }
+}

@@ -1,11 +1,28 @@
-﻿using StudentCourseManagement.Applications.Services;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using StudentCourseManagement.Presentation.Forms.Class;
+using StudentCourseManagement.Presentation.Forms.Help;
+using StudentCourseManagement.Presentation.Forms.Schedule;
+using StudentCourseManagement.Applications.Services;
+using StudentCourseManagement.Domain.Entities;
+using System.IO;
+using StudentCourseManagement.Presentation.Forms.Auth; 
 
 namespace StudentCourseManagement.Presentation.Forms.Admin
 {
     public partial class FrmAdminDashboard : Form
     {
         private readonly AdminService _userService;
-        private User _currentUser; // quản lý viên hiện tại
+        private User _currentUser;
+
+        public bool IsLoggingOut { get; private set; } = false;
 
         public FrmAdminDashboard(AdminService userService, Guid userId)
         {
@@ -74,7 +91,7 @@ namespace StudentCourseManagement.Presentation.Forms.Admin
             };
             if (ofd.ShowDialog() == DialogResult.OK)
             {
-                pictureBoxProfile.Image?.Dispose(); // giải phóng ảnh cũ nếu có
+                pictureBoxProfile.Image?.Dispose();
                 pictureBoxProfile.Image = Image.FromFile(ofd.FileName);
             }
         }
@@ -111,10 +128,53 @@ namespace StudentCourseManagement.Presentation.Forms.Admin
 
         private void đăngXuấtToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FrmLoginAdmin frmLogin = new FrmLoginAdmin();
-            frmLogin.Show();
-
+            this.IsLoggingOut = true; 
             this.Close(); 
+        }
+
+        private void lichHocToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmQuanLyThoiKhoaBieu frm = new FrmQuanLyThoiKhoaBieu();
+            frm.ShowDialog();
+        }
+
+        private void lichThiToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmQuanLyLichThi frm = new FrmQuanLyLichThi();
+            frm.ShowDialog();
+        }
+
+        private void chuongTrinhKhungToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmQuanLyChuongTrinhKhung frm = new FrmQuanLyChuongTrinhKhung();
+            frm.ShowDialog();
+        }
+
+        private void lopHocToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmQuanLyLopHoc frm = new FrmQuanLyLopHoc();
+            frm.ShowDialog();
+        }
+
+        private void troGiupToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmHelp frm = new FrmHelp();
+            frm.ShowDialog();
+        }
+
+        private void khoaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Chức năng 'Quản lý Khoa' đang được phát triển.");
+        }
+
+        private void ngànhToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Chức năng 'Quản lý Ngành' đang được phát triển.");
+        }
+
+        private void chuyenNganhToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Chức năng 'Quản lý Chuyên ngành' đang được phát triển.");
         }
     }
 }

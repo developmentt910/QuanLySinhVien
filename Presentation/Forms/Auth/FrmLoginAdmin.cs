@@ -1,12 +1,18 @@
-﻿
-
-using StudentCourseManagement.Applications.Services;
+﻿using StudentCourseManagement.Applications.Services;
+using StudentCourseManagement.Presentation.Forms.Admin;
+using StudentCourseManagement.Presentation.WinForms.Bootstrap;
+using StudentCourseManagement.Applications.Auth;
+using StudentCourseManagement.Applications.Security;
+using System;
+using System.Windows.Forms;
+using System.Linq;
 
 namespace StudentCourseManagement.Presentation.Forms.Auth
 {
     public partial class FrmLoginAdmin : Form
     {
         private readonly LoginService _loginService;
+        private bool isLoggedIn = false; 
 
         public FrmLoginAdmin()
         {
@@ -17,6 +23,7 @@ namespace StudentCourseManagement.Presentation.Forms.Auth
             var rosterR = ServicesFactory.CreateRosterReader();
             var userW = ServicesFactory.CreateUsersWriter();
             _loginService = new LoginService(usersReader, throttle, rosterR, userW, captcha);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FrmLoginAdmin_FormClosed);
         }
 
         private void FrmLoginAdmin_Load(object sender, EventArgs e)
@@ -53,7 +60,6 @@ namespace StudentCourseManagement.Presentation.Forms.Auth
                 txtCaptchaInput.Clear();
                 return;
             }
-
             MessageBox.Show($"Chào mừng {result.Value.FullName}!", "Đăng nhập thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             var userService = new AdminService(
@@ -63,19 +69,53 @@ namespace StudentCourseManagement.Presentation.Forms.Auth
 
             Guid userId = result.Value.Id;
 
-
             FrmAdminDashboard adminForm = new FrmAdminDashboard(userService, userId);
-            adminForm.FormClosed += (s, args) => this.Close();
+
+            adminForm.FormClosed += (s, args) =>
+            {
+                if (adminForm.IsLoggingOut)
+                {
+                    this.isLoggedIn = false; 
+                    this.Show(); 
+                    lblCaptchaCode.Text = _loginService.GenerateCaptcha();
+                    txtCaptchaInput.Clear();
+                    txtMDQ.Clear();
+                }
+                else
+                {
+                    Application.Exit();
+                }
+            };
+
+            this.isLoggedIn = true; 
             adminForm.Show();
             this.Hide();
         }
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            FrmRegister frmRegister = new FrmRegister();
-            frmRegister.Show();
-            this.Hide();
+            var frmRegister = Application.OpenForms.OfType<FrmRegister>().FirstOrDefault();
+            if (frmRegister != null)
+            {
+                frmRegister.Show();
+            }
+            else
+            {
+                FrmRegister newFrmRegister = new FrmRegister();
+                newFrmRegister.Show();
+            }
+
+            this.isLoggedIn = true; 
+            this.Close(); 
+        }
+
+        private void FrmLoginAdmin_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            if (!isLoggedIn)
+            {
+                var frmRegister = Application.OpenForms.OfType<FrmRegister>().FirstOrDefault();
+                frmRegister?.Close();
+            }
         }
     }
 }
-
