@@ -11,9 +11,9 @@ using StudentCourseManagement.Applications.SemesterApp;
 using StudentCourseManagement.Applications.MajorApp;
 using StudentCourseManagement.Presentation.WinForms.Bootstrap;
 
-namespace StudentCourseManagement.Presentation.Forms.ManageCourse
+namespace StudentCourseManagement.Presentation.Forms.Manage
 {
-    public partial class FrmFacultyManagement : Form
+    public partial class FrmSemesterManagement : Form
     {
   private readonly SemesterService _semesterService;
      private readonly MajorService _majorService;
@@ -21,7 +21,7 @@ namespace StudentCourseManagement.Presentation.Forms.ManageCourse
         private List<Domain.Entities.Semester> _semesters = new();
         private Domain.Entities.Semester? _selectedSemester;
 
-      public FrmFacultyManagement()
+      public FrmSemesterManagement()
         {
 InitializeComponent();
           
@@ -30,7 +30,7 @@ InitializeComponent();
             _majorService = ServicesFactory.CreateMajorService();
             
       // Đăng ký sự kiện
-   this.Load += FrmFacultyManagement_Load;
+   this.Load += FrmSemesterManagement_Load;
         comboBox1.SelectedIndexChanged += ComboBox1_SelectedIndexChanged;
       comboBox2.SelectedIndexChanged += ComboBox2_SelectedIndexChanged;
           button1.Click += BtnAdd_Click;
@@ -38,7 +38,7 @@ InitializeComponent();
         button3.Click += BtnDelete_Click;
         }
 
-        private async void FrmFacultyManagement_Load(object sender, EventArgs e)
+        private async void FrmSemesterManagement_Load(object sender, EventArgs e)
         {
     try
       {
@@ -480,7 +480,7 @@ var selectedMajor = (Domain.Entities.Major)comboBox1.SelectedItem;
             button3.Text = "Xóa";
             button3.UseVisualStyleBackColor = true;
             // 
-            // FrmFacultyManagement
+            // FrmSemesterManagement
             // 
             ClientSize = new Size(842, 501);
             Controls.Add(button3);
@@ -494,8 +494,8 @@ var selectedMajor = (Domain.Entities.Major)comboBox1.SelectedItem;
             Controls.Add(menuStrip1);
             FormBorderStyle = FormBorderStyle.SizableToolWindow;
             MainMenuStrip = menuStrip1;
-            Name = "FrmFacultyManagement";
-            Text = "FrmFacultyManagement.";
+            Name = "FrmSemesterManagement";
+            Text = "Quản lý học kỳ";
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
             ResumeLayout(false);

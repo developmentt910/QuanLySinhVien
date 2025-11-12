@@ -39,4 +39,8 @@
 		<None Include=".gitignore" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="database\Scripts\" />
+	</ItemGroup>
+
 </Project>

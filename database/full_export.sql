@@ -1,4 +1,4 @@
-﻿USE [master]
+﻿﻿USE [master]
 GO
 /****** Object:  Database [QLSV]    Script Date: 10/30/2025 9:56:55 PM ******/
 CREATE DATABASE [QLSV]
@@ -171,11 +171,9 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[Major](
-	[MajorId] [uniqueidentifier] NOT NULL,
+	[Id] [uniqueidentifier] NOT NULL,
 	[MajorName] [nvarchar](100) NOT NULL,
 	[FacultyId] [uniqueidentifier] NOT NULL,
-	
-
 PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
