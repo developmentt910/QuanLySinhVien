@@ -7,14 +7,260 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using StudentCourseManagement.Applications.SemesterApp;
+using StudentCourseManagement.Applications.MajorApp;
+using StudentCourseManagement.Presentation.WinForms.Bootstrap;
 
 namespace StudentCourseManagement.Presentation.Forms.ManageCourse
 {
     public partial class FrmFacultyManagement : Form
     {
-        public FrmFacultyManagement()
+  private readonly SemesterService _semesterService;
+     private readonly MajorService _majorService;
+      private List<Domain.Entities.Major> _majors = new();
+        private List<Domain.Entities.Semester> _semesters = new();
+        private Domain.Entities.Semester? _selectedSemester;
+
+      public FrmFacultyManagement()
         {
-            InitializeComponent();
+InitializeComponent();
+          
+    // Khởi tạo services
+            _semesterService = ServicesFactory.CreateSemesterService();
+            _majorService = ServicesFactory.CreateMajorService();
+            
+      // Đăng ký sự kiện
+   this.Load += FrmFacultyManagement_Load;
+        comboBox1.SelectedIndexChanged += ComboBox1_SelectedIndexChanged;
+      comboBox2.SelectedIndexChanged += ComboBox2_SelectedIndexChanged;
+          button1.Click += BtnAdd_Click;
+ button2.Click += BtnUpdate_Click;
+        button3.Click += BtnDelete_Click;
+        }
+
+        private async void FrmFacultyManagement_Load(object sender, EventArgs e)
+        {
+    try
+      {
+         await LoadMajorsAsync();
+          }
+   catch (Exception ex)
+    {
+           MessageBox.Show($"Lỗi khi tải dữ liệu: {ex.Message}", "Lỗi",
+  MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+        }
+
+        private async Task LoadMajorsAsync()
+   {
+        try
+            {
+     var majors = await _majorService.GetAllMajorsAsync();
+     _majors = majors.ToList();
+
+             comboBox1.DataSource = null;
+                comboBox1.DisplayMember = "MajorName";
+    comboBox1.ValueMember = "Id";
+              comboBox1.DataSource = _majors;
+
+       if (_majors.Any())
+          {
+      comboBox1.SelectedIndex = 0;
+       }
+  }
+        catch (Exception ex)
+            {
+   MessageBox.Show($"Lỗi khi tải danh sách ngành: {ex.Message}", "Lỗi",
+ MessageBoxButtons.OK, MessageBoxIcon.Error);
+    }
+        }
+
+        private async void ComboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+  if (comboBox1.SelectedItem is Domain.Entities.Major selectedMajor)
+          {
+ await LoadSemestersByMajorAsync(selectedMajor.Id);
+        }
+        }
+
+   private async Task LoadSemestersByMajorAsync(Guid majorId)
+        {
+   try
+            {
+var semesters = await _semesterService.GetSemestersByMajorAsync(majorId);
+      _semesters = semesters.ToList();
+
+      comboBox2.DataSource = null;
+    comboBox2.DisplayMember = "SemesterName";
+ comboBox2.ValueMember = "Id";
+                comboBox2.DataSource = _semesters;
+
+        if (_semesters.Any())
+   {
+         comboBox2.SelectedIndex = 0;
+                }
+                else
+       {
+          _selectedSemester = null;
+             }
+  }
+            catch (Exception ex)
+            {
+        MessageBox.Show($"Lỗi khi tải danh sách học kỳ: {ex.Message}", "Lỗi",
+ MessageBoxButtons.OK, MessageBoxIcon.Error);
+}
+        }
+
+        private void ComboBox2_SelectedIndexChanged(object sender, EventArgs e)
+  {
+     if (comboBox2.SelectedItem is Domain.Entities.Semester semester)
+ {
+   _selectedSemester = semester;
+            }
+        }
+
+        private async void BtnAdd_Click(object sender, EventArgs e)
+        {
+   if (comboBox1.SelectedItem == null)
+      {
+    MessageBox.Show("Vui lòng chọn ngành!", "Thông báo",
+   MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+  var selectedMajor = (Domain.Entities.Major)comboBox1.SelectedItem;
+
+    // Mở form thêm học kỳ
+            using (var addForm = new FrmAddEditSemester(selectedMajor.Id, selectedMajor.MajorName))
+ {
+      if (addForm.ShowDialog() == DialogResult.OK)
+       {
+   try
+ {
+   var result = await _semesterService.CreateSemesterAsync(
+      addForm.SemesterName,
+     addForm.Year,
+      addForm.SemesterNumber,
+     addForm.StartDate,
+         addForm.EndDate,
+       selectedMajor.Id);
+
+               if (result.Ok)
+            {
+          MessageBox.Show("Thêm học kỳ thành công!", "Thông báo",
+  MessageBoxButtons.OK, MessageBoxIcon.Information);
+      await LoadSemestersByMajorAsync(selectedMajor.Id);
+ }
+         else
+               {
+   MessageBox.Show($"Lỗi: {result.Error}", "Lỗi",
+  MessageBoxButtons.OK, MessageBoxIcon.Error);
+    }
+                }
+          catch (Exception ex)
+         {
+             MessageBox.Show($"Lỗi khi thêm học kỳ: {ex.Message}", "Lỗi",
+             MessageBoxButtons.OK, MessageBoxIcon.Error);
+ }
+            }
+  }
+        }
+
+        private async void BtnUpdate_Click(object sender, EventArgs e)
+        {
+       if (_selectedSemester == null)
+        {
+    MessageBox.Show("Vui lòng chọn học kỳ cần sửa!", "Thông báo",
+      MessageBoxButtons.OK, MessageBoxIcon.Warning);
+      return;
+            }
+
+var selectedMajor = (Domain.Entities.Major)comboBox1.SelectedItem;
+
+            // Mở form sửa học kỳ
+            using (var editForm = new FrmAddEditSemester(
+           selectedMajor.Id,
+     selectedMajor.MajorName,
+    _selectedSemester))
+     {
+        if (editForm.ShowDialog() == DialogResult.OK)
+   {
+  try
+                {
+         var result = await _semesterService.UpdateSemesterAsync(
+         _selectedSemester.Id,
+       editForm.SemesterName,
+        editForm.Year,
+      editForm.SemesterNumber,
+     editForm.StartDate,
+   editForm.EndDate,
+     editForm.IsActive,
+      selectedMajor.Id);
+
+     if (result.Ok)
+       {
+       MessageBox.Show("Cập nhật học kỳ thành công!", "Thông báo",
+  MessageBoxButtons.OK, MessageBoxIcon.Information);
+     await LoadSemestersByMajorAsync(selectedMajor.Id);
+   }
+   else
+           {
+                 MessageBox.Show($"Lỗi: {result.Error}", "Lỗi",
+       MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+   }
+           catch (Exception ex)
+              {
+            MessageBox.Show($"Lỗi khi cập nhật học kỳ: {ex.Message}", "Lỗi",
+        MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+   }
+  }
+        }
+
+        private async void BtnDelete_Click(object sender, EventArgs e)
+ {
+            if (_selectedSemester == null)
+     {
+    MessageBox.Show("Vui lòng chọn học kỳ cần xóa!", "Thông báo",
+ MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+     var confirmResult = MessageBox.Show(
+    $"Bạn có chắc chắn muốn xóa học kỳ '{_selectedSemester.SemesterName}'?\n\n" +
+                "Lưu ý: Xóa học kỳ có thể ảnh hưởng đến các dữ liệu liên quan (môn học, điểm số).",
+    "Xác nhận xóa",
+         MessageBoxButtons.YesNo,
+   MessageBoxIcon.Warning);
+
+            if (confirmResult != DialogResult.Yes)
+          return;
+
+            try
+         {
+   var result = await _semesterService.DeleteSemesterAsync(_selectedSemester.Id);
+
+                if (result.Ok)
+    {
+        MessageBox.Show("Xóa học kỳ thành công!", "Thông báo",
+        MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+             var selectedMajor = (Domain.Entities.Major)comboBox1.SelectedItem;
+     await LoadSemestersByMajorAsync(selectedMajor.Id);
+    }
+ else
+            {
+  MessageBox.Show($"Lỗi: {result.Error}\n\n" +
+             "Có thể học kỳ này đang được sử dụng trong hệ thống.", "Lỗi",
+        MessageBoxButtons.OK, MessageBoxIcon.Error);
+    }
+        }
+  catch (Exception ex)
+     {
+    MessageBox.Show($"Lỗi khi xóa học kỳ: {ex.Message}", "Lỗi",
+   MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void InitializeComponent()
@@ -256,18 +502,18 @@ namespace StudentCourseManagement.Presentation.Forms.ManageCourse
             PerformLayout();
 
         }
-        private Label label1;
+     private Label label1;
         private MenuStrip menuStrip1;
-        private ToolStripMenuItem hệThốngToolStripMenuItem;
+    private ToolStripMenuItem hệThốngToolStripMenuItem;
         private ToolStripMenuItem đăngNhậpToolStripMenuItem;
-        private ToolStripMenuItem quanLýSinhViênToolStripMenuItem;
+    private ToolStripMenuItem quanLýSinhViênToolStripMenuItem;
         private ToolStripMenuItem thôngTinSinhViênToolStripMenuItem;
         private ToolStripMenuItem kếtQuảHọcTậpToolStripMenuItem;
         private ToolStripMenuItem đánhGiáRènLuyệnToolStripMenuItem;
-        private ToolStripMenuItem quảnLýTổngHợpToolStripMenuItem;
+      private ToolStripMenuItem quảnLýTổngHợpToolStripMenuItem;
         private ToolStripMenuItem họcKỳToolStripMenuItem;
         private ToolStripMenuItem khoaToolStripMenuItem;
-        private ToolStripMenuItem ngànhToolStripMenuItem;
+    private ToolStripMenuItem ngànhToolStripMenuItem;
         private ToolStripMenuItem chuyênNgànhToolStripMenuItem;
         private ToolStripMenuItem lớpHọcToolStripMenuItem;
         private ToolStripMenuItem mônHọcToolStripMenuItem;
@@ -275,12 +521,152 @@ namespace StudentCourseManagement.Presentation.Forms.ManageCourse
         private ToolStripMenuItem thờiKhóaBiểuToolStripMenuItem;
         private ToolStripMenuItem thốngKêBáoCáoToolStripMenuItem;
         private ToolStripMenuItem trợGiúpToolStripMenuItem;
-        private Label label2;
+      private Label label2;
         private Label label3;
-        private ComboBox comboBox1;
+     private ComboBox comboBox1;
         private ComboBox comboBox2;
         private Button button1;
         private Button button2;
         private Button button3;
+    }
+
+    // Form phụ để thêm/sửa học kỳ
+    internal class FrmAddEditSemester : Form
+    {
+        private TextBox txtSemesterName;
+        private NumericUpDown numYear;
+      private NumericUpDown numSemesterNumber;
+        private DateTimePicker dtpStartDate;
+  private DateTimePicker dtpEndDate;
+    private CheckBox chkIsActive;
+  private Button btnOK;
+        private Button btnCancel;
+        private Label lblMajor;
+
+        public string SemesterName => txtSemesterName.Text.Trim();
+        public int Year => (int)numYear.Value;
+        public int SemesterNumber => (int)numSemesterNumber.Value;
+ public DateTime StartDate => dtpStartDate.Value;
+        public DateTime EndDate => dtpEndDate.Value;
+        public bool IsActive => chkIsActive.Checked;
+
+        public FrmAddEditSemester(Guid majorId, string majorName, Domain.Entities.Semester? semester = null)
+        {
+            InitializeComponents(majorName);
+
+     if (semester != null)
+            {
+// Chế độ sửa
+           this.Text = "Sửa học kỳ";
+            txtSemesterName.Text = semester.SemesterName;
+    numYear.Value = semester.Year;
+     numSemesterNumber.Value = semester.SemesterNumber;
+          dtpStartDate.Value = semester.StartDate;
+           dtpEndDate.Value = semester.EndDate;
+       chkIsActive.Checked = semester.IsActive;
+            }
+  else
+            {
+   // Chế độ thêm mới
+      this.Text = "Thêm học kỳ mới";
+      numYear.Value = DateTime.Now.Year;
+                numSemesterNumber.Value = 1;
+          dtpStartDate.Value = DateTime.Now;
+ dtpEndDate.Value = DateTime.Now.AddMonths(4);
+          chkIsActive.Checked = true;
+         }
+     }
+
+      private void InitializeComponents(string majorName)
+        {
+ this.Size = new Size(500, 400);
+         this.StartPosition = FormStartPosition.CenterParent;
+            this.FormBorderStyle = FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+
+   int yPos = 20;
+            int labelWidth = 120;
+          int controlLeft = labelWidth + 30;
+
+         // Ngành
+         var lblMajorLabel = new Label { Text = "Ngành:", Left = 20, Top = yPos, Width = labelWidth };
+  lblMajor = new Label { Text = majorName, Left = controlLeft, Top = yPos, Width = 300, Font = new Font("Segoe UI", 9, FontStyle.Bold) };
+    this.Controls.Add(lblMajorLabel);
+            this.Controls.Add(lblMajor);
+    yPos += 35;
+
+            // Tên học kỳ
+       var lblSemesterName = new Label { Text = "Tên học kỳ:", Left = 20, Top = yPos, Width = labelWidth };
+     txtSemesterName = new TextBox { Left = controlLeft, Top = yPos - 3, Width = 300 };
+            this.Controls.Add(lblSemesterName);
+     this.Controls.Add(txtSemesterName);
+            yPos += 35;
+
+        // Năm học
+        var lblYear = new Label { Text = "Năm học:", Left = 20, Top = yPos, Width = labelWidth };
+     numYear = new NumericUpDown { Left = controlLeft, Top = yPos - 3, Width = 150, Minimum = 2000, Maximum = 2100 };
+        this.Controls.Add(lblYear);
+     this.Controls.Add(numYear);
+            yPos += 35;
+
+            // Học kỳ thứ
+      var lblSemesterNumber = new Label { Text = "Học kỳ thứ:", Left = 20, Top = yPos, Width = labelWidth };
+            numSemesterNumber = new NumericUpDown { Left = controlLeft, Top = yPos - 3, Width = 150, Minimum = 1, Maximum = 3 };
+this.Controls.Add(lblSemesterNumber);
+   this.Controls.Add(numSemesterNumber);
+            yPos += 35;
+
+     // Ngày bắt đầu
+       var lblStartDate = new Label { Text = "Ngày bắt đầu:", Left = 20, Top = yPos, Width = labelWidth };
+            dtpStartDate = new DateTimePicker { Left = controlLeft, Top = yPos - 3, Width = 200, Format = DateTimePickerFormat.Short };
+      this.Controls.Add(lblStartDate);
+    this.Controls.Add(dtpStartDate);
+            yPos += 35;
+
+            // Ngày kết thúc
+  var lblEndDate = new Label { Text = "Ngày kết thúc:", Left = 20, Top = yPos, Width = labelWidth };
+            dtpEndDate = new DateTimePicker { Left = controlLeft, Top = yPos - 3, Width = 200, Format = DateTimePickerFormat.Short };
+            this.Controls.Add(lblEndDate);
+            this.Controls.Add(dtpEndDate);
+         yPos += 35;
+
+            // Trạng thái
+     chkIsActive = new CheckBox { Text = "Đang hoạt động", Left = controlLeft, Top = yPos, Width = 200 };
+   this.Controls.Add(chkIsActive);
+        yPos += 40;
+
+            // Buttons
+btnOK = new Button { Text = "Lưu", Left = controlLeft, Top = yPos, Width = 90, DialogResult = DialogResult.OK };
+            btnCancel = new Button { Text = "Hủy", Left = controlLeft + 100, Top = yPos, Width = 90, DialogResult = DialogResult.Cancel };
+    btnOK.Click += BtnOK_Click;
+
+          this.Controls.Add(btnOK);
+          this.Controls.Add(btnCancel);
+       this.AcceptButton = btnOK;
+            this.CancelButton = btnCancel;
+        }
+
+ private void BtnOK_Click(object sender, EventArgs e)
+      {
+     // Validate
+         if (string.IsNullOrWhiteSpace(txtSemesterName.Text))
+        {
+     MessageBox.Show("Vui lòng nhập tên học kỳ!", "Thông báo",
+     MessageBoxButtons.OK, MessageBoxIcon.Warning);
+           txtSemesterName.Focus();
+        this.DialogResult = DialogResult.None;
+           return;
+       }
+
+            if (dtpStartDate.Value >= dtpEndDate.Value)
+         {
+  MessageBox.Show("Ngày bắt đầu phải trước ngày kết thúc!", "Thông báo",
+               MessageBoxButtons.OK, MessageBoxIcon.Warning);
+         dtpStartDate.Focus();
+  this.DialogResult = DialogResult.None;
+return;
+  }
+     }
     }
 }

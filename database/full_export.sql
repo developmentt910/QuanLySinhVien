@@ -171,9 +171,11 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[Major](
-	[Id] [uniqueidentifier] NOT NULL,
+	[MajorId] [uniqueidentifier] NOT NULL,
 	[MajorName] [nvarchar](100) NOT NULL,
 	[FacultyId] [uniqueidentifier] NOT NULL,
+	
+
 PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC

@@ -1,6 +1,7 @@
 using System;
 using System.Windows.Forms;
 using StudentCourseManagement.Presentation.WinForms.Bootstrap;
+using StudentCourseManagement.Presentation.Forms.ManageCourse;
 
 namespace StudentCourseManagement
 {
@@ -19,7 +20,7 @@ namespace StudentCourseManagement
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FrmRegister());
+            Application.Run(new FrmFacultyManagement());
         }
     }
 }
