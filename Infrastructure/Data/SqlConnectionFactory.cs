@@ -1,4 +1,9 @@
-﻿
+﻿using Microsoft.Extensions.Configuration;
+using System;
+using Microsoft.Data.SqlClient;
+using System.Threading;
+using System.Threading.Tasks;
+
 namespace StudentCourseManagement.Infrastructure.Data
 {
     public sealed class SqlConnectionFactory
