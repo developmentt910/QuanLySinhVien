@@ -21,7 +21,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AppCenter" Version="5.0.7" />
-		<PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.2" />
+		<PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.3" />
 		<PackageReference Include="Microsoft.Extensions.Configuration" Version="9.*" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="9.*" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.*" />
@@ -37,6 +37,10 @@
 		<None Include="Properties\Settings.settings" />
 		<None Include="README.md" />
 		<None Include=".gitignore" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="database\" />
 	</ItemGroup>
 
 </Project>

@@ -1,8 +1,7 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
+using StudentCourseManagement.Presentation.Forms.Student;
+using System;
 using System.Windows.Forms;
-using Microsoft.Extensions.Configuration;
-using StudentCourseManagement.Presentation.WinForms.Bootstrap;
-using StudentCourseManagement.Presentation.Forms.Admin;
 namespace StudentCourseManagement
 {
     internal static class Program
@@ -15,7 +14,7 @@ namespace StudentCourseManagement
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .Build();
 
-            ServicesFactory.UseConfiguration(config);
+            //ServicesFactory.UseConfiguration(config);
 
 
 
@@ -23,7 +22,7 @@ namespace StudentCourseManagement
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             //Application.Run(new FrmRegister());
-            Application.Run(new FrmAdminDashboard());
+            Application.Run(new FrmStudentManagement());
 
 
 

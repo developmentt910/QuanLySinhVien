@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using StudentCourseManagement.Domain.Entities;
 using StudentCourseManagement.Domain.Abstractions.Repositories;
 using StudentCourseManagement.Applications.Students.Dtos;
+using StudentCourseManagement.Infrastructure.Repositories.SqlServer;
 
 namespace StudentCourseManagement.Applications.Students
 {
-    /// <summary>
-    /// Lớp xử lý nghiệp vụ sinh viên
-    /// </summary>
     public class StudentService
     {
         private readonly IStudentRepository _repository;
@@ -18,9 +16,9 @@ namespace StudentCourseManagement.Applications.Students
             _repository = repository;
         }
 
-        /// <summary>
-        /// Lấy toàn bộ danh sách sinh viên
-        /// </summary>
+        // =========================
+        // ✅ LẤY DANH SÁCH SINH VIÊN
+        // =========================
         public List<StudentDto> GetAllStudents()
         {
             var entities = _repository.GetAll();
@@ -32,14 +30,20 @@ namespace StudentCourseManagement.Applications.Students
                 {
                     StudentId = s.StudentId,
                     FullName = s.FullName,
+
+                    Faculty = s.Faculty,
                     Major = s.Major,
                     Specialization = s.Specialization,
                     ClassName = s.ClassName,
+
                     Gender = s.Gender,
+
+                    // ✅ CHỐT DÙNG Phone – Email
                     Phone = s.Phone,
                     CCCD = s.CCCD,
                     Email = s.Email,
                     Address = s.Address,
+
                     Status = s.Status,
                     Year = s.Year
                 });
@@ -48,9 +52,9 @@ namespace StudentCourseManagement.Applications.Students
             return list;
         }
 
-        /// <summary>
-        /// Lấy thông tin 1 sinh viên theo mã
-        /// </summary>
+        // =========================
+        // ✅ LẤY 1 SINH VIÊN
+        // =========================
         public StudentDto? GetStudentById(string studentId)
         {
             var s = _repository.GetById(studentId);
@@ -60,22 +64,27 @@ namespace StudentCourseManagement.Applications.Students
             {
                 StudentId = s.StudentId,
                 FullName = s.FullName,
+
+                Faculty = s.Faculty,
                 Major = s.Major,
                 Specialization = s.Specialization,
                 ClassName = s.ClassName,
+
                 Gender = s.Gender,
+
                 Phone = s.Phone,
                 CCCD = s.CCCD,
                 Email = s.Email,
                 Address = s.Address,
+
                 Status = s.Status,
                 Year = s.Year
             };
         }
 
-        /// <summary>
-        /// Thêm sinh viên mới
-        /// </summary>
+        // =========================
+        // ✅ THÊM SINH VIÊN
+        // =========================
         public bool AddStudent(StudentDto dto)
         {
             if (dto == null || string.IsNullOrWhiteSpace(dto.StudentId))
@@ -90,9 +99,9 @@ namespace StudentCourseManagement.Applications.Students
             return true;
         }
 
-        /// <summary>
-        /// Cập nhật thông tin sinh viên
-        /// </summary>
+        // =========================
+        // ✅ CẬP NHẬT SINH VIÊN
+        // =========================
         public bool UpdateStudent(StudentDto dto)
         {
             if (dto == null || string.IsNullOrWhiteSpace(dto.StudentId))
@@ -107,9 +116,9 @@ namespace StudentCourseManagement.Applications.Students
             return true;
         }
 
-        /// <summary>
-        /// Xóa sinh viên
-        /// </summary>
+        // =========================
+        // ✅ XÓA SINH VIÊN
+        // =========================
         public bool DeleteStudent(string studentId)
         {
             if (string.IsNullOrWhiteSpace(studentId))
@@ -123,25 +132,35 @@ namespace StudentCourseManagement.Applications.Students
             return true;
         }
 
-        /// <summary>
-        /// Chuyển từ DTO sang Entity
-        /// </summary>
+        // =========================
+        // ✅ MAP DTO → ENTITY (CHUẨN)
+        // =========================
         private Student MapToEntity(StudentDto dto)
         {
             return new Student
             {
                 StudentId = dto.StudentId,
                 FullName = dto.FullName,
+
+                Faculty = dto.Faculty,
                 Major = dto.Major,
                 Specialization = dto.Specialization,
                 ClassName = dto.ClassName,
+
                 Gender = dto.Gender,
+
                 Phone = dto.Phone,
                 CCCD = dto.CCCD,
                 Email = dto.Email,
                 Address = dto.Address,
+
                 Status = dto.Status,
-                Year = dto.Year
+                Year = dto.Year,
+
+                // ✅ MẬT KHẨU BĂM
+                PasswordHash = string.IsNullOrWhiteSpace(dto.Password)
+                    ? null
+                    : StudentRepository.HashPassword(dto.Password)
             };
         }
     }
