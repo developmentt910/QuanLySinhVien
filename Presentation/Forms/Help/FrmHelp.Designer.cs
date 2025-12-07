@@ -17,304 +17,310 @@
 
         private void InitializeComponent()
         {
-            this.pnlMenu = new System.Windows.Forms.Panel();
-            this.btnAbout = new System.Windows.Forms.Button();
-            this.btnFAQ = new System.Windows.Forms.Button();
-            this.btnSupport = new System.Windows.Forms.Button();
-            this.pnlContent = new System.Windows.Forms.Panel();
-            this.pnlSupport = new System.Windows.Forms.Panel();
-            this.lblSupportEmail = new System.Windows.Forms.Label();
-            this.lblSupportPhone = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.pnlFAQ = new System.Windows.Forms.Panel();
-            this.linkFAQ3 = new System.Windows.Forms.LinkLabel();
-            this.linkFAQ2 = new System.Windows.Forms.LinkLabel();
-            this.linkFAQ1 = new System.Windows.Forms.LinkLabel();
-            this.label3 = new System.Windows.Forms.Label();
-            this.pnlAbout = new System.Windows.Forms.Panel();
-            this.txtAboutInfo = new System.Windows.Forms.TextBox();
-            this.lblCopyright = new System.Windows.Forms.Label();
-            this.lblVersion = new System.Windows.Forms.Label();
-            this.lblAppName = new System.Windows.Forms.Label();
-            this.btnClose = new System.Windows.Forms.Button();
-            this.pnlMenu.SuspendLayout();
-            this.pnlContent.SuspendLayout();
-            this.pnlSupport.SuspendLayout();
-            this.pnlFAQ.SuspendLayout();
-            this.pnlAbout.SuspendLayout();
-            this.SuspendLayout();
+            pnlMenu = new Panel();
+            btnAbout = new Button();
+            btnFAQ = new Button();
+            btnSupport = new Button();
+            pnlContent = new Panel();
+            pnlSupport = new Panel();
+            lblSupportEmail = new Label();
+            lblSupportPhone = new Label();
+            label2 = new Label();
+            pnlFAQ = new Panel();
+            linkFAQ3 = new LinkLabel();
+            linkFAQ2 = new LinkLabel();
+            linkFAQ1 = new LinkLabel();
+            label3 = new Label();
+            pnlAbout = new Panel();
+            txtAboutInfo = new TextBox();
+            lblCopyright = new Label();
+            lblVersion = new Label();
+            lblAppName = new Label();
+            btnClose = new Button();
+            pnlMenu.SuspendLayout();
+            pnlContent.SuspendLayout();
+            pnlSupport.SuspendLayout();
+            pnlFAQ.SuspendLayout();
+            pnlAbout.SuspendLayout();
+            SuspendLayout();
             // 
             // pnlMenu
             // 
-            this.pnlMenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.pnlMenu.Controls.Add(this.btnAbout);
-            this.pnlMenu.Controls.Add(this.btnFAQ);
-            this.pnlMenu.Controls.Add(this.btnSupport);
-            this.pnlMenu.Dock = System.Windows.Forms.DockStyle.Left;
-            this.pnlMenu.Location = new System.Drawing.Point(0, 0);
-            this.pnlMenu.Name = "pnlMenu";
-            this.pnlMenu.Size = new System.Drawing.Size(200, 364);
-            this.pnlMenu.TabIndex = 0;
+            pnlMenu.BackColor = Color.FromArgb(240, 240, 240);
+            pnlMenu.Controls.Add(btnAbout);
+            pnlMenu.Controls.Add(btnFAQ);
+            pnlMenu.Controls.Add(btnSupport);
+            pnlMenu.Dock = DockStyle.Left;
+            pnlMenu.Location = new Point(0, 0);
+            pnlMenu.Margin = new Padding(3, 4, 3, 4);
+            pnlMenu.Name = "pnlMenu";
+            pnlMenu.Size = new Size(222, 455);
+            pnlMenu.TabIndex = 0;
             // 
             // btnAbout
             // 
-            this.btnAbout.FlatAppearance.BorderSize = 0;
-            this.btnAbout.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnAbout.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnAbout.Location = new System.Drawing.Point(0, 100);
-            this.btnAbout.Name = "btnAbout";
-            this.btnAbout.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
-            this.btnAbout.Size = new System.Drawing.Size(200, 50);
-            this.btnAbout.TabIndex = 2;
-            this.btnAbout.Text = "Thông tin";
-            this.btnAbout.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnAbout.UseVisualStyleBackColor = true;
-            this.btnAbout.Click += new System.EventHandler(this.btnAbout_Click);
+            btnAbout.FlatAppearance.BorderSize = 0;
+            btnAbout.FlatStyle = FlatStyle.Flat;
+            btnAbout.Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            btnAbout.Location = new Point(0, 125);
+            btnAbout.Margin = new Padding(3, 4, 3, 4);
+            btnAbout.Name = "btnAbout";
+            btnAbout.Padding = new Padding(22, 0, 0, 0);
+            btnAbout.Size = new Size(222, 62);
+            btnAbout.TabIndex = 2;
+            btnAbout.Text = "Thông tin";
+            btnAbout.TextAlign = ContentAlignment.MiddleLeft;
+            btnAbout.UseVisualStyleBackColor = true;
+            btnAbout.Click += btnAbout_Click;
             // 
             // btnFAQ
             // 
-            this.btnFAQ.FlatAppearance.BorderSize = 0;
-            this.btnFAQ.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnFAQ.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnFAQ.Location = new System.Drawing.Point(0, 50);
-            this.btnFAQ.Name = "btnFAQ";
-            this.btnFAQ.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
-            this.btnFAQ.Size = new System.Drawing.Size(200, 50);
-            this.btnFAQ.TabIndex = 1;
-            this.btnFAQ.Text = "Hướng dẫn (FAQ)";
-            this.btnFAQ.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnFAQ.UseVisualStyleBackColor = true;
-            this.btnFAQ.Click += new System.EventHandler(this.btnFAQ_Click);
+            btnFAQ.FlatAppearance.BorderSize = 0;
+            btnFAQ.FlatStyle = FlatStyle.Flat;
+            btnFAQ.Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            btnFAQ.Location = new Point(0, 62);
+            btnFAQ.Margin = new Padding(3, 4, 3, 4);
+            btnFAQ.Name = "btnFAQ";
+            btnFAQ.Padding = new Padding(22, 0, 0, 0);
+            btnFAQ.Size = new Size(222, 62);
+            btnFAQ.TabIndex = 1;
+            btnFAQ.Text = "Hướng dẫn (FAQ)";
+            btnFAQ.TextAlign = ContentAlignment.MiddleLeft;
+            btnFAQ.UseVisualStyleBackColor = true;
+            btnFAQ.Click += btnFAQ_Click;
             // 
             // btnSupport
             // 
-            this.btnSupport.FlatAppearance.BorderSize = 0;
-            this.btnSupport.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSupport.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSupport.Location = new System.Drawing.Point(0, 0);
-            this.btnSupport.Name = "btnSupport";
-            this.btnSupport.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
-            this.btnSupport.Size = new System.Drawing.Size(200, 50);
-            this.btnSupport.TabIndex = 0;
-            this.btnSupport.Text = "Hỗ trợ Kỹ thuật";
-            this.btnSupport.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnSupport.UseVisualStyleBackColor = true;
-            this.btnSupport.Click += new System.EventHandler(this.btnSupport_Click);
+            btnSupport.FlatAppearance.BorderSize = 0;
+            btnSupport.FlatStyle = FlatStyle.Flat;
+            btnSupport.Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            btnSupport.Location = new Point(0, 0);
+            btnSupport.Margin = new Padding(3, 4, 3, 4);
+            btnSupport.Name = "btnSupport";
+            btnSupport.Padding = new Padding(22, 0, 0, 0);
+            btnSupport.Size = new Size(222, 62);
+            btnSupport.TabIndex = 0;
+            btnSupport.Text = "Hỗ trợ Kỹ thuật";
+            btnSupport.TextAlign = ContentAlignment.MiddleLeft;
+            btnSupport.UseVisualStyleBackColor = true;
+            btnSupport.Click += btnSupport_Click;
             // 
             // pnlContent
             // 
-            this.pnlContent.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.pnlContent.Controls.Add(this.pnlSupport);
-            this.pnlContent.Controls.Add(this.pnlFAQ);
-            this.pnlContent.Controls.Add(this.pnlAbout);
-            this.pnlContent.Location = new System.Drawing.Point(200, 0);
-            this.pnlContent.Name = "pnlContent";
-            this.pnlContent.Size = new System.Drawing.Size(584, 310);
-            this.pnlContent.TabIndex = 1;
+            pnlContent.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            pnlContent.Controls.Add(pnlSupport);
+            pnlContent.Controls.Add(pnlFAQ);
+            pnlContent.Controls.Add(pnlAbout);
+            pnlContent.Location = new Point(222, 0);
+            pnlContent.Margin = new Padding(3, 4, 3, 4);
+            pnlContent.Name = "pnlContent";
+            pnlContent.Size = new Size(649, 388);
+            pnlContent.TabIndex = 1;
             // 
             // pnlSupport
             // 
-            this.pnlSupport.BackColor = System.Drawing.Color.White;
-            this.pnlSupport.Controls.Add(this.lblSupportEmail);
-            this.pnlSupport.Controls.Add(this.lblSupportPhone);
-            this.pnlSupport.Controls.Add(this.label2);
-            this.pnlSupport.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlSupport.Location = new System.Drawing.Point(0, 0);
-            this.pnlSupport.Name = "pnlSupport";
-            this.pnlSupport.Size = new System.Drawing.Size(584, 310);
-            this.pnlSupport.TabIndex = 0;
+            pnlSupport.BackColor = Color.White;
+            pnlSupport.Controls.Add(lblSupportEmail);
+            pnlSupport.Controls.Add(lblSupportPhone);
+            pnlSupport.Controls.Add(label2);
+            pnlSupport.Dock = DockStyle.Fill;
+            pnlSupport.Location = new Point(0, 0);
+            pnlSupport.Margin = new Padding(3, 4, 3, 4);
+            pnlSupport.Name = "pnlSupport";
+            pnlSupport.Size = new Size(649, 388);
+            pnlSupport.TabIndex = 0;
             // 
             // lblSupportEmail
             // 
-            this.lblSupportEmail.AutoSize = true;
-            this.lblSupportEmail.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSupportEmail.Location = new System.Drawing.Point(30, 130);
-            this.lblSupportEmail.Name = "lblSupportEmail";
-            this.lblSupportEmail.Size = new System.Drawing.Size(263, 25);
-            this.lblSupportEmail.TabIndex = 6;
-            this.lblSupportEmail.Text = "Email hỗ trợ: taokyngucfan2k5@edu.vn";
+            lblSupportEmail.AutoSize = true;
+            lblSupportEmail.Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblSupportEmail.Location = new Point(33, 162);
+            lblSupportEmail.Name = "lblSupportEmail";
+            lblSupportEmail.Size = new Size(285, 25);
+            lblSupportEmail.TabIndex = 6;
+            lblSupportEmail.Text = "Email hỗ trợ: daihoc@edu.vn";
             // 
             // lblSupportPhone
             // 
-            this.lblSupportPhone.AutoSize = true;
-            this.lblSupportPhone.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSupportPhone.Location = new System.Drawing.Point(30, 90);
-            this.lblSupportPhone.Name = "lblSupportPhone";
-            this.lblSupportPhone.Size = new System.Drawing.Size(209, 25);
-            this.lblSupportPhone.TabIndex = 5;
-            this.lblSupportPhone.Text = "Hotline: 1900 3636 (IT)";
+            lblSupportPhone.AutoSize = true;
+            lblSupportPhone.Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblSupportPhone.Location = new Point(33, 112);
+            lblSupportPhone.Name = "lblSupportPhone";
+            lblSupportPhone.Size = new Size(213, 25);
+            lblSupportPhone.TabIndex = 5;
+            lblSupportPhone.Text = "Hotline: 1900 8386 (IT)";
             // 
             // label2
             // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(28, 30);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(325, 29);
-            this.label2.TabIndex = 4;
-            this.label2.Text = "Thông tin Hỗ trợ Kỹ thuật";
+            label2.AutoSize = true;
+            label2.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label2.Location = new Point(31, 38);
+            label2.Name = "label2";
+            label2.Size = new Size(300, 29);
+            label2.TabIndex = 4;
+            label2.Text = "Thông tin Hỗ trợ Kỹ thuật";
             // 
             // pnlFAQ
             // 
-            this.pnlFAQ.BackColor = System.Drawing.Color.White;
-            this.pnlFAQ.Controls.Add(this.linkFAQ3);
-            this.pnlFAQ.Controls.Add(this.linkFAQ2);
-            this.pnlFAQ.Controls.Add(this.linkFAQ1);
-            this.pnlFAQ.Controls.Add(this.label3);
-            this.pnlFAQ.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlFAQ.Location = new System.Drawing.Point(0, 0);
-            this.pnlFAQ.Name = "pnlFAQ";
-            this.pnlFAQ.Size = new System.Drawing.Size(584, 310);
-            this.pnlFAQ.TabIndex = 1;
+            pnlFAQ.BackColor = Color.White;
+            pnlFAQ.Controls.Add(linkFAQ3);
+            pnlFAQ.Controls.Add(linkFAQ2);
+            pnlFAQ.Controls.Add(linkFAQ1);
+            pnlFAQ.Controls.Add(label3);
+            pnlFAQ.Dock = DockStyle.Fill;
+            pnlFAQ.Location = new Point(0, 0);
+            pnlFAQ.Margin = new Padding(3, 4, 3, 4);
+            pnlFAQ.Name = "pnlFAQ";
+            pnlFAQ.Size = new Size(649, 388);
+            pnlFAQ.TabIndex = 1;
             // 
             // linkFAQ3
             // 
-            this.linkFAQ3.AutoSize = true;
-            this.linkFAQ3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.linkFAQ3.Location = new System.Drawing.Point(30, 150);
-            this.linkFAQ3.Name = "linkFAQ3";
-            this.linkFAQ3.Size = new System.Drawing.Size(465, 25);
-            this.linkFAQ3.TabIndex = 7;
-            this.linkFAQ3.TabStop = true;
-            this.linkFAQ3.Text = "Tại sao tôi không thấy môn học ở form Chương trình khung?";
-            this.linkFAQ3.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkFAQ3_LinkClicked);
+            linkFAQ3.AutoSize = true;
+            linkFAQ3.Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            linkFAQ3.Location = new Point(33, 188);
+            linkFAQ3.Name = "linkFAQ3";
+            linkFAQ3.Size = new Size(529, 25);
+            linkFAQ3.TabIndex = 7;
+            linkFAQ3.TabStop = true;
+            linkFAQ3.Text = "Tại sao tôi không thấy môn học ở form Chương trình khung?";
+            linkFAQ3.LinkClicked += linkFAQ3_LinkClicked;
             // 
             // linkFAQ2
             // 
-            this.linkFAQ2.AutoSize = true;
-            this.linkFAQ2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.linkFAQ2.Location = new System.Drawing.Point(30, 110);
-            this.linkFAQ2.Name = "linkFAQ2";
-            this.linkFAQ2.Size = new System.Drawing.Size(309, 25);
-            this.linkFAQ2.TabIndex = 6;
-            this.linkFAQ2.TabStop = true;
-            this.linkFAQ2.Text = "Làm thế nào để thêm một Lịch thi?";
-            this.linkFAQ2.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkFAQ2_LinkClicked);
+            linkFAQ2.AutoSize = true;
+            linkFAQ2.Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            linkFAQ2.Location = new Point(33, 138);
+            linkFAQ2.Name = "linkFAQ2";
+            linkFAQ2.Size = new Size(309, 25);
+            linkFAQ2.TabIndex = 6;
+            linkFAQ2.TabStop = true;
+            linkFAQ2.Text = "Làm thế nào để thêm một Lịch thi?";
+            linkFAQ2.LinkClicked += linkFAQ2_LinkClicked;
             // 
             // linkFAQ1
             // 
-            this.linkFAQ1.AutoSize = true;
-            this.linkFAQ1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.linkFAQ1.Location = new System.Drawing.Point(30, 70);
-            this.linkFAQ1.Name = "linkFAQ1";
-            this.linkFAQ1.Size = new System.Drawing.Size(342, 25);
-            this.linkFAQ1.TabIndex = 5;
-            this.linkFAQ1.TabStop = true;
-            this.linkFAQ1.Text = "Làm thế nào để thêm một Thời khóa biểu?";
-            this.linkFAQ1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkFAQ1_LinkClicked);
+            linkFAQ1.AutoSize = true;
+            linkFAQ1.Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            linkFAQ1.Location = new Point(33, 88);
+            linkFAQ1.Name = "linkFAQ1";
+            linkFAQ1.Size = new Size(377, 25);
+            linkFAQ1.TabIndex = 5;
+            linkFAQ1.TabStop = true;
+            linkFAQ1.Text = "Làm thế nào để thêm một Thời khóa biểu?";
+            linkFAQ1.LinkClicked += linkFAQ1_LinkClicked;
             // 
             // label3
             // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(28, 30);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(248, 29);
-            this.label3.TabIndex = 4;
-            this.label3.Text = "Câu hỏi thường gặp";
+            label3.AutoSize = true;
+            label3.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label3.Location = new Point(31, 38);
+            label3.Name = "label3";
+            label3.Size = new Size(239, 29);
+            label3.TabIndex = 4;
+            label3.Text = "Câu hỏi thường gặp";
             // 
             // pnlAbout
             // 
-            this.pnlAbout.BackColor = System.Drawing.Color.White;
-            this.pnlAbout.Controls.Add(this.txtAboutInfo);
-            this.pnlAbout.Controls.Add(this.lblCopyright);
-            this.pnlAbout.Controls.Add(this.lblVersion);
-            this.pnlAbout.Controls.Add(this.lblAppName);
-            this.pnlAbout.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlAbout.Location = new System.Drawing.Point(0, 0);
-            this.pnlAbout.Name = "pnlAbout";
-            this.pnlAbout.Size = new System.Drawing.Size(584, 310);
-            this.pnlAbout.TabIndex = 2;
+            pnlAbout.BackColor = Color.White;
+            pnlAbout.Controls.Add(txtAboutInfo);
+            pnlAbout.Controls.Add(lblCopyright);
+            pnlAbout.Controls.Add(lblVersion);
+            pnlAbout.Controls.Add(lblAppName);
+            pnlAbout.Dock = DockStyle.Fill;
+            pnlAbout.Location = new Point(0, 0);
+            pnlAbout.Margin = new Padding(3, 4, 3, 4);
+            pnlAbout.Name = "pnlAbout";
+            pnlAbout.Size = new Size(649, 388);
+            pnlAbout.TabIndex = 2;
             // 
             // txtAboutInfo
             // 
-            this.txtAboutInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtAboutInfo.BackColor = System.Drawing.Color.White;
-            this.txtAboutInfo.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txtAboutInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtAboutInfo.Location = new System.Drawing.Point(33, 140);
-            this.txtAboutInfo.Multiline = true;
-            this.txtAboutInfo.Name = "txtAboutInfo";
-            this.txtAboutInfo.ReadOnly = true;
-            this.txtAboutInfo.Size = new System.Drawing.Size(528, 150);
-            this.txtAboutInfo.TabIndex = 8;
-            this.txtAboutInfo.Text = "Phần mềm được phát triển bởi [taokyngucfan] nhằm mục đích quản lý toàn diện ng" +
-    "hiệp vụ đào tạo sinh viên.";
+            txtAboutInfo.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            txtAboutInfo.BackColor = Color.White;
+            txtAboutInfo.BorderStyle = BorderStyle.None;
+            txtAboutInfo.Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            txtAboutInfo.Location = new Point(37, 175);
+            txtAboutInfo.Margin = new Padding(3, 4, 3, 4);
+            txtAboutInfo.Multiline = true;
+            txtAboutInfo.Name = "txtAboutInfo";
+            txtAboutInfo.ReadOnly = true;
+            txtAboutInfo.Size = new Size(587, 188);
+            txtAboutInfo.TabIndex = 8;
+            txtAboutInfo.Text = "Phần mềm được phát triển bởi [LMKAT] nhằm mục đích quản lý toàn diện nghiệp vụ đào tạo sinh viên.";
             // 
             // lblCopyright
             // 
-            this.lblCopyright.AutoSize = true;
-            this.lblCopyright.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblCopyright.Location = new System.Drawing.Point(28, 105);
-            this.lblCopyright.Name = "lblCopyright";
-            this.lblCopyright.Size = new System.Drawing.Size(326, 25);
-            this.lblCopyright.TabIndex = 7;
-            this.lblCopyright.Text = "Copyright © 2025 [Tên Trường/Bạn]";
+            lblCopyright.AutoSize = true;
+            lblCopyright.Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblCopyright.Location = new Point(31, 131);
+            lblCopyright.Name = "lblCopyright";
+            lblCopyright.Size = new Size(326, 25);
+            lblCopyright.TabIndex = 7;
+            lblCopyright.Text = "Copyright © 2025 [LMKAT]";
             // 
             // lblVersion
             // 
-            this.lblVersion.AutoSize = true;
-            this.lblVersion.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblVersion.Location = new System.Drawing.Point(28, 70);
-            this.lblVersion.Name = "lblVersion";
-            this.lblVersion.Size = new System.Drawing.Size(147, 25);
-            this.lblVersion.TabIndex = 6;
-            this.lblVersion.Text = "Phiên bản: 1.0.0";
+            lblVersion.AutoSize = true;
+            lblVersion.Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblVersion.Location = new Point(31, 88);
+            lblVersion.Name = "lblVersion";
+            lblVersion.Size = new Size(154, 25);
+            lblVersion.TabIndex = 6;
+            lblVersion.Text = "Phiên bản: 1.0.0";
             // 
             // lblAppName
             // 
-            this.lblAppName.AutoSize = true;
-            this.lblAppName.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblAppName.Location = new System.Drawing.Point(28, 30);
-            this.lblAppName.Name = "lblAppName";
-            this.lblAppName.Size = new System.Drawing.Size(351, 29);
-            this.lblAppName.TabIndex = 5;
-            this.lblAppName.Text = "Hệ thống Quản lý Sinh viên";
+            lblAppName.AutoSize = true;
+            lblAppName.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblAppName.Location = new Point(31, 38);
+            lblAppName.Name = "lblAppName";
+            lblAppName.Size = new Size(327, 29);
+            lblAppName.TabIndex = 5;
+            lblAppName.Text = "Hệ thống Quản lý Sinh viên";
             // 
             // btnClose
             // 
-            this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnClose.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnClose.Location = new System.Drawing.Point(660, 316);
-            this.btnClose.Name = "btnClose";
-            this.btnClose.Size = new System.Drawing.Size(112, 36);
-            this.btnClose.TabIndex = 2;
-            this.btnClose.Text = "Đóng";
-            this.btnClose.UseVisualStyleBackColor = true;
-            this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
+            btnClose.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            btnClose.Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            btnClose.Location = new Point(733, 395);
+            btnClose.Margin = new Padding(3, 4, 3, 4);
+            btnClose.Name = "btnClose";
+            btnClose.Size = new Size(124, 45);
+            btnClose.TabIndex = 2;
+            btnClose.Text = "Đóng";
+            btnClose.UseVisualStyleBackColor = true;
+            btnClose.Click += btnClose_Click;
             // 
             // FrmHelp
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(784, 364);
-            this.Controls.Add(this.btnClose);
-            this.Controls.Add(this.pnlContent);
-            this.Controls.Add(this.pnlMenu);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(800, 400);
-            this.Name = "FrmHelp";
-            this.ShowIcon = false;
-            this.ShowInTaskbar = false;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Trợ giúp & Thông tin";
-            this.Load += new System.EventHandler(this.FrmHelp_Load);
-            this.pnlMenu.ResumeLayout(false);
-            this.pnlContent.ResumeLayout(false);
-            this.pnlSupport.ResumeLayout(false);
-            this.pnlSupport.PerformLayout();
-            this.pnlFAQ.ResumeLayout(false);
-            this.pnlFAQ.PerformLayout();
-            this.pnlAbout.ResumeLayout(false);
-            this.pnlAbout.PerformLayout();
-            this.ResumeLayout(false);
+            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.White;
+            ClientSize = new Size(871, 455);
+            Controls.Add(btnClose);
+            Controls.Add(pnlContent);
+            Controls.Add(pnlMenu);
+            FormBorderStyle = FormBorderStyle.FixedDialog;
+            Margin = new Padding(3, 4, 3, 4);
+            MaximizeBox = false;
+            MinimizeBox = false;
+            MinimumSize = new Size(886, 486);
+            Name = "FrmHelp";
+            ShowIcon = false;
+            ShowInTaskbar = false;
+            StartPosition = FormStartPosition.CenterParent;
+            Text = "Trợ giúp & Thông tin";
+            Load += FrmHelp_Load;
+            pnlMenu.ResumeLayout(false);
+            pnlContent.ResumeLayout(false);
+            pnlSupport.ResumeLayout(false);
+            pnlSupport.PerformLayout();
+            pnlFAQ.ResumeLayout(false);
+            pnlFAQ.PerformLayout();
+            pnlAbout.ResumeLayout(false);
+            pnlAbout.PerformLayout();
+            ResumeLayout(false);
 
         }
 
