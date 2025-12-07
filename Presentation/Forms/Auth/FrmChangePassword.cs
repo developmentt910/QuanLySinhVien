@@ -4,15 +4,16 @@ namespace StudentCourseManagement.Forms.Auth
     public partial class FrmChangePassword : Form
     {
         private readonly PasswordChangeService _changeService;
+        private readonly Guid _currentUserId;
 
-        public FrmChangePassword(PasswordChangeService changeService)
+        public FrmChangePassword(PasswordChangeService changeService, Guid currentUserId)
         {
             InitializeComponent();
             _changeService = changeService;
+            _currentUserId = currentUserId;
         }
 
-
-        private void btnChange_Click(object sender, EventArgs e)
+        private async void btnChange_Click(object sender, EventArgs e)
         {
             lblMessage.Visible = false;
 
@@ -20,7 +21,9 @@ namespace StudentCourseManagement.Forms.Auth
             string newPwd = txtNewPassword.Text.Trim();
             string confirmPwd = txtConfirmPassword.Text.Trim();
 
-            if (string.IsNullOrEmpty(oldPwd) || string.IsNullOrEmpty(newPwd) || string.IsNullOrEmpty(confirmPwd))
+            if (string.IsNullOrEmpty(oldPwd) ||
+                string.IsNullOrEmpty(newPwd) ||
+                string.IsNullOrEmpty(confirmPwd))
             {
                 ShowMessage("Vui lòng điền đầy đủ thông tin.");
                 return;
@@ -32,8 +35,17 @@ namespace StudentCourseManagement.Forms.Auth
                 return;
             }
 
+            var error = await _changeService.ChangePasswordAsync(_currentUserId, oldPwd, newPwd);
+
+            if (error != null)
+            {
+                ShowMessage(error);
+                return;
+            }
+
             ShowMessage("Đổi mật khẩu thành công!", Color.Green);
             ClearInputs();
+
         }
 
         private void ShowMessage(string text, Color? color = null)
@@ -52,7 +64,7 @@ namespace StudentCourseManagement.Forms.Auth
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            FrmLogin frmlogin  = new FrmLogin();
+            FrmLogin frmlogin = new FrmLogin();
             frmlogin.Show();
             this.Hide();
         }

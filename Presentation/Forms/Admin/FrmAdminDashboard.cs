@@ -5,14 +5,18 @@ namespace StudentCourseManagement.Presentation.Forms.Admin
     public partial class FrmAdminDashboard : Form
     {
         private readonly AdminService _userService;
-        private User _currentUser; // quản lý viên hiện tại
+        private Roster _currentUser;
+        private Guid _currentUserId;
 
         public FrmAdminDashboard(AdminService userService, Guid userId)
         {
             InitializeComponent();
             _userService = userService;
-
+            pictureBoxProfile.SizeMode = PictureBoxSizeMode.Zoom;
             _ = LoadUserDataAsync(userId);
+            _currentUserId = userId;
+
+
 
             btnEdit.Click += BtnEdit_Click;
             btnSave.Click += BtnSave_Click;
@@ -31,8 +35,10 @@ namespace StudentCourseManagement.Presentation.Forms.Admin
                     txtRole.Text = _currentUser.Role;
                     txtGender.Text = _currentUser.Gender;
                     txtCCCD.Text = _currentUser.CCCD;
-                    txtPhone.Text = _currentUser.PhoneE164;
-                    txtEmail.Text = _currentUser.EmailNormalized;
+                    txtPhone.Text = _currentUser.Phone164;
+                    txtEmail.Text = _currentUser.EmailSchool;
+                    txtMDQ.Text = _currentUser.PrivilegeCode;
+                    txtDiaChi.Text = _currentUser.Address;
 
                     if (_currentUser.ProfileImage != null && _currentUser.ProfileImage.Length > 0)
                     {
@@ -64,6 +70,10 @@ namespace StudentCourseManagement.Presentation.Forms.Admin
             txtGender.ReadOnly = isReadOnly;
             txtCCCD.ReadOnly = isReadOnly;
             txtPhone.ReadOnly = isReadOnly;
+            txtMDQ.ReadOnly = isReadOnly;
+            txtRole.ReadOnly = isReadOnly;
+            txtDiaChi.ReadOnly = isReadOnly;
+            txtEmail.ReadOnly = isReadOnly;
         }
 
         private void BtnUploadImage_Click(object sender, EventArgs e)
@@ -74,7 +84,7 @@ namespace StudentCourseManagement.Presentation.Forms.Admin
             };
             if (ofd.ShowDialog() == DialogResult.OK)
             {
-                pictureBoxProfile.Image?.Dispose(); // giải phóng ảnh cũ nếu có
+                pictureBoxProfile.Image?.Dispose();
                 pictureBoxProfile.Image = Image.FromFile(ofd.FileName);
             }
         }
@@ -86,9 +96,11 @@ namespace StudentCourseManagement.Presentation.Forms.Admin
                 if (_currentUser == null) return;
 
                 _currentUser.FullName = txtFullName.Text.Trim();
+                _currentUser.PrivilegeCode = txtMDQ.Text.Trim();
                 _currentUser.Gender = txtGender.Text.Trim();
+                _currentUser.Address = txtDiaChi.Text.Trim();
                 _currentUser.CCCD = txtCCCD.Text.Trim();
-                _currentUser.PhoneE164 = txtPhone.Text.Trim();
+                _currentUser.Phone164 = txtPhone.Text.Trim();
 
                 if (pictureBoxProfile.Image != null)
                 {
@@ -111,10 +123,21 @@ namespace StudentCourseManagement.Presentation.Forms.Admin
 
         private void đăngXuấtToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FrmLoginAdmin frmLogin = new FrmLoginAdmin();
+            FrmLogin frmLogin = new FrmLogin();
             frmLogin.Show();
 
-            this.Close(); 
+            this.Close();
+        }
+
+        private void đổiMậtKhẩuToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+            FrmChangePassword frmChangePassword = new FrmChangePassword(
+                            ServicesFactory.CreatePasswordChangeService(),
+                            _currentUserId);
+            frmChangePassword.Show();
+
+            this.Close();
         }
     }
 }

@@ -1,5 +1,8 @@
 ﻿
 
+using StudentCourseManagement.Applications.Services;
+using StudentCourseManagement.Infrastructure.Security;
+
 namespace StudentCourseManagement.Presentation.WinForms.Bootstrap
 {
 
@@ -18,18 +21,28 @@ namespace StudentCourseManagement.Presentation.WinForms.Bootstrap
             _db ?? throw new InvalidOperationException(
                 "ServicesFactory chưa được cấu hình. Hãy gọi UseConfiguration(config) từ Program.");
 
-        // Infrastructure: Repositories (Auth)
-        public static IUsersReader CreateUsersReader() => new UsersReader(Db);
-        public static IUsersWriter CreateUsersWriter() => new UsersWriter(Db);
+        public static IRosterWriter CreateUsersWriter() => new RosterWriter(Db);
         public static IRosterReader CreateRosterReader() => new RosterReader(Db);
-        public static IOtpPinsReader CreateOtpReader() => new OtpPinsReader(Db);
-        public static IOtpPinsWriter CreateOtpWriter() => new OtpPinsWriter(Db);
-     
-        public static ILoginThrottleStore CreateThrottleStore() => new LoginThrottleStore(Db);
+       
+        public static AdminService CreateAdminService()
+        {
+            return new AdminService(CreateRosterReader(), CreateUsersWriter());
+        }
+        public static PasswordChangeService CreatePasswordChangeService()
+        {
+            return new PasswordChangeService(
+                CreateRosterReader(),
+                CreateUsersWriter()
+            );
+        }
+
+
 
         // External stubs
-        public static IEmailService CreateEmail() => new EmailServiceStub();
         public static ICaptchaService CreateCaptcha() => new StubCaptchaService();
-        public static IClock CreateClock() => new SystemClock();
+
+        public static IForgotPasswordService CreateForgotPasswordService()
+    => new ForgotPasswordService(Db);
+
     }
 }

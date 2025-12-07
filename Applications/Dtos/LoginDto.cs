@@ -6,12 +6,14 @@ using System.Threading.Tasks;
 
 namespace StudentCourseManagement.Applications.Dtos
 {
-    public sealed class LoginDto
+    public class LoginDto
     {
-        public string StudentCode { get; set; } = string.Empty;
-        public string Password { get; set; } = string.Empty;
-        public string? CaptchaToken { get; set; }
-        public string? CaptchaInput { get; set; }
-        public string? PrivilegeCode { get; internal set; }
+        public string? PrivilegeCode { get; set; }
+        public string Password { get; set; } = null!;
+        
+        public string CaptchaToken { get; set; } = null!;
+        public string CaptchaInput { get; set; } = null!;
+
+
     }
 }

@@ -4,22 +4,19 @@ namespace StudentCourseManagement.Applications.Auth
 {
     public sealed class LoginService
     {
-        private readonly IUsersReader _usersR;
-        private readonly ThrottleService _throttle;
+        private readonly IRosterReader _usersR;
         private readonly CaptchaVerifier? _captcha;
         private readonly IRosterReader _rosterR;
-        private readonly IUsersWriter _userW;
+        private readonly IRosterWriter _userW;
 
 
         public LoginService(
-            IUsersReader usersR,
-            ThrottleService throttle,
+            IRosterReader usersR,
             IRosterReader rosterR,
-            IUsersWriter userW,
+            IRosterWriter userW,
             CaptchaVerifier? captcha = null)
         {
             _usersR = usersR;
-            _throttle = throttle;
             _rosterR = rosterR;
             _userW = userW;
             _captcha = captcha;
@@ -27,61 +24,29 @@ namespace StudentCourseManagement.Applications.Auth
 
         public string GenerateCaptcha() => _captcha?.Generate() ?? string.Empty;
 
-        public async Task<Result<User>> LoginAsync(LoginDto dto, CancellationToken ct = default)
+        public async Task<(Roster? user, string? error)> LoginAsync(LoginDto dto)
         {
             // Kiểm tra Captcha
             if (_captcha != null && !_captcha.Verify(dto.CaptchaToken!, dto.CaptchaInput!))
-                return Result<User>.Fail("Mã bảo vệ không đúng.");
+                return (null, "Mã bảo vệ không đúng.");
 
-            User? user = null;
+            if (string.IsNullOrWhiteSpace(dto.PrivilegeCode))
+                return (null, "Vui lòng nhập mã đặc quyền.");
 
-            //Admin login
-            if (!string.IsNullOrWhiteSpace(dto.PrivilegeCode))
-            {
-                user = await _usersR.FindByPrivilegeCode(dto.PrivilegeCode.Trim());
-                if (user == null)
-                    return Result<User>.Fail("Tài khoản quản trị không tồn tại.");
-               
-            }
-            // Student login
-            else if (!string.IsNullOrWhiteSpace(dto.StudentCode))
-            {
-                user = await _usersR.FindByStudentCode(dto.StudentCode.Trim());
-                if (user == null)
-                    return Result<User>.Fail("Tài khoản sinh viên không tồn tại.");
-                
-                if (string.IsNullOrWhiteSpace(dto.Password))
-                    return Result<User>.Fail("Mật khẩu không được để trống.");
+            // Lấy user
+            var user = await _usersR.FindByPrivilegeCode(dto.PrivilegeCode.Trim());
+            if (user == null)
+                return (null, "Tài khoản không tồn tại.");
 
-                if (!PasswordHasher.Verifier(dto.Password, user.PasswordHash))
-                    return Result<User>.Fail("Mật khẩu không đúng.");
-            }
-            else
-            {
-                return Result<User>.Fail("Vui lòng nhập mã đặc quyền hoặc mã sinh viên.");
-            }
+            if (string.IsNullOrWhiteSpace(dto.Password))
+                return (null, "Mật khẩu không được để trống.");
 
-            // Kiểm tra tài khoản bị khóa
-            if (user.IsLocked)
-                return Result<User>.Fail("Tài khoản đang bị khóa.");
+            if (!dto.Password.Equals(user.PasswordHash))
+                return (null, "Mật khẩu không đúng.");
 
-            // Kiểm tra throttle
-            var keyHash = KeyHasher.Sha256(Encoding.UTF8.GetBytes(user.Id.ToString()));
-            if (!await _throttle.AllowAsync("password", keyHash, DateTime.UtcNow))
-                return Result<User>.Fail("Thử sai quá nhiều lần, vui lòng thử lại sau.");
-
-           
-
-            await _throttle.ResetAsync("password", keyHash);
-
-            // Kiểm tra quyền
-            if (!string.IsNullOrWhiteSpace(dto.PrivilegeCode) && user.Role != "admin")
-                return Result<User>.Fail("Tài khoản này không có quyền quản trị.");
-            if (!string.IsNullOrWhiteSpace(dto.StudentCode) && user.Role != "user")
-                return Result<User>.Fail("Tài khoản này không phải sinh viên.");
-
-            return Result<User>.Success(user);
+            return (user, null); // OK
         }
+
     }
 
 }

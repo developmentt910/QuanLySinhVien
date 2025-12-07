@@ -1,27 +1,41 @@
 ﻿
+using Microsoft.VisualBasic.ApplicationServices;
+using StudentCourseManagement.Presentation.Forms.Auth;
+using System.Drawing.Drawing2D;
+
 namespace StudentCourseManagement.Forms.Auth
 {
     public partial class FrmLogin : Form
     {
         private readonly LoginService _loginService;
-        private readonly PasswordChangeService _changeService;
+        private Panel card;
 
         public FrmLogin()
         {
             InitializeComponent();
+            this.Load += FrmLogin_Load;
 
-            var usersReader = ServicesFactory.CreateUsersReader();
-            var throttle = new ThrottleService(ServicesFactory.CreateThrottleStore());
+            var usersReader = ServicesFactory.CreateRosterReader();
             var captcha = new CaptchaVerifier(ServicesFactory.CreateCaptcha());
             var rosterR = ServicesFactory.CreateRosterReader();
             var userW = ServicesFactory.CreateUsersWriter();
-            _loginService = new LoginService(usersReader, throttle, rosterR, userW, captcha);
+            _loginService = new LoginService(usersReader, rosterR, userW, captcha);
+           
+
+
 
         }
+
+        
+
 
         private void FrmLogin_Load(object sender, EventArgs e)
         {
             lblCaptchaCode.Text = _loginService.GenerateCaptcha();
+
+
+            
+
         }
 
         private void btnRefreshCaptcha_Click(object sender, EventArgs e)
@@ -33,45 +47,42 @@ namespace StudentCourseManagement.Forms.Auth
         {
             var dto = new LoginDto
             {
-                StudentCode = txtMSV.Text.Trim(),
+                PrivilegeCode = txtMSV.Text.Trim(),
                 Password = txtPassword.Text.Trim(),
                 CaptchaInput = txtCaptchaInput.Text.Trim(),
                 CaptchaToken = lblCaptchaCode.Text,
             };
 
-            if ((string.IsNullOrWhiteSpace(dto.StudentCode)) ||
-                 string.IsNullOrWhiteSpace(dto.Password))
-            {
-                MessageBox.Show("Vui lòng nhập mã sinh viên và mật khẩu.", "Thiếu thông tin", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+            var (user, error) = await _loginService.LoginAsync(dto);
 
-            var result = await _loginService.LoginAsync(dto);
-
-            if (!result.Ok)
+            if (error != null)
             {
-                MessageBox.Show(result.Error, "Lỗi đăng nhập", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(error, "Lỗi đăng nhập", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 lblCaptchaCode.Text = _loginService.GenerateCaptcha();
                 txtCaptchaInput.Clear();
                 return;
             }
 
-            MessageBox.Show($"Chào mừng {result.Value.FullName}!", "Đăng nhập thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            // user đăng nhập thành công
+            //_loggedInUserId = user.Id;
 
+            MessageBox.Show($"Chào mừng {user.FullName}!", "Thành công");
+
+            var frm = new FrmAdminDashboard(ServicesFactory.CreateAdminService(), user.Id);
+            frm.Show();
+            this.Hide();
         }
+
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            FrmChangePassword frmchangepasswprd = new FrmChangePassword(_changeService);
-            frmchangepasswprd.Show();
+
+            FrmForgotPassword frmForgotPassword = new FrmForgotPassword();
+            frmForgotPassword.Show();
             this.Hide();
         }
 
-        private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            FrmRegister frmregister  = new FrmRegister();
-            frmregister.Show();
-            this.Hide();
-        }
+
+        
     }
 }

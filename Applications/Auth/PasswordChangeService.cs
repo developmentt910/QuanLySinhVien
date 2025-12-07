@@ -2,29 +2,35 @@
 
 namespace StudentCourseManagement.Applications.Auth
 {
-    public sealed class PasswordChangeService
+    public class PasswordChangeService
     {
-        private readonly IUsersReader _usersR;
-        private readonly IUsersWriter _usersW;
+        private readonly IRosterReader _reader;
+        private readonly IRosterWriter _writer;
 
-        public PasswordChangeService(IUsersReader usersR, IUsersWriter usersW)
-        { _usersR = usersR; _usersW = usersW; }
-
-        public async Task<Result> ChangeAsync(ChangePwdDto dto)
+        public PasswordChangeService(IRosterReader reader, IRosterWriter writer)
         {
-            if (!RegexRules.IsMatch(dto.NewPassword, RegexRules.PasswordStrong))
-                return Result.Fail("Mật khẩu mới chưa đủ mạnh.");
-
-            var user = await _usersR.FindByStudentCode(dto.StudentCode);
-            if (user is null) return Result.Fail("Không tìm thấy tài khoản.");
-
-            if (!PasswordHasher.Verifier(dto.OldPassword, user.PasswordHash))
-                return Result.Fail("Mật khẩu cũ không đúng.");
-
-            var newHash = PasswordHasher.Hash(dto.NewPassword);
-            await _usersW.UpdatePasswordHashAsync(user.Id, newHash);
-
-            return Result.Success();
+            _reader = reader;
+            _writer = writer;
         }
+
+        public async Task<string?> ChangePasswordAsync(Guid userId, string oldPwd, string newPwd)
+        {
+            var user = await _reader.FindByIdAsync(userId);
+            if (user == null)
+                return "Không tìm thấy người dùng.";
+
+            if (!string.Equals(user.PasswordHash, oldPwd))
+                return "Mật khẩu cũ không chính xác.";
+
+            user.PasswordHash = newPwd;
+
+            await _writer.UpdatePasswordHashAsync(userId, newPwd);
+
+            return null; // thành công
+        }
+
+
     }
+
 }
+

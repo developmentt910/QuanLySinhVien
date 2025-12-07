@@ -1,6 +1,4 @@
-﻿
-
-namespace StudentCourseManagement.Domain.Abstractions.Services
+﻿namespace StudentCourseManagement.Domain.Abstractions.Repositories
 {
     public interface ICaptchaService
     {

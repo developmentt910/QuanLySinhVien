@@ -1,6 +1,4 @@
-﻿
-
-namespace StudentCourseManagement.Infrastructure.Captcha
+﻿namespace StudentCourseManagement.Applications.Auth
 {
     public sealed class StubCaptchaService : ICaptchaService
     {

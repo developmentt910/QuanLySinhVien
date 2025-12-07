@@ -19,7 +19,7 @@ namespace StudentCourseManagement
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FrmRegister());
+            Application.Run(new FrmLogin());
 
 
 
