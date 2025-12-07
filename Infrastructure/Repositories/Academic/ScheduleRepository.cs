@@ -1,10 +1,10 @@
 ﻿using System.Data;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using System;
 using StudentCourseManagement.Infrastructure.Data;
 using StudentCourseManagement.Domain.Abstractions.Repositories;
 
-namespace StudentCourseManagement.Infrastructure.Repositories.SqlServer.Academic
+namespace StudentCourseManagement.Infrastructure.Repositories.Academic
 {
     public class ScheduleRepository : IScheduleRepository
     {
@@ -36,7 +36,7 @@ namespace StudentCourseManagement.Infrastructure.Repositories.SqlServer.Academic
             }
             catch (Exception ex)
             {
-                System.Windows.Forms.MessageBox.Show("Error loading data: " + ex.Message, "DB Error", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
+                MessageBox.Show("Error loading data: " + ex.Message, "DB Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             return dataTable;
         }
@@ -57,7 +57,7 @@ namespace StudentCourseManagement.Infrastructure.Repositories.SqlServer.Academic
             }
             catch (Exception ex)
             {
-                System.Windows.Forms.MessageBox.Show("Error executing command: " + ex.Message, "DB Error", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
+                MessageBox.Show("Error executing command: " + ex.Message, "DB Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

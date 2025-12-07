@@ -1,4 +1,5 @@
-﻿partial class FrmQuanLyChuongTrinhKhung
+﻿using System.ComponentModel;
+partial class FrmQuanLyChuongTrinhKhung
 {
     private System.ComponentModel.IContainer components = null;
 

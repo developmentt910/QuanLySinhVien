@@ -1,10 +1,10 @@
 ﻿using System.Data;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using System;
 using StudentCourseManagement.Infrastructure.Data;
 using StudentCourseManagement.Domain.Abstractions.Repositories;
 
-namespace StudentCourseManagement.Infrastructure.Repositories.SqlServer.Academic
+namespace StudentCourseManagement.Infrastructure.Repositories.Academic
 {
     public class CurriculumRepository : ICurriculumRepository
     {
@@ -34,7 +34,7 @@ namespace StudentCourseManagement.Infrastructure.Repositories.SqlServer.Academic
             }
             catch (Exception ex)
             {
-                System.Windows.Forms.MessageBox.Show("Lỗi tải dữ liệu: " + ex.Message, "Lỗi CSDL", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
+                MessageBox.Show("Lỗi tải dữ liệu: " + ex.Message, "Lỗi CSDL", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             return dataTable;
         }
@@ -55,7 +55,7 @@ namespace StudentCourseManagement.Infrastructure.Repositories.SqlServer.Academic
             }
             catch (Exception ex)
             {
-                System.Windows.Forms.MessageBox.Show("Lỗi thực thi: " + ex.Message, "Lỗi CSDL", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
+                MessageBox.Show("Lỗi thực thi: " + ex.Message, "Lỗi CSDL", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

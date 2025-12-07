@@ -3,7 +3,7 @@ using StudentCourseManagement.Presentation.WinForms.Bootstrap;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Windows.Forms;
-using StudentCourseManagement.Presentation.Forms.Schedule;
+using StudentCourseManagement.Presentation.Forms.Admin;
 
 namespace StudentCourseManagement
 {

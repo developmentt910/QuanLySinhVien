@@ -1,4 +1,5 @@
-﻿// Đặt namespace này cho đúng với thư mục của bạn
+﻿using System.ComponentModel;
+// Đặt namespace này cho đúng với thư mục của bạn
 namespace StudentCourseManagement.Presentation.Forms.Class
 {
     partial class FrmQuanLyLopHoc

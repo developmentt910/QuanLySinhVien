@@ -1,4 +1,5 @@
-﻿namespace StudentCourseManagement.Presentation.Forms.Schedule
+﻿using System.ComponentModel;
+namespace StudentCourseManagement.Presentation.Forms.Schedule
 {
     partial class FrmQuanLyThoiKhoaBieu
     {

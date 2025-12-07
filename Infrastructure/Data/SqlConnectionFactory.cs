@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System;
-using System.Data.SqlClient; 
-using System.Threading;     
-using System.Threading.Tasks; 
+using Microsoft.Data.SqlClient;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace StudentCourseManagement.Infrastructure.Data
 {
@@ -15,6 +15,7 @@ namespace StudentCourseManagement.Infrastructure.Data
                 ?? throw new InvalidOperationException(
                     "Missing ConnectionStrings:DefaultConnection in appsettings.json");
         }
+
 
         // create connection 
         public SqlConnection Create()

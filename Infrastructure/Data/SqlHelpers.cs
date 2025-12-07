@@ -1,4 +1,5 @@
-﻿
+﻿using Microsoft.Data.SqlClient;
+using System.Data;
 
 namespace StudentCourseManagement.Infrastructure.Data
 {
@@ -51,7 +52,7 @@ namespace StudentCourseManagement.Infrastructure.Data
         //truy van tra ve 1 gia tri
         public static async Task<object?> ExecScalarAsync(
             SqlConnection conn,
-            SqlTransaction? tx,           
+            SqlTransaction? tx,
             string sql,
             CommandType commandType = CommandType.Text,
             int timeoutSeconds = default,
@@ -70,11 +71,11 @@ namespace StudentCourseManagement.Infrastructure.Data
             {
                 cmd.CommandTimeout = timeoutSeconds;
             }
-            if (ps?.Length > 0) 
-                foreach(var p in ps)
-                    if (p.Value is null) 
-                        p.Value= DBNull.Value;               
-                cmd.Parameters.AddRange(ps);
+            if (ps?.Length > 0)
+                foreach (var p in ps)
+                    if (p.Value is null)
+                        p.Value = DBNull.Value;
+            cmd.Parameters.AddRange(ps);
             return await cmd.ExecuteScalarAsync(ct);
 
         }
@@ -112,7 +113,7 @@ namespace StudentCourseManagement.Infrastructure.Data
 
 
         // sql injection 
-        public static SqlParameter P (string name, object? value, SqlDbType type, int size = 0)
+        public static SqlParameter P(string name, object? value, SqlDbType type, int size = 0)
         {
             var p = new SqlParameter(name, type)
             {
