@@ -247,7 +247,7 @@
             txtAboutInfo.ReadOnly = true;
             txtAboutInfo.Size = new Size(587, 188);
             txtAboutInfo.TabIndex = 8;
-            txtAboutInfo.Text = "Phần mềm được phát triển bởi [LMKAT] nhằm mục đích quản lý toàn diện nghiệp vụ đào tạo sinh viên.";
+            txtAboutInfo.Text = "Phần mềm được phát triển bởi [LMKATgi] nhằm mục đích quản lý toàn diện nghiệp vụ đào tạo sinh viên.";
             // 
             // lblCopyright
             // 

@@ -57,9 +57,9 @@
             lblTitle.AutoSize = true;
             lblTitle.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblTitle.ForeColor = Color.FromArgb(30, 80, 160);
-            lblTitle.Location = new Point(172, 33);
+            lblTitle.Location = new Point(140, 31);
             lblTitle.Name = "lblTitle";
-            lblTitle.Size = new Size(207, 31);
+            lblTitle.Size = new Size(253, 38);
             lblTitle.TabIndex = 0;
             lblTitle.Text = "QUÊN MẬT KHẨU";
             // 
@@ -76,7 +76,7 @@
             // 
             txtEmail.Location = new Point(192, 107);
             txtEmail.Name = "txtEmail";
-            txtEmail.Size = new Size(300, 27);
+            txtEmail.Size = new Size(300, 31);
             txtEmail.TabIndex = 5;
             // 
             // btnSendOtp
