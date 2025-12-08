@@ -1,5 +1,9 @@
-﻿
+﻿using Microsoft.Extensions.Configuration; // để dùng ConfigurationBuilder
+using StudentCourseManagement.Presentation.Forms.result;
 using StudentCourseManagement.Presentation.WinForms.Bootstrap;
+using System;
+using System.Windows.Forms;
+
 namespace StudentCourseManagement
 {
     internal static class Program
@@ -7,6 +11,7 @@ namespace StudentCourseManagement
         [STAThread]
         static void Main()
         {
+            // Cấu hình appsettings.json
             var config = new ConfigurationBuilder()
                 .SetBasePath(AppContext.BaseDirectory)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
@@ -14,17 +19,15 @@ namespace StudentCourseManagement
 
             ServicesFactory.UseConfiguration(config);
 
+            // Khởi tạo WinForms
+            System.Windows.Forms.Application.SetHighDpiMode(HighDpiMode.SystemAware);
+            System.Windows.Forms.Application.EnableVisualStyles();
+            System.Windows.Forms.Application.SetCompatibleTextRenderingDefault(false);
 
+            //System.Windows.Forms.Application.Run(new FrmConductEvaluation());
 
-            Application.SetHighDpiMode(HighDpiMode.SystemAware);
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FrmRegister());
-
-
-
+            System.Windows.Forms.Application.Run(new Frmpointmanager());
 
         }
-
     }
 }

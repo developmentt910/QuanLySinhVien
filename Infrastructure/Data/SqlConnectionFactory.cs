@@ -1,28 +1,34 @@
-﻿using System.Diagnostics;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace StudentCourseManagement.Infrastructure.Data
 {
-    public sealed class SqlConnectionFactory
-    {
-        private readonly string _connectionString;
-        public SqlConnectionFactory(IConfiguration config)
+        public sealed class SqlConnectionFactory
         {
-            _connectionString = config.GetConnectionString("DefaultConnection")
-                ?? throw new InvalidOperationException(
-                    "Missing ConnectionStrings:DefaultConnection in appsettings.json");
+            private readonly string _connectionString;
+            public SqlConnectionFactory(IConfiguration config)
+            {
+                _connectionString = config.GetConnectionString("DefaultConnection")
+                    ?? throw new InvalidOperationException(
+                        "Missing ConnectionStrings:DefaultConnection in appsettings.json");
+            }
+
+
+            // create connection 
+            public SqlConnection Create()
+                => new SqlConnection(_connectionString);
+
+            // open connection
+            public async Task<SqlConnection> OpenAsync(CancellationToken ct = default)
+            {
+                var conn = new SqlConnection(_connectionString);
+                await conn.OpenAsync(ct);
+                return conn;
+            }
         }
-
-
-        // create connection 
-        public SqlConnection Create()
-            => new SqlConnection(_connectionString);
-
-        // open connection
-        public async Task<SqlConnection> OpenAsync(CancellationToken ct = default)
-        {
-            var conn = new SqlConnection(_connectionString);
-            await conn.OpenAsync(ct);
-            return conn;
-        }
-    }
 }
