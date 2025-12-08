@@ -1,29 +1,52 @@
-﻿namespace StudentCourseManagement.Domain.Entities
+﻿using System;
+
+namespace StudentCourseManagement.Domain.Entities
 {
     public class Student
     {
-        public string? StudentId { get; set; }
-        public string? FullName { get; set; }
+        // =====================
+        // ✅ KHÓA & ĐỊNH DANH
+        // =====================
+        public string StudentId { get; set; }   // StudentCode trong DB
 
-        public string? Faculty { get; set; }   // Khoa
-        public string? Major { get; set; }
-        public string? Specialization { get; set; }
-        public string? ClassName { get; set; }
+        // =====================
+        // ✅ THÔNG TIN CƠ BẢN
+        // =====================
+        public string FullName { get; set; }
+        public string Gender { get; set; }
+        public byte[] ProfileImage { get; set; }
+        // =====================
+        // ✅ QUAN HỆ HỌC TẬP
+        // =====================
+        public Guid? ClassId { get; set; }
+        public Guid? MajorId { get; set; }
+        public Guid? SpecializationId { get; set; }
 
-        public string? Gender { get; set; }
+        // =====================
+        // ✅ TÊN HIỂN THỊ (JOIN)
+        // =====================
+        public string Faculty { get; set; }
+        public string Major { get; set; }
+        public string Specialization { get; set; }
+        public string ClassName { get; set; }
 
-        // ✅ CHỐT DÙNG Phone
-        public string? Phone { get; set; }
+        // =====================
+        // ✅ LIÊN HỆ
+        // =====================
+        public string Phone { get; set; }
+        public string CCCD { get; set; }
+        public string Email { get; set; }
+        public string Address { get; set; }
 
-        public string? CCCD { get; set; }
+        // =====================
+        // ✅ TRẠNG THÁI
+        // =====================
+        public string Status { get; set; }   // Đang học | Đã tốt nghiệp | Bảo lưu
+        public string Year { get; set; }     // CohortYear
 
-        // ✅ CHỐT DÙNG Email
-        public string? Email { get; set; }
-
-        public string? Address { get; set; }
-        public string? Status { get; set; }
-        public string? Year { get; set; }
-
-        public string? PasswordHash { get; set; }
+        // =====================
+        // ✅ BẢO MẬT
+        // =====================
+        public string PasswordHash { get; set; }
     }
 }

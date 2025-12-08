@@ -1,273 +1,510 @@
 ﻿using StudentCourseManagement.Applications.Students;
 using StudentCourseManagement.Applications.Students.Dtos;
 using StudentCourseManagement.Infrastructure.Repositories.SqlServer;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using Microsoft.Extensions.Configuration;
 
 namespace StudentCourseManagement.Presentation.Forms.Student
 {
     public partial class FrmStudentManagement : Form
     {
         private readonly StudentService _service;
+        private byte[] _selectedImageBytes;
+
 
         public FrmStudentManagement()
         {
             InitializeComponent();
+            picStudent.Image = null;
+            picStudent.InitialImage = null;
+            picStudent.ErrorImage = null;
+            picStudent.ImageLocation = null;
+
+
+            cmbSpecializationSql.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbMajorSql.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbFacultySql.DropDownStyle = ComboBoxStyle.DropDownList;
+            
+
+            // Load config SQL
             var config = new ConfigurationBuilder()
                 .SetBasePath(AppContext.BaseDirectory)
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .Build();
 
             var factory = new SqlConnectionFactory(config);
-            var studentRepository = new StudentRepository(factory);
-            _service = new StudentService(studentRepository);
+            var repo = new StudentRepository(factory);
+            _service = new StudentService(repo);
 
+            SetupCombobox();
             LoadStudents();
+            
         }
 
-        // ==========================
-        // LOAD DANH SÁCH SINH VIÊN
-        // ==========================
+        // =========================
+        // SETUP COMBOBOX
+        // =========================
+        private void SetupCombobox()
+        {
+            // ✅ CLEAR TOÀN BỘ TRƯỚC
+            cmbGender.Items.Clear();
+            cmbStatus.Items.Clear();
+
+            cmbFacultySql.DataSource = null;
+            cmbFacultySql.Items.Clear();
+
+            cmbMajorSql.DataSource = null;
+            cmbMajorSql.Items.Clear();
+
+            cmbSpecializationSql.DataSource = null;
+            cmbSpecializationSql.Items.Clear();
+
+            // ✅ LOAD KHOA
+            var faculties = _service.GetFaculties();
+            cmbFacultySql.DataSource = new BindingSource(faculties, null);
+            cmbFacultySql.DisplayMember = "Value";
+            cmbFacultySql.ValueMember = "Key";
+
+            // ✅ GIỚI TÍNH
+            cmbGender.Items.AddRange(new object[] { "Nam", "Nữ", "Khác" });
+            cmbFacultySql.SelectedIndex = -1;
+            // ✅ TRẠNG THÁI
+            cmbStatus.Items.AddRange(new object[] { "Đang học", "Đã tốt nghiệp", "Bảo lưu" });
+
+            // ✅ GỠ EVENT CŨ ĐỂ TRÁNH GỌI LẶP
+            cmbFacultySql.SelectedIndexChanged -= cmbFacultySql_SelectedIndexChanged;
+            cmbMajorSql.SelectedIndexChanged -= cmbMajorSql_SelectedIndexChanged;
+
+            // ✅ GẮN LẠI EVENT
+            cmbFacultySql.SelectedIndexChanged += cmbFacultySql_SelectedIndexChanged;
+            cmbMajorSql.SelectedIndexChanged += cmbMajorSql_SelectedIndexChanged;
+            cmbSpecializationSql.SelectedIndexChanged += cmbSpecializationSql_SelectedIndexChanged;
+
+        }
+
+
+
+
+        // =========================
+        // LOAD DANH SÁCH
+        // =========================
         private void LoadStudents()
         {
             try
             {
-                var students = _service.GetAllStudents();
-                dgvStudents.AutoGenerateColumns = true;
+                var data = _service.GetAllStudents();
+                foreach (var s in data)
+                {
+                    Console.WriteLine(
+                        $"SV: {s.StudentId} | Major: {s.Major} | Specialization: [{s.Specialization}]"
+                    );
+                }
+                // XÓA TOÀN BỘ CỘT CŨ TRONG DESIGNER
                 dgvStudents.DataSource = null;
-                dgvStudents.DataSource = students;
+                dgvStudents.Columns.Clear();
+
+                // TỰ SINH CỘT THEO StudentDto
+                dgvStudents.AutoGenerateColumns = true;
+                dgvStudents.DataSource = data;
+
+                string[] hideCols =
+ {
+    "FacultyId",
+    "ClassId",
+    "MajorId",
+    "SpecializationId",
+    "ProfileImage"   // ✅ ẨN CỘT ẢNH
+};
+
+
+                foreach (var name in hideCols)
+                {
+                    if (dgvStudents.Columns[name] != null)
+                        dgvStudents.Columns[name].Visible = false;
+                }
+
+
+
+                dgvStudents.Columns["StudentId"].HeaderText = "Mã SV";
+                dgvStudents.Columns["FullName"].HeaderText = "Họ và Tên";
+                dgvStudents.Columns["Gender"].HeaderText = "Giới tính";
+                dgvStudents.Columns["Faculty"].HeaderText = "Khoa";
+                dgvStudents.Columns["Major"].HeaderText = "Ngành";
+                dgvStudents.Columns["Specialization"].HeaderText = "Chuyên ngành";
+                dgvStudents.Columns["ClassName"].HeaderText = "Lớp";
+                dgvStudents.Columns["Phone"].HeaderText = "SĐT";
+                dgvStudents.Columns["CCCD"].HeaderText = "CCCD";
+                dgvStudents.Columns["Email"].HeaderText = "Email";
+                dgvStudents.Columns["Address"].HeaderText = "Địa chỉ";
+                dgvStudents.Columns["Status"].HeaderText = "Trạng thái";
+                dgvStudents.Columns["Year"].HeaderText = "Năm học";
+                dgvStudents.Columns["Password"].HeaderText = "Mật khẩu"; 
+
+                dgvStudents.ClearSelection();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Lỗi khi tải danh sách sinh viên: {ex.Message}",
-                    "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Lỗi load danh sách: " + ex.Message);
             }
         }
 
-        // ==========================
-        // ✅ THÊM SINH VIÊN
-        // ==========================
+        // =========================
+        // THÊM
+        // =========================
         private void btnAdd_Click_1(object sender, EventArgs e)
         {
             try
             {
-                var s = new StudentDto
-                {
-                    StudentId = txtStudentId.Text.Trim(),
-                    FullName = txtFullName.Text.Trim(),
-                    Faculty = txtFaculty.Text.Trim(),          // ✅ KHOA
-                    Major = txtMajor.Text.Trim(),
-                    Specialization = txtSpecialization.Text.Trim(),
-                    ClassName = txtClass.Text.Trim(),
-                    Gender = cmbGender.Text,
-                    Phone = txtPhone.Text.Trim(),
-                    CCCD = txtCCCD.Text.Trim(),
-                    Email = txtEmail.Text.Trim(),
-                    Address = txtAddress.Text.Trim(),
-                    Status = cmbStatus.Text,
-                    Year = txtYear.Text.Trim(),
-                    Password = txtPassword.Text.Trim()        // ✅ MẬT KHẨU
-                };
+                var dto = GetDtoFromForm();
+                _service.AddStudent(dto);
 
-                _service.AddStudent(s);
-                LoadStudents();
-
-                MessageBox.Show("✅ Thêm sinh viên thành công!",
-                    "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
+                LoadStudents();     // ✅ LOAD LẠI NGAY
                 ClearForm();
+
+                MessageBox.Show("✅ Thêm sinh viên thành công");
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"❌ Lỗi khi thêm sinh viên: {ex.Message}",
-                    "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("❌ Lỗi thêm: " + ex.Message);
             }
         }
 
-        // ==========================
-        // ✅ CẬP NHẬT SINH VIÊN
-        // ==========================
+
+        // =========================
+        // CẬP NHẬT
+        // =========================
         private void btnUpdate_Click_1(object sender, EventArgs e)
         {
             try
             {
-                var s = new StudentDto
-                {
-                    StudentId = txtStudentId.Text.Trim(),
-                    FullName = txtFullName.Text.Trim(),
-                    Faculty = txtFaculty.Text.Trim(),          // ✅ KHOA
-                    Major = txtMajor.Text.Trim(),
-                    Specialization = txtSpecialization.Text.Trim(),
-                    ClassName = txtClass.Text.Trim(),
-                    Gender = cmbGender.Text,
-                    Phone = txtPhone.Text.Trim(),
-                    CCCD = txtCCCD.Text.Trim(),
-                    Email = txtEmail.Text.Trim(),
-                    Address = txtAddress.Text.Trim(),
-                    Status = cmbStatus.Text,
-                    Year = txtYear.Text.Trim(),
-                    Password = txtPassword.Text.Trim()        // ✅ đổi nếu nhập
-                };
+                var dto = GetDtoFromForm();
+                _service.UpdateStudent(dto);
 
-                _service.UpdateStudent(s);
-                LoadStudents();
-
-                MessageBox.Show("✅ Cập nhật sinh viên thành công!",
-                    "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
+                LoadStudents();     // ✅ LOAD LẠI NGAY
                 ClearForm();
+
+                MessageBox.Show("✅ Cập nhật thành công");
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"❌ Lỗi khi cập nhật: {ex.Message}",
-                    "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("❌ Lỗi cập nhật: " + ex.Message);
             }
         }
 
-        // ==========================
-        // ✅ XÓA SINH VIÊN
-        // ==========================
+
+        // =========================
+        // XÓA
+        // =========================
         private void btnDelete_Click_1(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtStudentId.Text))
-            {
-                MessageBox.Show("Vui lòng nhập Mã SV cần xóa!",
-                    "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+            if (string.IsNullOrWhiteSpace(txtStudentId.Text)) return;
 
-            if (MessageBox.Show("Bạn có chắc muốn xóa sinh viên này?",
-                "Xác nhận", MessageBoxButtons.YesNo,
-                MessageBoxIcon.Question) == DialogResult.Yes)
+            if (MessageBox.Show("Bạn có chắc muốn xóa?", "Xác nhận",
+                MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 try
                 {
                     _service.DeleteStudent(txtStudentId.Text.Trim());
+
                     LoadStudents();
-
-                    MessageBox.Show("✅ Xóa sinh viên thành công!",
-                        "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
                     ClearForm();
+
+                    MessageBox.Show("✅ Đã xóa");
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"❌ Lỗi khi xóa: {ex.Message}",
-                        "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("❌ Lỗi xóa: " + ex.Message);
                 }
             }
         }
 
-        // ==========================
-        // ✅ CLICK GRID → ĐỔ LÊN FORM
-        // ==========================
-        private void dgvStudents_CellContentClick(object sender, DataGridViewCellEventArgs e)
+
+
+        // =========================
+        // CLICK GRID → ĐỔ FORM
+        // =========================
+        private void dgvStudents_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0) return;
+            picStudent.Image = null;
+            picStudent.ErrorImage = null;
+            if (dgvStudents.Rows[e.RowIndex].DataBoundItem is not StudentDto s)
+                return;
 
-            var row = dgvStudents.Rows[e.RowIndex];
+            // ===== ĐỔ THÔNG TIN FORM =====
+            txtStudentId.Text = s.StudentId;
+            txtFullName.Text = s.FullName;
 
-            txtStudentId.Text = row.Cells["StudentId"].Value?.ToString();
-            txtFullName.Text = row.Cells["FullName"].Value?.ToString();
-            txtFaculty.Text = row.Cells["Faculty"].Value?.ToString();   // ✅ KHOA
-            txtMajor.Text = row.Cells["Major"].Value?.ToString();
-            txtSpecialization.Text = row.Cells["Specialization"].Value?.ToString();
-            txtClass.Text = row.Cells["ClassName"].Value?.ToString();
-            cmbGender.Text = row.Cells["Gender"].Value?.ToString();
-            txtPhone.Text = row.Cells["Phone"].Value?.ToString();
-            txtCCCD.Text = row.Cells["CCCD"].Value?.ToString();
-            txtEmail.Text = row.Cells["Email"].Value?.ToString();
-            txtAddress.Text = row.Cells["Address"].Value?.ToString();
-            cmbStatus.Text = row.Cells["Status"].Value?.ToString();
-            txtYear.Text = row.Cells["Year"].Value?.ToString();
+            SelectItemByText(cmbFacultySql, s.Faculty);
 
-            txtPassword.Clear(); // ❗ không hiển thị mật khẩu
+            cmbMajorSql.BeginInvoke(new Action(() =>
+            {
+                SelectItemByText(cmbMajorSql, s.Major);
+
+                cmbSpecializationSql.BeginInvoke(new Action(() =>
+                {
+                    SelectItemByText(cmbSpecializationSql, s.Specialization);
+
+                    cmbClassSql.BeginInvoke(new Action(() =>
+                    {
+                        SelectItemByText(cmbClassSql, s.ClassName);
+                    }));
+                }));
+            }));
+
+            cmbGender.Text = s.Gender;
+            txtPhone.Text = s.Phone;
+            txtCCCD.Text = s.CCCD;
+            txtYear.Text = s.Year;
+            txtAddress.Text = s.Address;
+            cmbStatus.Text = s.Status;
+            txtPassword.Text = s.Password;
+
+            // ===== ✅ HIỂN THỊ ẢNH (QUAN TRỌNG NHẤT) =====
+            if (s.ProfileImage != null && s.ProfileImage.Length > 0)
+            {
+                using var ms = new MemoryStream(s.ProfileImage);
+                picStudent.Image = Image.FromStream(ms);
+            }
+            else
+            {
+                picStudent.Image = null;
+            }
         }
 
-        // ==========================
-        // ✅ CLEAR FORM
-        // ==========================
+
+
+
+        // =========================
+        // TÌM KIẾM
+        // =========================
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+            var key = txtSearch.Text.Trim();
+            if (string.IsNullOrEmpty(key)) return;
+
+            var sv = _service.GetStudentById(key);
+            if (sv == null)
+            {
+                MessageBox.Show("Không tìm thấy!");
+                return;
+            }
+
+            txtStudentId.Text = sv.StudentId;
+            txtFullName.Text = sv.FullName;
+            cmbFacultySql.Text = sv.Faculty;
+            cmbMajorSql.Text = sv.Major;
+            cmbSpecializationSql.Text = sv.Specialization;
+            SelectItemByText(cmbClassSql, sv.ClassName);
+            cmbGender.Text = sv.Gender;
+            txtPhone.Text = sv.Phone;
+            txtCCCD.Text = sv.CCCD;
+            //txtEmail.Text = sv.Email;
+            txtYear.Text = sv.Year;
+            txtAddress.Text = sv.Address;
+            cmbStatus.Text = sv.Status;
+        }
+
+        // =========================
+        // DTO TỪ FORM
+        // =========================
+        private StudentDto GetDtoFromForm()
+        {
+            return new StudentDto
+            {
+                StudentId = txtStudentId.Text.Trim(),
+                FullName = txtFullName.Text.Trim(),
+
+                // ✅ BẮT BUỘC PHẢI LẤY SelectedValue (KHÔNG LẤY TEXT)
+                MajorId = cmbMajorSql.SelectedValue is Guid m ? m : (Guid?)null,
+                SpecializationId = cmbSpecializationSql.SelectedValue is Guid s ? s : (Guid?)null,
+                ClassId = cmbClassSql.SelectedValue is Guid c ? c : (Guid?)null,
+
+                // ✅ VẪN GIỮ TEXT ĐỂ HIỂN THỊ
+                Faculty = cmbFacultySql.Text,
+                Major = cmbMajorSql.Text,
+                Specialization = cmbSpecializationSql.Text,
+                ClassName = cmbClassSql.Text,
+
+                Gender = cmbGender.Text,
+                Phone = txtPhone.Text.Trim(),
+                CCCD = txtCCCD.Text.Trim(),
+                Address = txtAddress.Text.Trim(),
+                Year = txtYear.Text.Trim(),
+                Status = cmbStatus.Text,
+                ProfileImage = _selectedImageBytes
+    ?? (dgvStudents.CurrentRow?.DataBoundItem as StudentDto)?.ProfileImage,
+
+
+                // ✅ EMAIL TỰ SINH (nếu chưa có form nhập email)
+                Email = txtStudentId.Text.Trim() + "@epu.edu.vn",
+
+                Password = string.IsNullOrWhiteSpace(txtPassword.Text)
+                    ? null
+                    : txtPassword.Text.Trim()
+            };
+        }
+
+
+
+
+
+        // =========================
+        // CLEAR FORM
+        // =========================
         private void ClearForm()
         {
             txtStudentId.Clear();
             txtFullName.Clear();
-            txtFaculty.Clear();
-            txtMajor.Clear();
-            txtSpecialization.Clear();
-            txtClass.Clear();
-            cmbGender.SelectedIndex = -1;
+            cmbClassSql.SelectedIndex = -1;
+            txtPassword.Clear();
             txtPhone.Clear();
             txtCCCD.Clear();
-            txtEmail.Clear();
-            txtAddress.Clear();
-            cmbStatus.SelectedIndex = -1;
+            
             txtYear.Clear();
-            txtPassword.Clear();
+            txtAddress.Clear();
+
+            cmbFacultySql.SelectedIndex = -1;
+            cmbMajorSql.SelectedIndex = -1;
+            cmbSpecializationSql.SelectedIndex = -1;
+
+            cmbGender.SelectedIndex = -1;
+            cmbStatus.SelectedIndex = -1;
+
             picStudent.Image = null;
+            _selectedImageBytes = null;
         }
 
-        // ==========================
-        // ✅ TÌM SINH VIÊN
-        // ==========================
-        private void btnSearch_Click(object sender, EventArgs e)
+        private void btnRefresh_Click(object sender, EventArgs e)
         {
-            string keyword = txtSearch.Text.Trim();
-            if (string.IsNullOrEmpty(keyword))
+            ClearForm();
+            txtSearch.Clear();
+
+            LoadStudents();          // ✅ BẮT BUỘC CALL LẠI
+            dgvStudents.ClearSelection();
+        }
+
+
+        // =========================
+        // CHỌN ẢNH
+        // =========================
+        private void btnSelectPhoto_Click(object sender, EventArgs e)
+        {
+            using var ofd = new OpenFileDialog();
+            ofd.Filter = "Ảnh (*.jpg;*.png)|*.jpg;*.png";
+            if (ofd.ShowDialog() == DialogResult.OK)
             {
-                MessageBox.Show("Vui lòng nhập Mã SV để tìm!",
-                    "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                picStudent.ImageLocation = ofd.FileName;
+                _selectedImageBytes = File.ReadAllBytes(ofd.FileName);
+            }
+        }
+        // =========================
+        // ✅ CHỌN KHOA → LOAD NGÀNH
+        // =========================
+        private void cmbFacultySql_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cmbFacultySql.SelectedValue is Guid facultyId)
+            {
+                var majors = _service.GetMajorsByFaculty(facultyId);
+                cmbMajorSql.DataSource = new BindingSource(majors, null);
+                cmbMajorSql.DisplayMember = "Value";
+                cmbMajorSql.ValueMember = "Key";
+            }
+        }
+
+        // =========================
+        // ✅ CHỌN NGÀNH → LOAD CHUYÊN NGÀNH
+        // =========================
+        private void cmbMajorSql_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cmbMajorSql.SelectedValue is Guid majorId)
+            {
+                // RESET CHUYÊN NGÀNH & LỚP
+                cmbSpecializationSql.DataSource = null;
+                cmbSpecializationSql.Items.Clear();
+
+                cmbClassSql.DataSource = null;
+                cmbClassSql.Items.Clear();
+
+                // LOAD CHUYÊN NGÀNH
+                var specs = _service.GetSpecializationsByMajor(majorId);
+
+                cmbSpecializationSql.DataSource = new BindingSource(specs, null);
+                cmbSpecializationSql.DisplayMember = "Value";
+                cmbSpecializationSql.ValueMember = "Key";
+
+                cmbSpecializationSql.SelectedIndex = -1;
+            }
+        }
+
+        private void SelectItemByText(ComboBox combo, string text)
+        {
+            if (string.IsNullOrWhiteSpace(text))
+            {
+                combo.SelectedIndex = -1;
                 return;
             }
 
-            try
+            for (int i = 0; i < combo.Items.Count; i++)
             {
-                var student = _service.GetStudentById(keyword);
-                if (student == null)
+                var item = combo.Items[i];
+                if (combo.GetItemText(item).Equals(text, StringComparison.OrdinalIgnoreCase))
                 {
-                    MessageBox.Show("Không tìm thấy sinh viên!",
-                        "Kết quả", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    return;
+                    combo.SelectedIndex = i;
+                    break;
                 }
-
-                txtStudentId.Text = student.StudentId;
-                txtFullName.Text = student.FullName;
-                txtFaculty.Text = student.Faculty;       // ✅
-                txtMajor.Text = student.Major;
-                txtSpecialization.Text = student.Specialization;
-                txtClass.Text = student.ClassName;
-                cmbGender.Text = student.Gender;
-                txtPhone.Text = student.Phone;
-                txtCCCD.Text = student.CCCD;
-                txtEmail.Text = student.Email;
-                txtAddress.Text = student.Address;
-                cmbStatus.Text = student.Status;
-                txtYear.Text = student.Year;
-
-                txtPassword.Clear();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"❌ Lỗi khi tìm sinh viên: {ex.Message}",
-                    "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-        // ==========================
-        // ✅ CHỌN ẢNH SINH VIÊN
-        // ==========================
-        private void btnSelectPhoto_Click(object sender, EventArgs e)
+        private void cmbSpecializationSql_SelectedIndexChanged(object sender, EventArgs e)
         {
-            OpenFileDialog ofd = new OpenFileDialog();
-            ofd.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.bmp";
-
-            if (ofd.ShowDialog() == DialogResult.OK)
+            if (cmbSpecializationSql.SelectedValue is Guid specId)
             {
-                picStudent.Image = Image.FromFile(ofd.FileName);
+                cmbClassSql.DataSource = null;
+                cmbClassSql.Items.Clear();
+
+                var classes = _service.GetClassesBySpecialization(specId);
+
+                cmbClassSql.DataSource = new BindingSource(classes, null);
+                cmbClassSql.DisplayMember = "Value";
+                cmbClassSql.ValueMember = "Key";
+
+                cmbClassSql.SelectedIndex = -1;
             }
         }
+
+        // =========================
+        // ✅ HIỂN THỊ ẢNH KHI CHỌN DÒNG
+        // =========================
+        private void dgvStudents_SelectionChanged(object sender, EventArgs e)
+        {
+            if (dgvStudents.CurrentRow == null) return;
+
+            if (dgvStudents.CurrentRow.DataBoundItem is StudentDto s)
+            {
+                if (s.ProfileImage != null && s.ProfileImage.Length > 0)
+                {
+                    using (var ms = new MemoryStream(s.ProfileImage))
+                    {
+                        picStudent.Image = Image.FromStream(ms);
+                    }
+                }
+                else
+                {
+                    picStudent.Image = null;
+                }
+            }
+        }
+
+
+
+
+
+
+        private void dgvStudents_CellContentClick(object sender, DataGridViewCellEventArgs e) { }
+        private void lblSearch_Click(object sender, EventArgs e) { }
     }
 }

@@ -16,9 +16,6 @@ namespace StudentCourseManagement.Applications.Students
             _repository = repository;
         }
 
-        // =========================
-        // ✅ LẤY DANH SÁCH SINH VIÊN
-        // =========================
         public List<StudentDto> GetAllStudents()
         {
             var entities = _repository.GetAll();
@@ -36,25 +33,26 @@ namespace StudentCourseManagement.Applications.Students
                     Specialization = s.Specialization,
                     ClassName = s.ClassName,
 
-                    Gender = s.Gender,
+                    ClassId = s.ClassId,
+                    MajorId = s.MajorId,
+                    SpecializationId = s.SpecializationId,
 
-                    // ✅ CHỐT DÙNG Phone – Email
+                    Gender = s.Gender,
                     Phone = s.Phone,
                     CCCD = s.CCCD,
                     Email = s.Email,
                     Address = s.Address,
 
                     Status = s.Status,
-                    Year = s.Year
+                    Year = s.Year,
+                    Password = s.PasswordHash,
+                    ProfileImage = s.ProfileImage
                 });
             }
 
             return list;
         }
 
-        // =========================
-        // ✅ LẤY 1 SINH VIÊN
-        // =========================
         public StudentDto? GetStudentById(string studentId)
         {
             var s = _repository.GetById(studentId);
@@ -74,67 +72,36 @@ namespace StudentCourseManagement.Applications.Students
 
                 Phone = s.Phone,
                 CCCD = s.CCCD,
-                Email = s.Email,
+                //Email = s.Email,
                 Address = s.Address,
 
                 Status = s.Status,
-                Year = s.Year
+                Year = s.Year,
+
+                Password = s.PasswordHash
             };
         }
 
-        // =========================
-        // ✅ THÊM SINH VIÊN
-        // =========================
         public bool AddStudent(StudentDto dto)
         {
-            if (dto == null || string.IsNullOrWhiteSpace(dto.StudentId))
-                throw new ArgumentException("Dữ liệu không hợp lệ");
-
-            var existing = _repository.GetById(dto.StudentId);
-            if (existing != null)
-                throw new InvalidOperationException("Mã sinh viên đã tồn tại");
-
             var entity = MapToEntity(dto);
             _repository.Add(entity);
             return true;
         }
 
-        // =========================
-        // ✅ CẬP NHẬT SINH VIÊN
-        // =========================
         public bool UpdateStudent(StudentDto dto)
         {
-            if (dto == null || string.IsNullOrWhiteSpace(dto.StudentId))
-                throw new ArgumentException("Dữ liệu không hợp lệ");
-
-            var existing = _repository.GetById(dto.StudentId);
-            if (existing == null)
-                throw new InvalidOperationException("Không tìm thấy sinh viên để cập nhật");
-
             var entity = MapToEntity(dto);
             _repository.Update(entity);
             return true;
         }
 
-        // =========================
-        // ✅ XÓA SINH VIÊN
-        // =========================
         public bool DeleteStudent(string studentId)
         {
-            if (string.IsNullOrWhiteSpace(studentId))
-                throw new ArgumentException("Mã sinh viên không hợp lệ");
-
-            var existing = _repository.GetById(studentId);
-            if (existing == null)
-                throw new InvalidOperationException("Không tìm thấy sinh viên để xóa");
-
             _repository.Delete(studentId);
             return true;
         }
 
-        // =========================
-        // ✅ MAP DTO → ENTITY (CHUẨN)
-        // =========================
         private Student MapToEntity(StudentDto dto)
         {
             return new Student
@@ -147,21 +114,40 @@ namespace StudentCourseManagement.Applications.Students
                 Specialization = dto.Specialization,
                 ClassName = dto.ClassName,
 
-                Gender = dto.Gender,
+                // ✅ 3 ID QUAN TRỌNG BỊ THIẾU
+                ClassId = dto.ClassId,
+                MajorId = dto.MajorId,
+                SpecializationId = dto.SpecializationId,
 
+                Gender = dto.Gender,
                 Phone = dto.Phone,
                 CCCD = dto.CCCD,
-                Email = dto.Email,
+                //Email = dto.Email,
                 Address = dto.Address,
 
                 Status = dto.Status,
                 Year = dto.Year,
 
-                // ✅ MẬT KHẨU BĂM
-                PasswordHash = string.IsNullOrWhiteSpace(dto.Password)
-                    ? null
-                    : StudentRepository.HashPassword(dto.Password)
+                // ✅ PASSWORD: CHO PHÉP NULL ĐỂ SQL GIỮ NGUYÊN
+                PasswordHash = dto.Password,
+                ProfileImage = dto.ProfileImage
             };
         }
+
+
+
+        public Dictionary<Guid, string> GetFaculties() =>
+            (_repository as StudentRepository)!.GetFaculties();
+
+        public Dictionary<Guid, string> GetMajorsByFaculty(Guid facultyId) =>
+            (_repository as StudentRepository)!.GetMajorsByFaculty(facultyId);
+
+        public Dictionary<Guid, string> GetSpecializationsByMajor(Guid majorId) =>
+            (_repository as StudentRepository)!.GetSpecializationsByMajor(majorId);
+        public Dictionary<Guid, string> GetClassesBySpecialization(Guid specializationId)
+        {
+            return (_repository as StudentRepository)!.GetClassesBySpecialization(specializationId);
+        }
+
     }
 }
