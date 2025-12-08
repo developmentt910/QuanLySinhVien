@@ -1,12 +1,9 @@
-<<<<<<< HEAD
 using System;
-
 using System.Windows.Forms;
-
-=======
-﻿
+using Microsoft.Extensions.Configuration;
 using StudentCourseManagement.Presentation.WinForms.Bootstrap;
->>>>>>> feature/admin
+using StudentCourseManagement.Presentation.Forms.Auth; 
+
 namespace StudentCourseManagement
 {
     internal static class Program
@@ -20,18 +17,10 @@ namespace StudentCourseManagement
                 .Build();
 
             ServicesFactory.UseConfiguration(config);
-
-
-
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new FrmLogin());
-
-
-
-
         }
-
     }
 }

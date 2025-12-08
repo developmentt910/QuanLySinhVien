@@ -1,0 +1,22 @@
+﻿using System;
+using System.Data;
+
+namespace StudentCourseManagement.Domain.Abstractions.Services
+{
+    public interface IScheduleService
+    {
+        DataTable GetFaculties();
+        DataTable GetMajorsByFaculty(string facultyId);
+        DataTable GetSpecializationsByMajor(string majorId);
+        DataTable GetClassesBySpecialization(string specializationId);
+        DataTable GetSemesters();
+        DataTable GetSchedules(string classId, string semesterId);
+        DataTable GetAvailableSubjects(string classId, string semesterId, Guid majorId, Guid specializationId);
+
+        void AddSchedule(string classId, string subjectId, string teacherName, string room, string semesterId, DateTime lessonDate, int startPeriod, int endPeriod);
+        void RemoveSchedule(string scheduleId);
+        void UpdateSchedule(string scheduleId, string subjectId, string teacherName, string room, DateTime lessonDate, int startPeriod, int endPeriod);
+        DataTable GetSubjectsBySpecialization(Guid majorId, Guid specializationId);
+        DataTable GetAllSubjectDetailsBySpecialization(Guid majorId, Guid specializationId);
+    }
+}

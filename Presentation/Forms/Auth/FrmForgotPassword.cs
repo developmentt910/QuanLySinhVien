@@ -29,7 +29,7 @@ namespace StudentCourseManagement.Presentation.Forms.Auth
             lblTitle.Font = new Font("Segoe UI", 24, FontStyle.Bold);
             lblTitle.ForeColor = Color.FromArgb(52, 73, 94);
 
-            
+
 
             StyleButton(btnSendOtp, Color.FromArgb(52, 152, 219));
 

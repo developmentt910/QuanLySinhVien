@@ -62,6 +62,7 @@
             lblTitle.Location = new Point(12, 9);
             lblTitle.Name = "lblTitle";
             lblTitle.Size = new Size(335, 44);
+
             lblTitle.TabIndex = 0;
             lblTitle.Text = "MNI HIALLSHAPE";
             // 
@@ -80,6 +81,7 @@
             txtEmail.Location = new Point(124, 202);
             txtEmail.Name = "txtEmail";
             txtEmail.Size = new Size(674, 27);
+
             txtEmail.TabIndex = 5;
             // 
             // btnSendOtp
