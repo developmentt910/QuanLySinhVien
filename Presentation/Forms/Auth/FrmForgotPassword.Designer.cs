@@ -50,23 +50,26 @@
             txtEmail = new TextBox();
             btnSendOtp = new Button();
             btnBack = new Button();
+            label1 = new Label();
+            label2 = new Label();
             SuspendLayout();
             // 
             // lblTitle
             // 
             lblTitle.AutoSize = true;
-            lblTitle.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblTitle.ForeColor = Color.FromArgb(30, 80, 160);
-            lblTitle.Location = new Point(172, 33);
+            lblTitle.Font = new Font("Stencil", 22.2F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
+            lblTitle.ForeColor = Color.FromArgb(192, 0, 192);
+            lblTitle.Location = new Point(12, 9);
             lblTitle.Name = "lblTitle";
-            lblTitle.Size = new Size(207, 31);
+            lblTitle.Size = new Size(335, 44);
             lblTitle.TabIndex = 0;
-            lblTitle.Text = "QUÊN MẬT KHẨU";
+            lblTitle.Text = "MNI HIALLSHAPE";
             // 
             // lblEmail
             // 
+            lblEmail.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblEmail.ForeColor = Color.FromArgb(60, 60, 60);
-            lblEmail.Location = new Point(57, 111);
+            lblEmail.Location = new Point(124, 176);
             lblEmail.Name = "lblEmail";
             lblEmail.Size = new Size(70, 23);
             lblEmail.TabIndex = 1;
@@ -74,9 +77,9 @@
             // 
             // txtEmail
             // 
-            txtEmail.Location = new Point(192, 107);
+            txtEmail.Location = new Point(124, 202);
             txtEmail.Name = "txtEmail";
-            txtEmail.Size = new Size(300, 27);
+            txtEmail.Size = new Size(674, 27);
             txtEmail.TabIndex = 5;
             // 
             // btnSendOtp
@@ -86,11 +89,11 @@
             btnSendOtp.FlatAppearance.BorderSize = 0;
             btnSendOtp.FlatStyle = FlatStyle.Flat;
             btnSendOtp.ForeColor = Color.White;
-            btnSendOtp.Location = new Point(172, 193);
+            btnSendOtp.Location = new Point(319, 265);
             btnSendOtp.Name = "btnSendOtp";
             btnSendOtp.Size = new Size(157, 33);
             btnSendOtp.TabIndex = 9;
-            btnSendOtp.Text = "Gửi yêu cầu";
+            btnSendOtp.Text = "Tiếp tục";
             btnSendOtp.UseVisualStyleBackColor = false;
             btnSendOtp.Click += btnSendOtp_Click;
             // 
@@ -101,18 +104,40 @@
             btnBack.FlatAppearance.BorderSize = 0;
             btnBack.FlatStyle = FlatStyle.Flat;
             btnBack.ForeColor = Color.FromArgb(0, 102, 204);
-            btnBack.Location = new Point(336, 293);
+            btnBack.Location = new Point(702, 335);
             btnBack.Name = "btnBack";
-            btnBack.Size = new Size(200, 31);
+            btnBack.Size = new Size(171, 31);
             btnBack.TabIndex = 11;
-            btnBack.Text = "← Quay lại đăng nhập";
+            btnBack.Text = "<- Quay lại đăng nhập";
             btnBack.UseVisualStyleBackColor = false;
             btnBack.Click += btnBack_Click;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Font = new Font("Sitka Display", 13.7999992F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label1.Location = new Point(69, 63);
+            label1.Name = "label1";
+            label1.Size = new Size(180, 33);
+            label1.TabIndex = 12;
+            label1.Text = "Quên mật khẩu ?";
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Font = new Font("Sitka Text", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label2.Location = new Point(124, 117);
+            label2.Name = "label2";
+            label2.Size = new Size(674, 21);
+            label2.TabIndex = 13;
+            label2.Text = "Nếu bạn quên mật khẩu, hãy làm theo những bước sau đây để khôi phục lại mật khẩu của bạn.  ";
             // 
             // FrmForgotPassword
             // 
             BackColor = Color.WhiteSmoke;
-            ClientSize = new Size(532, 336);
+            ClientSize = new Size(872, 364);
+            Controls.Add(label2);
+            Controls.Add(label1);
             Controls.Add(lblTitle);
             Controls.Add(lblEmail);
             Controls.Add(txtEmail);
@@ -124,9 +149,7 @@
 
 
         }
-
-
-
-
+        private Label label1;
+        private Label label2;
     }
 }

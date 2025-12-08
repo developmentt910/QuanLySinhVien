@@ -15,7 +15,6 @@ namespace StudentCourseManagement.Presentation.Forms.Auth
         {
             InitializeComponent();
 
-            // LẤY SERVICE ĐÚNG CHUẨN TỪ FACTORY
             _service = ServicesFactory.CreateForgotPasswordService();
 
             CustomizeUI();
@@ -64,7 +63,6 @@ namespace StudentCourseManagement.Presentation.Forms.Auth
 
             MessageBox.Show("OTP đã được gửi đến email của bạn.");
 
-            // Mở form nhập OTP
             var frm = new FrmEnterOtp(email, _service);
             frm.Show();
             this.Hide();

@@ -19,18 +19,37 @@ namespace StudentCourseManagement.Applications.Auth
             if (user == null)
                 return "Không tìm thấy người dùng.";
 
-            if (!string.Equals(user.PasswordHash, oldPwd))
+            bool isHashed = user.PasswordHash != null && user.PasswordHash.Contains('.');
+            bool oldPasswordValid = false;
+
+            if (isHashed)
+            {
+                oldPasswordValid = PasswordHelper.VerifyPassword(oldPwd, user.PasswordHash);
+            }
+            else
+            {
+                oldPasswordValid = string.Equals(oldPwd, user.PasswordHash);
+
+                if (oldPasswordValid)
+                {
+                    string hashedOld = PasswordHelper.HashPassword(oldPwd);
+                    await _writer.UpdatePasswordHashAsync(userId, hashedOld);
+                    user.PasswordHash = hashedOld;
+                }
+            }
+
+            if (!oldPasswordValid)
                 return "Mật khẩu cũ không chính xác.";
 
-            user.PasswordHash = newPwd;
+            string newHashed = PasswordHelper.HashPassword(newPwd);
+            user.PasswordHash = newHashed;
 
-            await _writer.UpdatePasswordHashAsync(userId, newPwd);
+            await _writer.UpdatePasswordHashAsync(userId, newHashed);
 
             return null; // thành công
         }
-
-
     }
 
 }
+
 
