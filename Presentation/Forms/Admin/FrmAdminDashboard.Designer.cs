@@ -64,6 +64,7 @@
             txtMDQ = new TextBox();
             label2 = new Label();
             txtDiaChi = new TextBox();
+            btnXuat = new Button();
             menuStrip1.SuspendLayout();
             ((ISupportInitialize)pictureBoxProfile).BeginInit();
             SuspendLayout();
@@ -87,14 +88,14 @@
             // đăngXuấtToolStripMenuItem
             // 
             đăngXuấtToolStripMenuItem.Name = "đăngXuấtToolStripMenuItem";
-            đăngXuấtToolStripMenuItem.Size = new Size(224, 26);
+            đăngXuấtToolStripMenuItem.Size = new Size(181, 26);
             đăngXuấtToolStripMenuItem.Text = "Đăng xuất";
             đăngXuấtToolStripMenuItem.Click += đăngXuấtToolStripMenuItem_Click;
             // 
             // đổiMậtKhẩuToolStripMenuItem
             // 
             đổiMậtKhẩuToolStripMenuItem.Name = "đổiMậtKhẩuToolStripMenuItem";
-            đổiMậtKhẩuToolStripMenuItem.Size = new Size(224, 26);
+            đổiMậtKhẩuToolStripMenuItem.Size = new Size(181, 26);
             đổiMậtKhẩuToolStripMenuItem.Text = "Đổi mật khẩu";
             đổiMậtKhẩuToolStripMenuItem.Click += đổiMậtKhẩuToolStripMenuItem_Click;
             // 
@@ -317,7 +318,7 @@
             // btnEdit
             // 
             btnEdit.Font = new Font("Arial", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            btnEdit.Location = new Point(1073, 466);
+            btnEdit.Location = new Point(1084, 383);
             btnEdit.Name = "btnEdit";
             btnEdit.Size = new Size(83, 29);
             btnEdit.TabIndex = 16;
@@ -364,11 +365,22 @@
             txtDiaChi.Size = new Size(165, 27);
             txtDiaChi.TabIndex = 21;
             // 
+            // btnXuat
+            // 
+            btnXuat.Location = new Point(1050, 517);
+            btnXuat.Name = "btnXuat";
+            btnXuat.Size = new Size(117, 31);
+            btnXuat.TabIndex = 22;
+            btnXuat.Text = "Xuất PDF";
+            btnXuat.UseVisualStyleBackColor = true;
+            btnXuat.Click += btnXuat_Click;
+            // 
             // FrmAdminDashboard
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1179, 560);
+            Controls.Add(btnXuat);
             Controls.Add(txtDiaChi);
             Controls.Add(label2);
             Controls.Add(txtMDQ);
@@ -446,5 +458,6 @@
         private Label label2;
         private TextBox txtDiaChi;
         private ToolStripMenuItem đổiMậtKhẩuToolStripMenuItem;
+        private Button btnXuat;
     }
 }

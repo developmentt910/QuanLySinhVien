@@ -2,6 +2,7 @@
 using System.Net.Mail;
 using System.Net;
 using System.Threading.Tasks;
+using Microsoft.Data.SqlClient;
 
 namespace StudentCourseManagement.Infrastructure.Security
 {
@@ -34,9 +35,9 @@ namespace StudentCourseManagement.Infrastructure.Security
             using var conn = await _db.OpenAsync();
 
             string sql = @"
-        INSERT INTO OtpPins(UserId, OtpCode, ExpiresAtUtc, CreatedAtUtc)
-        VALUES (@UserId, @Otp, DATEADD(MINUTE, 3, GETDATE()), GETDATE())
-    ";
+                INSERT INTO OtpPins(UserId, OtpCode, ExpiresAtUtc, CreatedAtUtc)
+                VALUES (@UserId, @Otp, DATEADD(MINUTE, 3, GETDATE()), GETDATE())
+            ";
 
             var cmd = new SqlCommand(sql, conn);
             cmd.Parameters.AddWithValue("@UserId", userId);
@@ -45,18 +46,16 @@ namespace StudentCourseManagement.Infrastructure.Security
             return await cmd.ExecuteNonQueryAsync() > 0;
         }
 
-
         public async Task<bool> VerifyOtpAsync(Guid userId, string otp)
         {
             using var conn = await _db.OpenAsync();
 
             string sql = @"
-    SELECT COUNT(*) FROM OtpPins
-    WHERE UserId = @UserId
-      AND OtpCode = @Otp
-      AND CreatedAtUtc >= DATEADD(MINUTE, -3, GETDATE())
-";
-
+                SELECT COUNT(*) FROM OtpPins
+                WHERE UserId = @UserId
+                  AND OtpCode = @Otp
+                  AND CreatedAtUtc >= DATEADD(MINUTE, -3, GETDATE())
+            ";
 
             var cmd = new SqlCommand(sql, conn);
             cmd.Parameters.AddWithValue("@UserId", userId);
@@ -66,20 +65,24 @@ namespace StudentCourseManagement.Infrastructure.Security
             return count > 0;
         }
 
-        public async Task UpdatePasswordAsync(Guid userId, string newPassword)
+        public async Task UpdatePasswordAsync(string emailSchool, string newPassword)
         {
             using var conn = await _db.OpenAsync();
 
-            string sql = @"UPDATE Roster 
-                           SET PasswordHash = @Pwd 
-                           WHERE Id = @UserId";
+            string sql = @"
+                UPDATE Roster
+                SET PasswordHash = @PasswordHash
+                WHERE EmailSchool = @EmailSchool
+            ";
 
             var cmd = new SqlCommand(sql, conn);
-            cmd.Parameters.AddWithValue("@Pwd", newPassword);
-            cmd.Parameters.AddWithValue("@UserId", userId);
+            cmd.Parameters.AddWithValue("@PasswordHash", PasswordHelper.HashPassword(newPassword)); 
+            cmd.Parameters.AddWithValue("@EmailSchool", emailSchool);
 
             await cmd.ExecuteNonQueryAsync();
         }
+
+       
 
         public async Task<bool> SendOtpAsync(string email)
         {
@@ -96,8 +99,6 @@ namespace StudentCourseManagement.Infrastructure.Security
             return true;
         }
 
-
-
         public async Task<string> ResetPasswordAsync(string email, string otp, string newPassword)
         {
             var userId = await GetUserIdByEmailAsync(email);
@@ -108,7 +109,7 @@ namespace StudentCourseManagement.Infrastructure.Security
             if (!otpValid)
                 return "OTP không đúng hoặc đã hết hạn.";
 
-            await UpdatePasswordAsync(userId.Value, newPassword);
+            await UpdatePasswordAsync(email, newPassword);
 
             return "OK";
         }
@@ -131,6 +132,5 @@ namespace StudentCourseManagement.Infrastructure.Security
 
             await smtp.SendMailAsync(message);
         }
-
     }
 }
