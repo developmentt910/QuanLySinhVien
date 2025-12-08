@@ -319,7 +319,7 @@ namespace StudentCourseManagement.Presentation.Forms.Schedule
                         DataRow newRow = dtAvailableSubjects.NewRow();
                         newRow["Id"] = subjectId;
                         newRow["SubjectName"] = subjectName;
-                        dtAvailableSubjects.Rows.InsertAt(newRow, 0); 
+                        dtAvailableSubjects.Rows.InsertAt(newRow, 0);
                     }
                     cboMonHoc.SelectedValue = subjectId;
                 }

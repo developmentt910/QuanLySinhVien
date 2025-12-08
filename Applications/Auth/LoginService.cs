@@ -41,10 +41,31 @@ namespace StudentCourseManagement.Applications.Auth
             if (string.IsNullOrWhiteSpace(dto.Password))
                 return (null, "Mật khẩu không được để trống.");
 
-            if (!dto.Password.Equals(user.PasswordHash))
+            bool isHashed = user.PasswordHash != null && user.PasswordHash.Contains('.');
+            bool passwordValid = false;
+
+            if (isHashed)
+            {
+                passwordValid = PasswordHelper.VerifyPassword(dto.Password, user.PasswordHash);
+            }
+            else
+            {
+                passwordValid = dto.Password.Equals(user.PasswordHash);
+
+                if (passwordValid)
+                {
+                    string hashed = PasswordHelper.HashPassword(dto.Password);
+                    await _userW.UpdatePasswordHashAsync(user.Id, hashed);
+
+               
+                    user.PasswordHash = hashed;
+                }
+            }
+
+            if (!passwordValid)
                 return (null, "Mật khẩu không đúng.");
 
-            return (user, null); // OK
+            return (user, null); 
         }
 
     }

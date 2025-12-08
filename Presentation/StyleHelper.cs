@@ -10,7 +10,6 @@ public static class StyleHelper
     public static void ApplyFormStyle(Form form)
     {
         form.BackColor = SecondaryColor;
-        form.Font = new Font("Segoe UI", 10, FontStyle.Regular);
 
         foreach (Control c in form.Controls)
         {
@@ -20,6 +19,8 @@ public static class StyleHelper
 
     private static void ApplyControlStyle(Control c)
     {
+        if (c is NumericUpDown) return;
+
         if (c.HasChildren)
         {
             foreach (Control child in c.Controls)
@@ -27,10 +28,9 @@ public static class StyleHelper
                 ApplyControlStyle(child);
             }
         }
+
         if (c is Button btn)
         {
-            btn.Font = new Font("Segoe UI", 10, FontStyle.Regular);
-            btn.Height = 40;
             btn.Cursor = Cursors.Hand;
             btn.FlatStyle = FlatStyle.Standard;
             btn.UseVisualStyleBackColor = true;
@@ -38,7 +38,6 @@ public static class StyleHelper
         else if (c is Label lbl && lbl.Name.Contains("Title"))
         {
             lbl.ForeColor = PrimaryColor;
-            lbl.Font = new Font("Segoe UI", 16, FontStyle.Bold);
         }
         else if (c is DataGridView dgv)
         {

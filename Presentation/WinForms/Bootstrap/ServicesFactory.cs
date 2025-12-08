@@ -64,6 +64,5 @@ namespace StudentCourseManagement.Presentation.WinForms.Bootstrap
         //THÊM MỚI CHO CLASS
         public static IClassRepository CreateClassRepository() => new ClassRepository(Db);
         public static IClassService CreateClassService() => new ClassService(CreateClassRepository());
-
     }
 }

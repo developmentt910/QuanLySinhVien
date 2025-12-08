@@ -1,4 +1,8 @@
+﻿using iTextSharp.text;
+using iTextSharp.text.pdf;
 using StudentCourseManagement.Applications.Services;
+using System.IO;
+using System.Windows.Forms;
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -54,7 +58,7 @@ namespace StudentCourseManagement.Presentation.Forms.Admin
                     if (_currentUser.ProfileImage != null && _currentUser.ProfileImage.Length > 0)
                     {
                         using var ms = new MemoryStream(_currentUser.ProfileImage);
-                        pictureBoxProfile.Image = Image.FromStream(ms);
+                        pictureBoxProfile.Image = System.Drawing.Image.FromStream(ms);
                     }
 
                     SetTextBoxesReadOnly(true);
@@ -76,7 +80,7 @@ namespace StudentCourseManagement.Presentation.Forms.Admin
             foreach (ToolStripMenuItem item in menuStrip1.Items)
             {
                 item.ForeColor = Color.White;
-                item.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+                item.Font = new System.Drawing.Font("Segoe UI", 10, FontStyle.Bold);
             }
         }
 
@@ -103,12 +107,21 @@ namespace StudentCourseManagement.Presentation.Forms.Admin
             {
                 Filter = "Image Files|*.jpg;*.jpeg;*.png;*.bmp"
             };
+
             if (ofd.ShowDialog() == DialogResult.OK)
             {
-                pictureBoxProfile.Image?.Dispose();
-                pictureBoxProfile.Image = Image.FromFile(ofd.FileName);
+                using (var fs = new FileStream(ofd.FileName, FileMode.Open, FileAccess.Read))
+                {
+                    using (var ms = new MemoryStream())
+                    {
+                        fs.CopyTo(ms);
+                        pictureBoxProfile.Image?.Dispose();
+                        pictureBoxProfile.Image = System.Drawing.Image.FromStream(new MemoryStream(ms.ToArray()));
+                    }
+                }
             }
         }
+
 
         private async void BtnSave_Click(object sender, EventArgs e)
         {
@@ -161,6 +174,73 @@ namespace StudentCourseManagement.Presentation.Forms.Admin
             this.Close();
         }
 
+        private void btnXuat_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                SaveFileDialog saveDialog = new SaveFileDialog();
+                saveDialog.Title = "Chọn nơi lưu file PDF...";
+                saveDialog.Filter = "PDF files (*.pdf)|*.pdf";
+                saveDialog.FileName = "AdminInfo.pdf";
+
+                if (saveDialog.ShowDialog() != DialogResult.OK)
+                    return;
+
+                string pdfPath = saveDialog.FileName;
+
+                // Tạo Document PDF
+                iTextSharp.text.Document doc = new iTextSharp.text.Document();
+                PdfWriter.GetInstance(doc, new FileStream(pdfPath, FileMode.Create));
+                doc.Open();
+
+                // FONT HỖ TRỢ UNICODE
+                BaseFont bf = BaseFont.CreateFont(
+                    "c:/windows/fonts/arial.ttf",
+                    BaseFont.IDENTITY_H,
+                    BaseFont.EMBEDDED);
+
+                iTextSharp.text.Font normalFont = new iTextSharp.text.Font(bf, 14);
+                iTextSharp.text.Font boldFont = new iTextSharp.text.Font(bf, 20, iTextSharp.text.Font.BOLD);
+
+                // TIÊU ĐỀ
+                Paragraph title = new Paragraph("THÔNG TIN QUẢN LÝ VIÊN\n\n", boldFont);
+                title.Alignment = Element.ALIGN_CENTER;
+                doc.Add(title);
+
+                // AVATAR
+                if (pictureBoxProfile.Image != null)
+                {
+                    using (MemoryStream ms = new MemoryStream())
+                    {
+                        pictureBoxProfile.Image.Save(ms, pictureBoxProfile.Image.RawFormat);
+                        iTextSharp.text.Image avatar = iTextSharp.text.Image.GetInstance(ms.ToArray());
+
+                        avatar.ScaleToFit(150, 150);
+                        avatar.Alignment = Element.ALIGN_CENTER;
+
+                        doc.Add(avatar);
+                        doc.Add(new Paragraph("\n"));
+                    }
+                }
+
+                // THÔNG TIN QUẢN LÝ
+                doc.Add(new Paragraph("Họ tên: " + txtFullName.Text, normalFont));
+                doc.Add(new Paragraph("Mã đặc quyền: " + txtMDQ.Text, normalFont));
+                doc.Add(new Paragraph("CCCD: " + txtCCCD.Text, normalFont));
+                doc.Add(new Paragraph("SĐT: " + txtPhone.Text, normalFont));
+                doc.Add(new Paragraph("Email: " + txtEmail.Text, normalFont));
+                doc.Add(new Paragraph("Giới tính: " + txtGender.Text, normalFont));
+                doc.Add(new Paragraph("Địa chỉ: " + txtDiaChi.Text, normalFont));
+
+                doc.Close();
+
+                MessageBox.Show("Xuất file PDF thành công:\n" + pdfPath);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi xuất PDF: " + ex.Message);
+            }
+        }
         // Sự kiện mở Form Quản lý TKB (Lịch học)
         private void lichHocToolStripMenuItem_Click(object sender, EventArgs e)
         {
