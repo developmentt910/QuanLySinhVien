@@ -89,12 +89,18 @@ namespace StudentCourseManagement.Applications.Students
             return true;
         }
 
-        public bool UpdateStudent(StudentDto dto)
+        public bool UpdateStudent(StudentDto dto, string oldCode)
         {
+            if (_repository.IsStudentCodeExistsForUpdate(dto.StudentId, oldCode))
+            {
+                throw new Exception("Mã sinh viên đã tồn tại, không thể cập nhật!");
+            }
+
             var entity = MapToEntity(dto);
-            _repository.Update(entity);
+            _repository.Update(entity, oldCode);
             return true;
         }
+
 
         public bool DeleteStudent(string studentId)
         {

@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Microsoft.Data.SqlClient;
+using StudentCourseManagement.Domain.Abstractions.Repositories;
+using StudentCourseManagement.Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Reflection.Emit;
 using System.Security.Cryptography;
 using System.Text;
-using Microsoft.Data.SqlClient;
-using StudentCourseManagement.Domain.Entities;
-using StudentCourseManagement.Domain.Abstractions.Repositories;
 
 namespace StudentCourseManagement.Infrastructure.Repositories.SqlServer
 {
@@ -192,7 +193,7 @@ VALUES(
     @mail,
     @addr,
     @year,
-    'STUDENT',
+    'USER',
     @password,
     @classId,
     @majorId,
@@ -235,14 +236,15 @@ VALUES(
         // =========================
         private const string UpdateSql = @"
 UPDATE dbo.Users SET
+    StudentCode = @newCode,
     FullName = @fullName,
     Gender = @gender,
     Phone164 = @phone,
     CCCD = @cccd,
     [Address] = @addr,
     CohortYear = @year,
+   
 
-    -- ✅ UPDATE MẬT KHẨU DẠNG TEXT (KHÔNG HASH)
     PasswordHash = CASE 
         WHEN @password IS NULL THEN PasswordHash 
         ELSE @password 
@@ -259,55 +261,65 @@ UPDATE dbo.Users SET
     SpecializationId = CASE 
         WHEN @specializationId IS NULL THEN SpecializationId ELSE @specializationId 
     END,
-    ProfileImage = CASE 
-    WHEN @img IS NULL THEN ProfileImage 
-    ELSE @img 
+    Role = CASE 
+    WHEN @status = 'ALUMNI' THEN 'ALUMNI'
+    WHEN @status = 'PAUSED' THEN 'PAUSED'
+    ELSE 'USER'
 END,
+
+    
+    ProfileImage = CASE 
+        WHEN @img IS NULL THEN ProfileImage 
+        ELSE @img 
+    END,
 
 
     UpdatedAtUtc = SYSUTCDATETIME()
-WHERE StudentCode = @code;
+WHERE StudentCode = @oldCode;
 ";
 
 
 
-        public void Update(Student s)
+
+        public void Update(Student s, string oldCode)
         {
             using var conn = _factory.Create();
             conn.Open();
 
             using var cmd = new SqlCommand(UpdateSql, conn);
 
-            cmd.Parameters.Add("@code", SqlDbType.VarChar).Value = s.StudentId ?? "";
+            cmd.Parameters.Add("@newCode", SqlDbType.VarChar).Value = s.StudentId;
+            cmd.Parameters.Add("@oldCode", SqlDbType.VarChar).Value = oldCode;
+
             cmd.Parameters.Add("@fullName", SqlDbType.NVarChar).Value = s.FullName ?? "";
             cmd.Parameters.Add("@gender", SqlDbType.NVarChar).Value = s.Gender ?? "Nam";
             cmd.Parameters.Add("@phone", SqlDbType.VarChar).Value = s.Phone ?? "";
             cmd.Parameters.Add("@cccd", SqlDbType.VarChar).Value = s.CCCD ?? "";
-            // ❌ XÓA
-
             cmd.Parameters.Add("@addr", SqlDbType.NVarChar).Value = s.Address ?? "";
             cmd.Parameters.Add("@year", SqlDbType.VarChar).Value = s.Year ?? "";
-
-            // ✅ PASSWORD TEXT
+            
             if (s.PasswordHash == null)
                 cmd.Parameters.Add("@password", SqlDbType.VarChar).Value = DBNull.Value;
             else
                 cmd.Parameters.Add("@password", SqlDbType.VarChar).Value = s.PasswordHash;
 
             cmd.Parameters.Add("@classId", SqlDbType.UniqueIdentifier).Value =
-                s.ClassId.HasValue ? s.ClassId.Value : DBNull.Value;
+                s.ClassId ?? (object)DBNull.Value;
 
             cmd.Parameters.Add("@majorId", SqlDbType.UniqueIdentifier).Value =
-                s.MajorId.HasValue ? s.MajorId.Value : DBNull.Value;
+                s.MajorId ?? (object)DBNull.Value;
 
             cmd.Parameters.Add("@specializationId", SqlDbType.UniqueIdentifier).Value =
-                s.SpecializationId.HasValue ? s.SpecializationId.Value : DBNull.Value;
-            cmd.Parameters.Add("@img", SqlDbType.VarBinary).Value =
-    s.ProfileImage != null ? (object)s.ProfileImage : DBNull.Value;
+                s.SpecializationId ?? (object)DBNull.Value;
+            cmd.Parameters.Add("@status", SqlDbType.NVarChar).Value = s.Status;
 
-            int rows = cmd.ExecuteNonQuery();
-            Console.WriteLine("UPDATE rows = " + rows);
+
+            cmd.Parameters.Add("@img", SqlDbType.VarBinary).Value =
+                s.ProfileImage ?? (object)DBNull.Value;
+
+            cmd.ExecuteNonQuery();
         }
+
 
 
 
@@ -399,6 +411,25 @@ WHERE StudentCode = @code;
             return result;
         }
 
+        // ✅ KIỂM TRA MÃ SV ĐÃ TỒN TẠI (DÙNG KHI UPDATE)
+        public bool IsStudentCodeExistsForUpdate(string newCode, string oldCode)
+        {
+            using var conn = _factory.Create();
+            conn.Open();
+
+            var sql = @"
+SELECT COUNT(*)
+FROM dbo.Users
+WHERE StudentCode = @newCode
+AND StudentCode <> @oldCode";
+
+            using var cmd = new SqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("@newCode", newCode);
+            cmd.Parameters.AddWithValue("@oldCode", oldCode);
+
+            int count = (int)cmd.ExecuteScalar();
+            return count > 0;
+        }
 
     }
 }

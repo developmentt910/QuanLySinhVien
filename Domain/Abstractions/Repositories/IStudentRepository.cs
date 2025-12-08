@@ -26,7 +26,9 @@ namespace StudentCourseManagement.Domain.Abstractions.Repositories
         /// <summary>
         /// Cập nhật thông tin sinh viên
         /// </summary>
-        void Update(Student student);
+        bool IsStudentCodeExistsForUpdate(string newCode, string oldCode);
+        void Update(Student student, string oldCode);
+
 
         /// <summary>
         /// Xóa sinh viên theo mã

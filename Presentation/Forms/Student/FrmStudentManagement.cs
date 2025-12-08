@@ -14,6 +14,7 @@ namespace StudentCourseManagement.Presentation.Forms.Student
     {
         private readonly StudentService _service;
         private byte[] _selectedImageBytes;
+        private string _oldStudentCode;
 
 
         public FrmStudentManagement()
@@ -181,10 +182,17 @@ namespace StudentCourseManagement.Presentation.Forms.Student
         {
             try
             {
-                var dto = GetDtoFromForm();
-                _service.UpdateStudent(dto);
+                if (string.IsNullOrWhiteSpace(_oldStudentCode))
+                {
+                    MessageBox.Show("❌ Chưa chọn sinh viên để cập nhật!");
+                    return;
+                }
 
-                LoadStudents();     // ✅ LOAD LẠI NGAY
+                var dto = GetDtoFromForm();
+
+                _service.UpdateStudent(dto, _oldStudentCode);   // ✅ TRUYỀN MÃ CŨ
+
+                LoadStudents();
                 ClearForm();
 
                 MessageBox.Show("✅ Cập nhật thành công");
@@ -194,6 +202,7 @@ namespace StudentCourseManagement.Presentation.Forms.Student
                 MessageBox.Show("❌ Lỗi cập nhật: " + ex.Message);
             }
         }
+
 
 
         // =========================
@@ -237,6 +246,7 @@ namespace StudentCourseManagement.Presentation.Forms.Student
 
             // ===== ĐỔ THÔNG TIN FORM =====
             txtStudentId.Text = s.StudentId;
+            _oldStudentCode = s.StudentId;
             txtFullName.Text = s.FullName;
 
             SelectItemByText(cmbFacultySql, s.Faculty);
@@ -335,7 +345,13 @@ namespace StudentCourseManagement.Presentation.Forms.Student
                 CCCD = txtCCCD.Text.Trim(),
                 Address = txtAddress.Text.Trim(),
                 Year = txtYear.Text.Trim(),
-                Status = cmbStatus.Text,
+                Status = cmbStatus.Text switch
+                {
+                    "Bảo lưu" => "PAUSED",
+                    "Đã tốt nghiệp" => "ALUMNI",
+                    _ => "User"
+                },
+
                 ProfileImage = _selectedImageBytes
     ?? (dgvStudents.CurrentRow?.DataBoundItem as StudentDto)?.ProfileImage,
 
