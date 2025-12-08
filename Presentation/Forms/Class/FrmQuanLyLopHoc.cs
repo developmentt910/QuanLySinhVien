@@ -27,6 +27,7 @@ namespace StudentCourseManagement.Presentation.Forms.Class
         {
             LoadKhoaData();
             SetControlState(false);
+            StyleHelper.ApplyFormStyle(this);
 
             txtMaLop.Enabled = false;
             txtTenLop.Enabled = false;

@@ -25,6 +25,7 @@ namespace StudentCourseManagement.Presentation.Forms.Schedule
             dtpLessonDate.Format = DateTimePickerFormat.Short;
             LoadKhoaData();
             LoadKyHocData();
+            StyleHelper.ApplyFormStyle(this);
             cboNganh.Enabled = false;
             cboChuyenNganh.Enabled = false;
             cboLopHoc.Enabled = false;

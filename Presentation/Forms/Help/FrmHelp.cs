@@ -15,6 +15,7 @@ namespace StudentCourseManagement.Presentation.Forms.Help
         {
             pnlSupport.BringToFront();
             HighlightButton(btnSupport);
+            StyleHelper.ApplyFormStyle(this);
         }
 
         private void HighlightButton(Button selectedButton)

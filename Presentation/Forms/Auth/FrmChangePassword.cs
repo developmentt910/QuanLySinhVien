@@ -12,7 +12,10 @@ namespace StudentCourseManagement.Forms.Auth
             _changeService = changeService;
             _currentUserId = currentUserId;
         }
-
+       private void FrmChangePassword_Load(object sender, EventArgs e)
+        {
+            StyleHelper.ApplyFormStyle(this);
+        }
         private async void btnChange_Click(object sender, EventArgs e)
         {
             lblMessage.Visible = false;

@@ -32,9 +32,9 @@ namespace StudentCourseManagement.Forms.Auth
         private void FrmLogin_Load(object sender, EventArgs e)
         {
             lblCaptchaCode.Text = _loginService.GenerateCaptcha();
-
-
             
+
+
 
         }
 

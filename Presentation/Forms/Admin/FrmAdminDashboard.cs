@@ -68,6 +68,16 @@ namespace StudentCourseManagement.Presentation.Forms.Admin
             {
                 MessageBox.Show("Lỗi khi tải dữ liệu: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            StyleHelper.ApplyFormStyle(this);
+
+            // Tùy chỉnh thêm cho MenuStrip đẹp hơn
+            menuStrip1.BackColor = StyleHelper.PrimaryColor;
+            menuStrip1.ForeColor = Color.White;
+            foreach (ToolStripMenuItem item in menuStrip1.Items)
+            {
+                item.ForeColor = Color.White;
+                item.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+            }
         }
 
         private void BtnEdit_Click(object sender, EventArgs e)
