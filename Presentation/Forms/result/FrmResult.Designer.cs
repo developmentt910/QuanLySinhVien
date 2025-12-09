@@ -257,6 +257,7 @@
             btnDelete.Size = new Size(60, 40);
             btnDelete.TabIndex = 4;
             btnDelete.Text = "Xóa";
+            btnDelete.Click += btnDelete_Click;
             // 
             // btnBack
             // 
@@ -264,7 +265,8 @@
             btnBack.Name = "btnBack";
             btnBack.Size = new Size(100, 30);
             btnBack.TabIndex = 24;
-            btnBack.Text = "Quay lại";
+            btnBack.Text = "Xuất Excel";
+            btnBack.Click += btnBack_Click;
             // 
             // lblDetail
             // 

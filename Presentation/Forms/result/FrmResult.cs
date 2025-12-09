@@ -1,4 +1,5 @@
-﻿using StudentCourseManagement.Applications;
+﻿using ClosedXML.Excel;
+using StudentCourseManagement.Applications;
 using StudentCourseManagement.Applications.Curriculum;
 using StudentCourseManagement.Applications.Students.Dtos;
 using StudentCourseManagement.Infrastructure.Data;
@@ -273,6 +274,153 @@ namespace StudentCourseManagement.Presentation.Forms.result
             }
 
             MessageBox.Show("Lưu điểm thành công!");
+        }
+
+        private void btnDelete_Click(object sender, EventArgs e)
+        {
+            if (currentStudent == null)
+            {
+                MessageBox.Show("Vui lòng tìm sinh viên trước!");
+                return;
+            }
+
+            int row = dgvDiem.CurrentCell?.RowIndex ?? -1;
+            if (row < 0)
+            {
+                MessageBox.Show("Vui lòng chọn môn học để xóa điểm!");
+                return;
+            }
+
+            var table = (DataTable)dgvDiem.DataSource;
+            string subjectName = table.Rows[row][1].ToString();
+
+            Guid subjectId = resultService.FindSubjectIdByName(subjectName);
+
+            if (subjectId == Guid.Empty)
+            {
+                MessageBox.Show("Không tìm thấy môn học trong hệ thống!");
+                return;
+            }
+
+            // Xác nhận người dùng
+            if (MessageBox.Show($"Bạn có chắc muốn xóa điểm môn '{subjectName}'?",
+                                "Xác nhận xóa",
+                                MessageBoxButtons.YesNo,
+                                MessageBoxIcon.Warning)
+                == DialogResult.No)
+                return;
+
+            // Gọi service để xóa
+            resultService.DeleteScore(currentStudent.Id, subjectId);
+
+            // Refresh lại table
+            LoadSubjectTable(cbHocKy.SelectedItem.ToString());
+
+            MessageBox.Show("Xóa điểm thành công!");
+        }
+
+
+        // package ClosedXML
+        private void btnBack_Click(object sender, EventArgs e)
+        {
+            if (dgvDiem.DataSource == null)
+            {
+                MessageBox.Show("Không có dữ liệu để xuất!", "Thông báo",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            SaveFileDialog save = new SaveFileDialog();
+            save.Filter = "Excel Workbook (*.xlsx)|*.xlsx";
+            save.FileName = $"BangDiem_{currentStudent.StudentCode}.xlsx";
+
+            if (save.ShowDialog() != DialogResult.OK)
+                return;
+
+            try
+            {
+                using (var workbook = new XLWorkbook())
+                {
+                    var ws = workbook.Worksheets.Add("Bảng điểm");
+
+                    int row = 1;
+
+                    // ==== TIÊU ĐỀ TRƯỜNG ====
+                    ws.Cell(row, 1).Value = "TRƯỜNG ĐẠI HỌC ĐIỆN LỰC";
+                    ws.Range(row, 1, row, 10).Merge().Style
+                        .Font.SetBold().Font.SetFontSize(16)
+                        .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+                    row++;
+
+                    // ==== TIÊU ĐỀ BẢNG ====
+                    ws.Cell(row, 1).Value = "BẢNG ĐIỂM HỌC TẬP";
+                    ws.Range(row, 1, row, 10).Merge().Style
+                        .Font.SetBold().Font.SetFontSize(14)
+                        .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+                    row += 2;
+
+                    // ==== THÔNG TIN SINH VIÊN ====
+                    ws.Cell(row, 1).Value = $"Họ và tên: {txtHoTen.Text}";
+                    ws.Cell(row, 5).Value = $"Mã SV: {currentStudent.StudentCode}";
+                    row++;
+
+                    ws.Cell(row, 1).Value = $"Khoa: {txtKhoa.Text}";
+                    ws.Cell(row, 5).Value = $"Ngành: {txtNganh.Text}";
+                    row++;
+
+                    ws.Cell(row, 1).Value = $"Chuyên ngành: {txtChuyenNganh.Text}";
+                    ws.Cell(row, 5).Value = $"Lớp: {txtLop.Text}";
+                    row += 2;
+
+                    // ==== HEADER BẢNG ====
+                    for (int i = 0; i < dgvDiem.Columns.Count; i++)
+                    {
+                        ws.Cell(row, i + 1).Value = dgvDiem.Columns[i].HeaderText;
+                    }
+
+                    var headerRange = ws.Range(row, 1, row, dgvDiem.Columns.Count);
+                    headerRange.Style.Font.SetBold();
+                    headerRange.Style.Fill.SetBackgroundColor(XLColor.AliceBlue);
+                    headerRange.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+                    headerRange.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                    headerRange.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+
+                    row++;
+
+                    // ==== DỮ LIỆU ====
+                    foreach (DataGridViewRow dgRow in dgvDiem.Rows)
+                    {
+                        if (!dgRow.IsNewRow)
+                        {
+                            for (int col = 0; col < dgvDiem.Columns.Count; col++)
+                            {
+                                ws.Cell(row, col + 1).Value = dgRow.Cells[col].Value?.ToString();
+                            }
+
+                            row++;
+                        }
+                    }
+
+                    // Tạo border cho toàn bộ bảng
+                    var tableRange = ws.Range((row - dgvDiem.Rows.Count - 1), 1, (row - 1), dgvDiem.Columns.Count);
+                    tableRange.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                    tableRange.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+                    tableRange.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+
+                    // Auto-fit cột
+                    ws.Columns().AdjustToContents();
+
+                    workbook.SaveAs(save.FileName);
+                }
+
+                MessageBox.Show("Xuất Excel thành công!", "Thành công",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi xuất Excel: " + ex.Message);
+            }
+
         }
     }
 }

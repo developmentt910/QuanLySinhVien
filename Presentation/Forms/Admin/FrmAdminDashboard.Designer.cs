@@ -216,7 +216,7 @@
             // hỆTHỐNGPHẦNMỀMQUẢNToolStripMenuItem
             // 
             hỆTHỐNGPHẦNMỀMQUẢNToolStripMenuItem.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
-            hỆTHỐNGPHẦNMỀMQUẢNToolStripMenuItem.ForeColor = SystemColors.ButtonHighlight;
+            hỆTHỐNGPHẦNMỀMQUẢNToolStripMenuItem.ForeColor = SystemColors.ActiveCaptionText;
             hỆTHỐNGPHẦNMỀMQUẢNToolStripMenuItem.Name = "hỆTHỐNGPHẦNMỀMQUẢNToolStripMenuItem";
             hỆTHỐNGPHẦNMỀMQUẢNToolStripMenuItem.Size = new Size(528, 27);
             hỆTHỐNGPHẦNMỀMQUẢNToolStripMenuItem.Text = "HỆ THỐNG PHẦN MỀM QUẢN LÝ SINH VIÊN MNI HIALLSHAPE";

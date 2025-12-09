@@ -17,6 +17,10 @@ public class ResultService
         return dao.GetSubjectsForSemester(specializationId, semesterCode);
     }
 
+    public void DeleteScore(Guid userId, Guid subjectId)
+    {
+        dao.DeleteScore(userId, subjectId);
+    }
 
     public StudentDtos FindByMSV(string msv) => dao.FindByMSV(msv);
     public List<string> GetSemestersForStudent(int? cohortYear) => dao.GetSemestersForStudent(cohortYear);

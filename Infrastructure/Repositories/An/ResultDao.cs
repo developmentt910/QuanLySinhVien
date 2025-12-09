@@ -339,5 +339,27 @@ WHERE u.StudentCode = @msv;
                 cmd.ExecuteNonQuery();
             }
         }
+
+
+        public void DeleteScore(Guid userId, Guid subjectId)
+        {
+            using (SqlConnection con = CreateConnection())
+            {
+                con.Open();
+
+                string sql = @"
+            DELETE FROM StudyResult
+            WHERE UserId = @uid AND SubjectId = @sub
+        ";
+
+                using var cmd = new SqlCommand(sql, con);
+                cmd.Parameters.AddWithValue("@uid", userId);
+                cmd.Parameters.AddWithValue("@sub", subjectId);
+
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+
     }
 }
