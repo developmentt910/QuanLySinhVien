@@ -104,22 +104,22 @@
             // thôngTinSinhViênToolStripMenuItem
             // 
             thôngTinSinhViênToolStripMenuItem.Name = "thôngTinSinhViênToolStripMenuItem";
-            thôngTinSinhViênToolStripMenuItem.Size = new Size(216, 26);
+            thôngTinSinhViênToolStripMenuItem.Size = new Size(224, 26);
             thôngTinSinhViênToolStripMenuItem.Text = "Thông tin sinh viên";
             thôngTinSinhViênToolStripMenuItem.Click += thôngTinSinhViênToolStripMenuItem_Click;
-
             // 
             // kếtQuảHọcTậpToolStripMenuItem
             // 
             kếtQuảHọcTậpToolStripMenuItem.Name = "kếtQuảHọcTậpToolStripMenuItem";
-            kếtQuảHọcTậpToolStripMenuItem.Size = new Size(216, 26);
+            kếtQuảHọcTậpToolStripMenuItem.Size = new Size(224, 26);
             kếtQuảHọcTậpToolStripMenuItem.Text = "Kết quả học tập";
             // 
             // đánhGiáRènLuyệnToolStripMenuItem
             // 
             đánhGiáRènLuyệnToolStripMenuItem.Name = "đánhGiáRènLuyệnToolStripMenuItem";
-            đánhGiáRènLuyệnToolStripMenuItem.Size = new Size(216, 26);
+            đánhGiáRènLuyệnToolStripMenuItem.Size = new Size(224, 26);
             đánhGiáRènLuyệnToolStripMenuItem.Text = "Đánh giá rèn luyện";
+            đánhGiáRènLuyệnToolStripMenuItem.Click += đánhGiáRènLuyệnToolStripMenuItem_Click;
             // 
             // quảnLýTổngHợpToolStripMenuItem
             // 
@@ -133,6 +133,7 @@
             họcKỳToolStripMenuItem.Name = "họcKỳToolStripMenuItem";
             họcKỳToolStripMenuItem.Size = new Size(190, 26);
             họcKỳToolStripMenuItem.Text = "Học kỳ";
+            họcKỳToolStripMenuItem.Click += họcKỳToolStripMenuItem_Click;
             // 
             // khoaToolStripMenuItem
             // 
@@ -145,12 +146,14 @@
             ngànhToolStripMenuItem.Name = "ngànhToolStripMenuItem";
             ngànhToolStripMenuItem.Size = new Size(190, 26);
             ngànhToolStripMenuItem.Text = "Ngành";
+            ngànhToolStripMenuItem.Click += ngànhToolStripMenuItem_Click;
             // 
             // chuyênNgànhToolStripMenuItem
             // 
             chuyênNgànhToolStripMenuItem.Name = "chuyênNgànhToolStripMenuItem";
             chuyênNgànhToolStripMenuItem.Size = new Size(190, 26);
             chuyênNgànhToolStripMenuItem.Text = "Chuyên ngành";
+            chuyênNgànhToolStripMenuItem.Click += chuyênNgànhToolStripMenuItem_Click;
             // 
             // lớpHọcToolStripMenuItem
             // 
@@ -335,7 +338,7 @@
             // 
             btnEdit.Font = new Font("Arial", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             btnEdit.Location = new Point(1062, 399);
-            btnEdit.Margin = new Padding(2, 2, 2, 2);
+            btnEdit.Margin = new Padding(2);
             btnEdit.Name = "btnEdit";
             btnEdit.Size = new Size(83, 29);
             btnEdit.TabIndex = 16;
@@ -385,7 +388,7 @@
             // btnXuat
             // 
             btnXuat.Location = new Point(1049, 545);
-            btnXuat.Margin = new Padding(2, 2, 2, 2);
+            btnXuat.Margin = new Padding(2);
             btnXuat.Name = "btnXuat";
             btnXuat.Size = new Size(94, 25);
             btnXuat.TabIndex = 22;

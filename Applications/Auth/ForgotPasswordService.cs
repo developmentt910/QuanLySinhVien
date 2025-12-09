@@ -3,6 +3,7 @@ using System.Net.Mail;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.Data.SqlClient;
+using StudentCourseManagement.Infrastructure.Repositories.AuthAdmin;
 
 namespace StudentCourseManagement.Infrastructure.Security
 {

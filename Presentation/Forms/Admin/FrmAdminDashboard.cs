@@ -3,7 +3,7 @@ using iTextSharp.text.pdf;
 using StudentCourseManagement.Applications.Services;
 using System.IO;
 using System.Windows.Forms;
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -16,6 +16,9 @@ using StudentCourseManagement.Presentation.Forms.Class;
 using StudentCourseManagement.Presentation.Forms.Help;
 using StudentCourseManagement.Presentation.Forms.Schedule;
 using StudentCourseManagement.Presentation.Forms.Student;
+using StudentCourseManagement.Presentation.Forms.Manage;
+using StudentCourseManagement.Presentation.Forms.result;
+
 namespace StudentCourseManagement.Presentation.Forms.Admin
 {
     public partial class FrmAdminDashboard : Form
@@ -111,17 +114,11 @@ namespace StudentCourseManagement.Presentation.Forms.Admin
 
             if (ofd.ShowDialog() == DialogResult.OK)
             {
-                using (var fs = new FileStream(ofd.FileName, FileMode.Open, FileAccess.Read))
-                {
-                    using (var ms = new MemoryStream())
-                    {
-                        fs.CopyTo(ms);
-                        pictureBoxProfile.Image?.Dispose();
-                        pictureBoxProfile.Image = System.Drawing.Image.FromStream(new MemoryStream(ms.ToArray()));
-                    }
-                }
+                using var imgTemp = System.Drawing.Image.FromFile(ofd.FileName);
+                pictureBoxProfile.Image = new Bitmap(imgTemp);
             }
         }
+
 
 
         private async void BtnSave_Click(object sender, EventArgs e)
@@ -136,25 +133,31 @@ namespace StudentCourseManagement.Presentation.Forms.Admin
                 _currentUser.Address = txtDiaChi.Text.Trim();
                 _currentUser.CCCD = txtCCCD.Text.Trim();
                 _currentUser.Phone164 = txtPhone.Text.Trim();
+                _currentUser.EmailSchool = txtEmail.Text.Trim();
 
+                // ====== FIX GDI+ khi LƯU ======
                 if (pictureBoxProfile.Image != null)
                 {
-                    using var ms = new MemoryStream();
-                    pictureBoxProfile.Image.Save(ms, pictureBoxProfile.Image.RawFormat);
+                    using Bitmap bmp = new Bitmap(pictureBoxProfile.Image);
+                    using MemoryStream ms = new MemoryStream();
+                    bmp.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
                     _currentUser.ProfileImage = ms.ToArray();
                 }
 
                 await _userService.UpdateUserInfoAsync(_currentUser);
 
-                MessageBox.Show("Cập nhật thông tin quản lý viên thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Cập nhật thông tin quản lý viên thành công!",
+                                "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 SetTextBoxesReadOnly(true);
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi khi lưu dữ liệu: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Lỗi khi lưu dữ liệu: " + ex.Message, "Lỗi",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
 
         private void đăngXuấtToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -194,7 +197,7 @@ namespace StudentCourseManagement.Presentation.Forms.Admin
                 PdfWriter.GetInstance(doc, new FileStream(pdfPath, FileMode.Create));
                 doc.Open();
 
-                // FONT HỖ TRỢ UNICODE
+                // FONT UNICODE
                 BaseFont bf = BaseFont.CreateFont(
                     "c:/windows/fonts/arial.ttf",
                     BaseFont.IDENTITY_H,
@@ -203,24 +206,24 @@ namespace StudentCourseManagement.Presentation.Forms.Admin
                 iTextSharp.text.Font normalFont = new iTextSharp.text.Font(bf, 14);
                 iTextSharp.text.Font boldFont = new iTextSharp.text.Font(bf, 20, iTextSharp.text.Font.BOLD);
 
+
                 // TIÊU ĐỀ
                 Paragraph title = new Paragraph("THÔNG TIN QUẢN LÝ VIÊN\n\n", boldFont);
                 title.Alignment = Element.ALIGN_CENTER;
                 doc.Add(title);
 
-                // AVATAR
-                // AVATAR
+
+                // ==========================
+                //  FIX GDI+ ERROR – CLONE ẢNH
+                // ==========================
                 if (pictureBoxProfile.Image != null)
                 {
+                    using (Bitmap bmp = new Bitmap(pictureBoxProfile.Image))  // clone ảnh
                     using (MemoryStream ms = new MemoryStream())
                     {
-                        // CLONE để tránh bị lock bởi Image.FromFile()
-                        using (Bitmap clone = new Bitmap(pictureBoxProfile.Image))
-                        {
-                            clone.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
-                        }
-
+                        bmp.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
                         iTextSharp.text.Image avatar = iTextSharp.text.Image.GetInstance(ms.ToArray());
+
                         avatar.ScaleToFit(150, 150);
                         avatar.Alignment = Element.ALIGN_CENTER;
 
@@ -230,7 +233,7 @@ namespace StudentCourseManagement.Presentation.Forms.Admin
                 }
 
 
-                // THÔNG TIN QUẢN LÝ
+                // THÔNG TIN
                 doc.Add(new Paragraph("Họ tên: " + txtFullName.Text, normalFont));
                 doc.Add(new Paragraph("Mã đặc quyền: " + txtMDQ.Text, normalFont));
                 doc.Add(new Paragraph("CCCD: " + txtCCCD.Text, normalFont));
@@ -248,6 +251,7 @@ namespace StudentCourseManagement.Presentation.Forms.Admin
                 MessageBox.Show("Lỗi xuất PDF: " + ex.Message);
             }
         }
+
         // Sự kiện mở Form Quản lý TKB (Lịch học)
         private void lichHocToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -284,6 +288,33 @@ namespace StudentCourseManagement.Presentation.Forms.Admin
         private void thôngTinSinhViênToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FrmStudentManagement frm = new FrmStudentManagement();
+            frm.ShowDialog();
+        }
+
+        // Sự kiện mở Form Quản lý Học kỳ
+        private void họcKỳToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmSemesterManagement frm = new FrmSemesterManagement();
+            frm.ShowDialog();
+        }
+
+        // Sự kiện mở Form Quản lý Ngành
+        private void ngànhToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmMajorManagement frm = new FrmMajorManagement();
+            frm.ShowDialog();
+        }
+
+        // Sự kiện mở Form Quản lý Chuyên ngành
+        private void chuyênNgànhToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmSpecManage frm = new FrmSpecManage();
+            frm.ShowDialog();
+        }
+
+        private void đánhGiáRènLuyệnToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmConductEvaluation frm = new FrmConductEvaluation();
             frm.ShowDialog();
         }
     }

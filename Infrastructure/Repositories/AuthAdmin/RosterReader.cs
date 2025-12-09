@@ -1,4 +1,4 @@
-﻿namespace StudentCourseManagement.Infrastructure.Repositories
+﻿namespace StudentCourseManagement.Infrastructure.Repositories.AuthAdmin
 {
     public sealed class RosterReader : IRosterReader
     {
@@ -12,7 +12,7 @@
 
 
 
-       
+
         public async Task<Roster?> FindByIdAsync(Guid id, CancellationToken ct = default)
         {
             await using var conn = await _db.OpenAsync(ct).ConfigureAwait(false);
@@ -69,20 +69,20 @@
         }
 
 
-          private static Roster Map(SqlDataReader rs) => new()
-          {
-              Id = rs.GetGuid(rs.GetOrdinal("Id")),
-              PrivilegeCode = rs["PrivilegeCode"] as string,
-              FullName = rs["FullName"] as string,
-              EmailSchool = rs["EmailSchool"] as string,
-              Gender = rs["Gender"] as string,
-              Address = rs["Address"] as string,
-              Role = rs["Role"] as string,
-              PasswordHash = rs["PasswordHash"] as string,
-              ProfileImage = rs["ProfileImage"] as byte[],
-              CCCD = rs["CCCD"] as string,
-              Phone164 = rs["Phone164"] as string,
-          };
+        private static Roster Map(SqlDataReader rs) => new()
+        {
+            Id = rs.GetGuid(rs.GetOrdinal("Id")),
+            PrivilegeCode = rs["PrivilegeCode"] as string,
+            FullName = rs["FullName"] as string,
+            EmailSchool = rs["EmailSchool"] as string,
+            Gender = rs["Gender"] as string,
+            Address = rs["Address"] as string,
+            Role = rs["Role"] as string,
+            PasswordHash = rs["PasswordHash"] as string,
+            ProfileImage = rs["ProfileImage"] as byte[],
+            CCCD = rs["CCCD"] as string,
+            Phone164 = rs["Phone164"] as string,
+        };
 
     };
 }

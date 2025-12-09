@@ -15,8 +15,6 @@ namespace StudentCourseManagement.Presentation.Forms.Student
         private readonly StudentService _service;
         private byte[] _selectedImageBytes;
         private string _oldStudentCode;
-
-
         public FrmStudentManagement()
         {
             InitializeComponent();
@@ -29,7 +27,7 @@ namespace StudentCourseManagement.Presentation.Forms.Student
             cmbSpecializationSql.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbMajorSql.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbFacultySql.DropDownStyle = ComboBoxStyle.DropDownList;
-            
+
 
             // Load config SQL
             var config = new ConfigurationBuilder()
@@ -43,7 +41,7 @@ namespace StudentCourseManagement.Presentation.Forms.Student
 
             SetupCombobox();
             LoadStudents();
-            
+
         }
 
         // =========================
@@ -143,7 +141,7 @@ namespace StudentCourseManagement.Presentation.Forms.Student
                 dgvStudents.Columns["Address"].HeaderText = "Địa chỉ";
                 dgvStudents.Columns["Status"].HeaderText = "Trạng thái";
                 dgvStudents.Columns["Year"].HeaderText = "Năm học";
-                dgvStudents.Columns["Password"].HeaderText = "Mật khẩu"; 
+                dgvStudents.Columns["Password"].HeaderText = "Mật khẩu";
 
                 dgvStudents.ClearSelection();
             }
@@ -394,7 +392,7 @@ namespace StudentCourseManagement.Presentation.Forms.Student
             txtPassword.Clear();
             txtPhone.Clear();
             txtCCCD.Clear();
-            
+
             txtYear.Clear();
             txtAddress.Clear();
 
@@ -426,14 +424,30 @@ namespace StudentCourseManagement.Presentation.Forms.Student
         // =========================
         private void btnSelectPhoto_Click(object sender, EventArgs e)
         {
+            // ✅ CHẶN KHI CHƯA NHẬP MÃ SINH VIÊN
+            if (string.IsNullOrWhiteSpace(txtStudentId.Text))
+            {
+                MessageBox.Show(
+                    "Vui lòng nhập Mã sinh viên trước khi chọn ảnh!",
+                    "Thiếu dữ liệu",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                );
+                txtStudentId.Focus();
+                return;
+            }
+
             using var ofd = new OpenFileDialog();
             ofd.Filter = "Ảnh (*.jpg;*.png)|*.jpg;*.png";
+
             if (ofd.ShowDialog() == DialogResult.OK)
             {
+                picStudent.Image?.Dispose();                 // ✅ GIẢI PHÓNG ẢNH CŨ
                 picStudent.ImageLocation = ofd.FileName;
                 _selectedImageBytes = File.ReadAllBytes(ofd.FileName);
             }
         }
+
         // =========================
         // ✅ CHỌN KHOA → LOAD NGÀNH
         // =========================
@@ -540,12 +554,22 @@ namespace StudentCourseManagement.Presentation.Forms.Student
 
             _selectedImageBytes = null;
         }
+        private bool CanUploadImage()
+        {
+            if (string.IsNullOrWhiteSpace(txtStudentId.Text))
+            {
+                MessageBox.Show(
+                    "Vui lòng nhập Mã sinh viên trước khi chọn ảnh!",
+                    "Thiếu dữ liệu",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                );
+                txtStudentId.Focus();
+                return false;
+            }
 
-
-
-
-
-
+            return true;
+        }
         private void dgvStudents_CellContentClick(object sender, DataGridViewCellEventArgs e) { }
         private void lblSearch_Click(object sender, EventArgs e) { }
     }

@@ -84,10 +84,17 @@ namespace StudentCourseManagement.Applications.Students
 
         public bool AddStudent(StudentDto dto)
         {
+            // ✅ CHẶN TRÙNG MÃ SINH VIÊN
+            if ((_repository as StudentRepository)!.IsStudentCodeExists(dto.StudentId))
+            {
+                throw new Exception("Mã sinh viên đã tồn tại, không thể thêm!");
+            }
+
             var entity = MapToEntity(dto);
             _repository.Add(entity);
             return true;
         }
+
 
         public bool UpdateStudent(StudentDto dto, string oldCode)
         {
