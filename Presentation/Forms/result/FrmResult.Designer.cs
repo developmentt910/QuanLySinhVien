@@ -113,7 +113,7 @@
             // 
             // txtHoTen
             // 
-            txtHoTen.Location = new Point(221, 158);
+            txtHoTen.Location = new Point(265, 155);
             txtHoTen.Name = "txtHoTen";
             txtHoTen.Size = new Size(180, 27);
             txtHoTen.TabIndex = 6;
@@ -128,7 +128,7 @@
             // 
             // txtKhoa
             // 
-            txtKhoa.Location = new Point(633, 159);
+            txtKhoa.Location = new Point(690, 158);
             txtKhoa.Name = "txtKhoa";
             txtKhoa.Size = new Size(188, 27);
             txtKhoa.TabIndex = 8;
@@ -143,29 +143,29 @@
             // 
             // txtNganh
             // 
-            txtNganh.Location = new Point(633, 208);
+            txtNganh.Location = new Point(690, 207);
             txtNganh.Name = "txtNganh";
             txtNganh.Size = new Size(188, 27);
             txtNganh.TabIndex = 14;
             // 
             // lblChuyenNganh
             // 
-            lblChuyenNganh.Location = new Point(917, 161);
+            lblChuyenNganh.Location = new Point(970, 161);
             lblChuyenNganh.Name = "lblChuyenNganh";
-            lblChuyenNganh.Size = new Size(100, 23);
+            lblChuyenNganh.Size = new Size(128, 23);
             lblChuyenNganh.TabIndex = 9;
             lblChuyenNganh.Text = "Chuyên ngành";
             // 
             // txtChuyenNganh
             // 
-            txtChuyenNganh.Location = new Point(1051, 158);
+            txtChuyenNganh.Location = new Point(1104, 158);
             txtChuyenNganh.Name = "txtChuyenNganh";
             txtChuyenNganh.Size = new Size(180, 27);
             txtChuyenNganh.TabIndex = 10;
             // 
             // lblLop
             // 
-            lblLop.Location = new Point(917, 206);
+            lblLop.Location = new Point(970, 206);
             lblLop.Name = "lblLop";
             lblLop.Size = new Size(100, 23);
             lblLop.TabIndex = 15;
@@ -173,7 +173,7 @@
             // 
             // txtLop
             // 
-            txtLop.Location = new Point(1051, 204);
+            txtLop.Location = new Point(1104, 204);
             txtLop.Name = "txtLop";
             txtLop.Size = new Size(180, 27);
             txtLop.TabIndex = 16;
@@ -188,22 +188,22 @@
             // 
             // cbHocKy
             // 
-            cbHocKy.Location = new Point(221, 204);
+            cbHocKy.Location = new Point(265, 201);
             cbHocKy.Name = "cbHocKy";
             cbHocKy.Size = new Size(180, 28);
             cbHocKy.TabIndex = 12;
             // 
             // lblScore1
             // 
-            lblScore1.Location = new Point(102, 258);
+            lblScore1.Location = new Point(102, 263);
             lblScore1.Name = "lblScore1";
-            lblScore1.Size = new Size(100, 23);
+            lblScore1.Size = new Size(157, 23);
             lblScore1.TabIndex = 17;
             lblScore1.Text = "Điểm thành phần 1";
             // 
             // txtScore1
             // 
-            txtScore1.Location = new Point(221, 258);
+            txtScore1.Location = new Point(265, 260);
             txtScore1.Name = "txtScore1";
             txtScore1.Size = new Size(180, 27);
             txtScore1.TabIndex = 18;
@@ -212,20 +212,20 @@
             // 
             lblScore2.Location = new Point(509, 261);
             lblScore2.Name = "lblScore2";
-            lblScore2.Size = new Size(100, 23);
+            lblScore2.Size = new Size(149, 23);
             lblScore2.TabIndex = 19;
             lblScore2.Text = "Điểm thành phần 2";
             // 
             // txtScore2
             // 
-            txtScore2.Location = new Point(633, 259);
+            txtScore2.Location = new Point(690, 257);
             txtScore2.Name = "txtScore2";
             txtScore2.Size = new Size(188, 27);
             txtScore2.TabIndex = 20;
             // 
             // lblExam
             // 
-            lblExam.Location = new Point(917, 261);
+            lblExam.Location = new Point(970, 260);
             lblExam.Name = "lblExam";
             lblExam.Size = new Size(100, 23);
             lblExam.TabIndex = 21;
@@ -233,7 +233,7 @@
             // 
             // txtExam
             // 
-            txtExam.Location = new Point(1051, 262);
+            txtExam.Location = new Point(1104, 256);
             txtExam.Name = "txtExam";
             txtExam.Size = new Size(180, 27);
             txtExam.TabIndex = 22;
@@ -260,7 +260,7 @@
             // 
             // btnBack
             // 
-            btnBack.Location = new Point(1325, 267);
+            btnBack.Location = new Point(1334, 320);
             btnBack.Name = "btnBack";
             btnBack.Size = new Size(100, 30);
             btnBack.TabIndex = 24;

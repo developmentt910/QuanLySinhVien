@@ -22,6 +22,7 @@ namespace StudentCourseManagement.Applications.Students.Dtos
         public Guid? MajorId { get; set; }
         public Guid? SpecializationId { get; set; }
         public Guid? ClassId { get; set; }
+        
 
         // =====================
         // ✅ TÊN HIỂN THỊ (FORM)

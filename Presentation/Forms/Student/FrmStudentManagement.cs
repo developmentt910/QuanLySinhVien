@@ -27,7 +27,7 @@ namespace StudentCourseManagement.Presentation.Forms.Student
             cmbSpecializationSql.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbMajorSql.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbFacultySql.DropDownStyle = ComboBoxStyle.DropDownList;
-            
+
 
             // Load config SQL
             var config = new ConfigurationBuilder()
@@ -41,7 +41,7 @@ namespace StudentCourseManagement.Presentation.Forms.Student
 
             SetupCombobox();
             LoadStudents();
-            
+
         }
 
         // =========================
@@ -141,7 +141,7 @@ namespace StudentCourseManagement.Presentation.Forms.Student
                 dgvStudents.Columns["Address"].HeaderText = "Địa chỉ";
                 dgvStudents.Columns["Status"].HeaderText = "Trạng thái";
                 dgvStudents.Columns["Year"].HeaderText = "Năm học";
-                dgvStudents.Columns["Password"].HeaderText = "Mật khẩu"; 
+                dgvStudents.Columns["Password"].HeaderText = "Mật khẩu";
 
                 dgvStudents.ClearSelection();
             }
@@ -158,10 +158,14 @@ namespace StudentCourseManagement.Presentation.Forms.Student
         {
             try
             {
+                // ✅ CHẶN NẾU CHƯA ĐIỀN ĐỦ
+                if (!IsValidStudentInput())
+                    return;
+
                 var dto = GetDtoFromForm();
                 _service.AddStudent(dto);
 
-                LoadStudents();     // ✅ LOAD LẠI NGAY
+                LoadStudents();
                 ClearForm();
 
                 MessageBox.Show("✅ Thêm sinh viên thành công");
@@ -171,6 +175,7 @@ namespace StudentCourseManagement.Presentation.Forms.Student
                 MessageBox.Show("❌ Lỗi thêm: " + ex.Message);
             }
         }
+
 
 
         // =========================
@@ -299,7 +304,7 @@ namespace StudentCourseManagement.Presentation.Forms.Student
             if (sv == null)
             {
                 MessageBox.Show("Không tìm thấy!");
-                ClearStudentImage();
+                ClearStudentImage();   // ✅ Bắt buộc clear khi không có
                 return;
             }
 
@@ -312,24 +317,27 @@ namespace StudentCourseManagement.Presentation.Forms.Student
             cmbGender.Text = sv.Gender;
             txtPhone.Text = sv.Phone;
             txtCCCD.Text = sv.CCCD;
-            //txtEmail.Text = sv.Email;
             txtYear.Text = sv.Year;
             txtAddress.Text = sv.Address;
             cmbStatus.Text = sv.Status;
+
             _oldStudentCode = sv.StudentId;
 
+            // ✅✅✅ PHẦN QUAN TRỌNG NHẤT – LOAD ẢNH
             if (sv.ProfileImage != null && sv.ProfileImage.Length > 0)
             {
                 using var ms = new MemoryStream(sv.ProfileImage);
                 picStudent.Image?.Dispose();
                 picStudent.Image = Image.FromStream(ms);
-                _selectedImageBytes = sv.ProfileImage;
+
+                _selectedImageBytes = sv.ProfileImage; // ✅ BẮT BUỘC GÁN LẠI
             }
             else
             {
-                ClearStudentImage();  // ✅ CLEAR ẢNH KHI SV KHÔNG CÓ ẢNH
+                ClearStudentImage();
             }
         }
+
 
         // =========================
         // DTO TỪ FORM
@@ -392,7 +400,7 @@ namespace StudentCourseManagement.Presentation.Forms.Student
             txtPassword.Clear();
             txtPhone.Clear();
             txtCCCD.Clear();
-            
+
             txtYear.Clear();
             txtAddress.Clear();
 
@@ -511,18 +519,26 @@ namespace StudentCourseManagement.Presentation.Forms.Student
         {
             if (cmbSpecializationSql.SelectedValue is Guid specId)
             {
+                // 🔥 Lấy classes (Dictionary<Guid,string>)
+                var classes = _service.GetClassesBySpecialization(specId);
+
+                // 🔥 Convert Dictionary → List<KeyValuePair<Guid,string>>
+                var classList = classes.ToList();
+
+                // 🔥 Reset control trước khi bind
                 cmbClassSql.DataSource = null;
                 cmbClassSql.Items.Clear();
 
-                var classes = _service.GetClassesBySpecialization(specId);
+                // 🔥 Bind đúng kiểu
+                cmbClassSql.DisplayMember = "Value";   // string tên lớp
+                cmbClassSql.ValueMember = "Key";     // Guid id lớp
+                cmbClassSql.DataSource = classList;
 
-                cmbClassSql.DataSource = new BindingSource(classes, null);
-                cmbClassSql.DisplayMember = "Value";
-                cmbClassSql.ValueMember = "Key";
-
+                // 🔥 Không chọn gì ban đầu
                 cmbClassSql.SelectedIndex = -1;
             }
         }
+
 
         private void dgvStudents_SelectionChanged(object sender, EventArgs e)
         {
@@ -568,6 +584,99 @@ namespace StudentCourseManagement.Presentation.Forms.Student
             }
 
             return true;
+        }
+
+
+        private bool IsValidStudentInput()
+        {
+            if (string.IsNullOrWhiteSpace(txtStudentId.Text))
+            {
+                MessageBox.Show("Vui lòng nhập Mã sinh viên!");
+                txtStudentId.Focus();
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(txtFullName.Text))
+            {
+                MessageBox.Show("Vui lòng nhập Họ và tên!");
+                txtFullName.Focus();
+                return false;
+            }
+
+            if (cmbFacultySql.SelectedIndex == -1)
+            {
+                MessageBox.Show("Vui lòng chọn Khoa!");
+                return false;
+            }
+
+            if (cmbMajorSql.SelectedIndex == -1)
+            {
+                MessageBox.Show("Vui lòng chọn Ngành!");
+                return false;
+            }
+
+            if (cmbSpecializationSql.SelectedIndex == -1)
+            {
+                MessageBox.Show("Vui lòng chọn Chuyên ngành!");
+                return false;
+            }
+
+            if (cmbClassSql.SelectedIndex == -1)
+            {
+                MessageBox.Show("Vui lòng chọn Lớp!");
+                return false;
+            }
+
+            if (cmbGender.SelectedIndex == -1)
+            {
+                MessageBox.Show("Vui lòng chọn Giới tính!");
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(txtPhone.Text))
+            {
+                MessageBox.Show("Vui lòng nhập Số điện thoại!");
+                txtPhone.Focus();
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(txtCCCD.Text))
+            {
+                MessageBox.Show("Vui lòng nhập CCCD!");
+                txtCCCD.Focus();
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(txtYear.Text))
+            {
+                MessageBox.Show("Vui lòng nhập Năm học!");
+                txtYear.Focus();
+                return false;
+            }
+
+            // ✅ BỔ SUNG: MẬT KHẨU
+            if (string.IsNullOrWhiteSpace(txtPassword.Text))
+            {
+                MessageBox.Show("Vui lòng nhập Mật khẩu!");
+                txtPassword.Focus();
+                return false;
+            }
+
+            // ✅ BỔ SUNG: ĐỊA CHỈ
+            if (string.IsNullOrWhiteSpace(txtAddress.Text))
+            {
+                MessageBox.Show("Vui lòng nhập Địa chỉ!");
+                txtAddress.Focus();
+                return false;
+            }
+
+            if (cmbStatus.SelectedIndex == -1)
+            {
+                MessageBox.Show("Vui lòng chọn Trạng thái!");
+                return false;
+            }
+
+            return true; // ✅ ĐẦY ĐỦ → CHO PHÉP THÊM
         }
 
 

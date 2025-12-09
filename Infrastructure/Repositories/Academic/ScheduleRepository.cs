@@ -99,9 +99,18 @@ namespace StudentCourseManagement.Infrastructure.Repositories.Academic
 
         public DataTable GetSemesters()
         {
-            string query = "SELECT Id, (SemesterName + ' (' + AcademicYear + ')') AS DisplayName FROM dbo.Semester ORDER BY AcademicYear, SemesterName";
+            string query = @"
+        SELECT 
+            SemesterCode,
+            SemesterName,
+            AcademicYear,
+            (SemesterCode + ' (' + AcademicYear + ')') AS DisplayName
+        FROM dbo.Semester
+        ORDER BY SemesterCode";
+
             return GetData(query);
         }
+
 
         public DataTable GetSchedules(string classId, string semesterId)
         {
@@ -238,5 +247,29 @@ namespace StudentCourseManagement.Infrastructure.Repositories.Academic
             };
             return GetData(query, parameters);
         }
+        public bool IsTeacherBusy(string teacherName, DateTime lessonDate, int startPeriod, int endPeriod, string? ignoreScheduleId = null)
+        {
+            string query = @"
+        SELECT COUNT(*)
+        FROM dbo.Schedule
+        WHERE TeacherName = @TeacherName
+          AND CAST(LessonDate AS DATE) = @LessonDate
+          AND StartPeriod <= @EndPeriod
+          AND EndPeriod >= @StartPeriod
+          AND (@IgnoreId IS NULL OR Id <> @IgnoreId)";
+
+            var parameters = new[]
+            {
+        new SqlParameter("@TeacherName", teacherName),
+        new SqlParameter("@LessonDate", lessonDate.Date),
+        new SqlParameter("@StartPeriod", startPeriod),
+        new SqlParameter("@EndPeriod", endPeriod),
+        new SqlParameter("@IgnoreId", (object?)ignoreScheduleId ?? DBNull.Value)
+    };
+
+            DataTable dt = GetData(query, parameters);
+            return Convert.ToInt32(dt.Rows[0][0]) > 0;
+        }
+
     }
 }

@@ -172,7 +172,7 @@ WHERE u.StudentCode = @id;
 INSERT INTO dbo.Users(
     Id, StudentCode, FullName, Gender, Phone164, CCCD, EmailSchool, [Address],
     CohortYear, Role, PasswordHash,
-    ClassId, MajorId, SpecializationId,
+    ClassId, MajorId, SpecializationId,FacultyId,
     CreatedAtUtc, UpdatedAtUtc, IsLocked
 )
 VALUES(
@@ -190,6 +190,7 @@ VALUES(
     @classId,
     @majorId,
     @specializationId,
+    @facultyId,
     SYSUTCDATETIME(),
     SYSUTCDATETIME(),
     0
@@ -219,6 +220,7 @@ VALUES(
             cmd.Parameters.AddWithValue("@classId", (object?)s.ClassId ?? DBNull.Value);
             cmd.Parameters.AddWithValue("@majorId", (object?)s.MajorId ?? DBNull.Value);
             cmd.Parameters.AddWithValue("@specializationId", (object?)s.SpecializationId ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("@facultyId", (object?)s.SpecializationId ?? DBNull.Value);
 
             cmd.ExecuteNonQuery();
         }
@@ -253,6 +255,11 @@ UPDATE dbo.Users SET
     SpecializationId = CASE 
         WHEN @specializationId IS NULL THEN SpecializationId ELSE @specializationId 
     END,
+
+    FacultyId = CASE 
+        WHEN @facultyId IS NULL THEN FacultyId ELSE @facultyId 
+    END,
+
     Role = CASE 
     WHEN @status = 'ALUMNI' THEN 'ALUMNI'
     WHEN @status = 'PAUSED' THEN 'PAUSED'
@@ -303,6 +310,11 @@ WHERE StudentCode = @oldCode;
 
             cmd.Parameters.Add("@specializationId", SqlDbType.UniqueIdentifier).Value =
                 s.SpecializationId ?? (object)DBNull.Value;
+            
+                 cmd.Parameters.Add("@facultyId", SqlDbType.UniqueIdentifier).Value =
+                s.FacultyId ?? (object)DBNull.Value;
+
+
             cmd.Parameters.Add("@status", SqlDbType.NVarChar).Value = s.Status;
 
 
@@ -433,6 +445,40 @@ AND StudentCode <> @oldCode";
 
             using var cmd = new SqlCommand(sql, conn);
             cmd.Parameters.AddWithValue("@code", studentCode);
+
+            int count = (int)cmd.ExecuteScalar();
+            return count > 0;
+        }
+        // ✅ KIỂM TRA CCCD CÓ TỒN TẠI (DÙNG KHI ADD)
+        public bool IsCccdExists(string cccd)
+        {
+            using var conn = _factory.Create();
+            conn.Open();
+
+            var sql = @"SELECT COUNT(*) FROM dbo.Users WHERE CCCD = @cccd";
+
+            using var cmd = new SqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("@cccd", cccd);
+
+            int count = (int)cmd.ExecuteScalar();
+            return count > 0;
+        }
+
+        // ✅ KIỂM TRA CCCD CÓ TỒN TẠI (DÙNG KHI UPDATE)
+        public bool IsCccdExistsForUpdate(string newCccd, string oldStudentCode)
+        {
+            using var conn = _factory.Create();
+            conn.Open();
+
+            var sql = @"
+SELECT COUNT(*)
+FROM dbo.Users
+WHERE CCCD = @cccd
+AND StudentCode <> @oldCode";
+
+            using var cmd = new SqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("@cccd", newCccd);
+            cmd.Parameters.AddWithValue("@oldCode", oldStudentCode);
 
             int count = (int)cmd.ExecuteScalar();
             return count > 0;

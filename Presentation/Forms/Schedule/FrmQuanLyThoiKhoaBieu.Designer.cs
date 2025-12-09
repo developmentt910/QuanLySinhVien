@@ -413,7 +413,8 @@ namespace StudentCourseManagement.Presentation.Forms.Schedule
             // lblTitle
             // 
             lblTitle.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            lblTitle.Font = new Font("Microsoft Sans Serif", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblTitle.Font = new Font("Segoe UI", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblTitle.ForeColor = SystemColors.Highlight;
             lblTitle.Location = new Point(15, 9);
             lblTitle.Name = "lblTitle";
             lblTitle.Size = new Size(1438, 32);

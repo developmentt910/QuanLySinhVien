@@ -1,5 +1,4 @@
-using Microsoft.Extensions.Configuration;
-using StudentCourseManagement.Presentation.WinForms.Bootstrap;
+
 
 namespace StudentCourseManagement
 {

@@ -84,10 +84,10 @@ namespace StudentCourseManagement.Presentation.Forms.Student
             btnSearch = new Button();
             pnlSearch = new Panel();
             grpPhoto.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)picStudent).BeginInit();
+            ((ISupportInitialize)picStudent).BeginInit();
             grpDetail.SuspendLayout();
             grpList.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dgvStudents).BeginInit();
+            ((ISupportInitialize)dgvStudents).BeginInit();
             pnlSearch.SuspendLayout();
             SuspendLayout();
             // 
@@ -178,14 +178,14 @@ namespace StudentCourseManagement.Presentation.Forms.Student
             // 
             txtStudentId.Location = new Point(157, 34);
             txtStudentId.Name = "txtStudentId";
-            txtStudentId.Size = new Size(220, 30);
+            txtStudentId.Size = new Size(220, 34);
             txtStudentId.TabIndex = 1;
             // 
             // lblFullName
             // 
             lblFullName.Location = new Point(518, 34);
             lblFullName.Name = "lblFullName";
-            lblFullName.Size = new Size(100, 23);
+            lblFullName.Size = new Size(111, 32);
             lblFullName.TabIndex = 2;
             lblFullName.Text = "Họ và Tên:";
             // 
@@ -193,7 +193,7 @@ namespace StudentCourseManagement.Presentation.Forms.Student
             // 
             txtFullName.Location = new Point(652, 32);
             txtFullName.Name = "txtFullName";
-            txtFullName.Size = new Size(220, 30);
+            txtFullName.Size = new Size(220, 34);
             txtFullName.TabIndex = 3;
             // 
             // lblFaculty
@@ -209,14 +209,14 @@ namespace StudentCourseManagement.Presentation.Forms.Student
             cmbFacultySql.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbFacultySql.Location = new Point(157, 72);
             cmbFacultySql.Name = "cmbFacultySql";
-            cmbFacultySql.Size = new Size(220, 31);
+            cmbFacultySql.Size = new Size(220, 36);
             cmbFacultySql.TabIndex = 5;
             // 
             // lblMajor
             // 
             lblMajor.Location = new Point(22, 115);
             lblMajor.Name = "lblMajor";
-            lblMajor.Size = new Size(100, 23);
+            lblMajor.Size = new Size(100, 40);
             lblMajor.TabIndex = 8;
             lblMajor.Text = "Ngành:";
             // 
@@ -225,14 +225,14 @@ namespace StudentCourseManagement.Presentation.Forms.Student
             cmbMajorSql.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbMajorSql.Location = new Point(157, 109);
             cmbMajorSql.Name = "cmbMajorSql";
-            cmbMajorSql.Size = new Size(220, 31);
+            cmbMajorSql.Size = new Size(220, 36);
             cmbMajorSql.TabIndex = 9;
             // 
             // lblSpecialization
             // 
             lblSpecialization.Location = new Point(22, 155);
             lblSpecialization.Name = "lblSpecialization";
-            lblSpecialization.Size = new Size(127, 23);
+            lblSpecialization.Size = new Size(127, 40);
             lblSpecialization.TabIndex = 12;
             lblSpecialization.Text = "Chuyên ngành:";
             // 
@@ -241,14 +241,14 @@ namespace StudentCourseManagement.Presentation.Forms.Student
             cmbSpecializationSql.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbSpecializationSql.Location = new Point(157, 151);
             cmbSpecializationSql.Name = "cmbSpecializationSql";
-            cmbSpecializationSql.Size = new Size(220, 31);
+            cmbSpecializationSql.Size = new Size(220, 36);
             cmbSpecializationSql.TabIndex = 13;
             // 
             // lblClass
             // 
             lblClass.Location = new Point(22, 195);
             lblClass.Name = "lblClass";
-            lblClass.Size = new Size(100, 23);
+            lblClass.Size = new Size(100, 40);
             lblClass.TabIndex = 16;
             lblClass.Text = "Lớp:";
             // 
@@ -257,14 +257,14 @@ namespace StudentCourseManagement.Presentation.Forms.Student
             cmbClassSql.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbClassSql.Location = new Point(157, 192);
             cmbClassSql.Name = "cmbClassSql";
-            cmbClassSql.Size = new Size(220, 31);
+            cmbClassSql.Size = new Size(220, 36);
             cmbClassSql.TabIndex = 17;
             // 
             // lblPassword
             // 
             lblPassword.Location = new Point(22, 235);
             lblPassword.Name = "lblPassword";
-            lblPassword.Size = new Size(100, 23);
+            lblPassword.Size = new Size(100, 31);
             lblPassword.TabIndex = 20;
             lblPassword.Text = "Mật khẩu:";
             // 
@@ -273,7 +273,7 @@ namespace StudentCourseManagement.Presentation.Forms.Student
             txtPassword.Location = new Point(157, 232);
             txtPassword.Name = "txtPassword";
             txtPassword.PasswordChar = '*';
-            txtPassword.Size = new Size(220, 30);
+            txtPassword.Size = new Size(220, 34);
             txtPassword.TabIndex = 21;
             // 
             // lblGender
@@ -290,7 +290,7 @@ namespace StudentCourseManagement.Presentation.Forms.Student
             cmbGender.Items.AddRange(new object[] { "Nam", "Nữ", "Khác" });
             cmbGender.Location = new Point(652, 72);
             cmbGender.Name = "cmbGender";
-            cmbGender.Size = new Size(220, 31);
+            cmbGender.Size = new Size(220, 36);
             cmbGender.TabIndex = 7;
             // 
             // lblPhone
@@ -305,14 +305,14 @@ namespace StudentCourseManagement.Presentation.Forms.Student
             // 
             txtPhone.Location = new Point(652, 112);
             txtPhone.Name = "txtPhone";
-            txtPhone.Size = new Size(220, 30);
+            txtPhone.Size = new Size(220, 34);
             txtPhone.TabIndex = 11;
             // 
             // lblCCCD
             // 
             lblCCCD.Location = new Point(518, 155);
             lblCCCD.Name = "lblCCCD";
-            lblCCCD.Size = new Size(100, 23);
+            lblCCCD.Size = new Size(100, 40);
             lblCCCD.TabIndex = 14;
             lblCCCD.Text = "CCCD:";
             // 
@@ -320,14 +320,14 @@ namespace StudentCourseManagement.Presentation.Forms.Student
             // 
             txtCCCD.Location = new Point(652, 152);
             txtCCCD.Name = "txtCCCD";
-            txtCCCD.Size = new Size(220, 30);
+            txtCCCD.Size = new Size(220, 34);
             txtCCCD.TabIndex = 15;
             // 
             // lblYear
             // 
             lblYear.Location = new Point(518, 199);
             lblYear.Name = "lblYear";
-            lblYear.Size = new Size(100, 23);
+            lblYear.Size = new Size(100, 36);
             lblYear.TabIndex = 22;
             lblYear.Text = "Năm học:";
             // 
@@ -335,14 +335,14 @@ namespace StudentCourseManagement.Presentation.Forms.Student
             // 
             txtYear.Location = new Point(652, 195);
             txtYear.Name = "txtYear";
-            txtYear.Size = new Size(220, 30);
+            txtYear.Size = new Size(220, 34);
             txtYear.TabIndex = 23;
             // 
             // lblAddress
             // 
             lblAddress.Location = new Point(22, 275);
             lblAddress.Name = "lblAddress";
-            lblAddress.Size = new Size(100, 23);
+            lblAddress.Size = new Size(100, 31);
             lblAddress.TabIndex = 24;
             lblAddress.Text = "Địa chỉ:";
             // 
@@ -350,14 +350,14 @@ namespace StudentCourseManagement.Presentation.Forms.Student
             // 
             txtAddress.Location = new Point(157, 272);
             txtAddress.Name = "txtAddress";
-            txtAddress.Size = new Size(220, 30);
+            txtAddress.Size = new Size(220, 34);
             txtAddress.TabIndex = 25;
             // 
             // lblStatus
             // 
             lblStatus.Location = new Point(518, 239);
             lblStatus.Name = "lblStatus";
-            lblStatus.Size = new Size(100, 23);
+            lblStatus.Size = new Size(111, 36);
             lblStatus.TabIndex = 26;
             lblStatus.Text = "Trạng thái:";
             // 
@@ -367,14 +367,14 @@ namespace StudentCourseManagement.Presentation.Forms.Student
             cmbStatus.Items.AddRange(new object[] { "Đang học", "Đã tốt nghiệp", "Bảo lưu" });
             cmbStatus.Location = new Point(652, 239);
             cmbStatus.Name = "cmbStatus";
-            cmbStatus.Size = new Size(220, 31);
+            cmbStatus.Size = new Size(220, 36);
             cmbStatus.TabIndex = 27;
             // 
             // btnAdd
             // 
             btnAdd.Location = new Point(250, 318);
             btnAdd.Name = "btnAdd";
-            btnAdd.Size = new Size(100, 34);
+            btnAdd.Size = new Size(100, 45);
             btnAdd.TabIndex = 28;
             btnAdd.Text = "Thêm";
             btnAdd.UseVisualStyleBackColor = true;
@@ -384,7 +384,7 @@ namespace StudentCourseManagement.Presentation.Forms.Student
             // 
             btnUpdate.Location = new Point(370, 318);
             btnUpdate.Name = "btnUpdate";
-            btnUpdate.Size = new Size(100, 34);
+            btnUpdate.Size = new Size(100, 45);
             btnUpdate.TabIndex = 29;
             btnUpdate.Text = "Cập nhật";
             btnUpdate.UseVisualStyleBackColor = true;
@@ -394,7 +394,7 @@ namespace StudentCourseManagement.Presentation.Forms.Student
             // 
             btnDelete.Location = new Point(489, 318);
             btnDelete.Name = "btnDelete";
-            btnDelete.Size = new Size(100, 34);
+            btnDelete.Size = new Size(100, 45);
             btnDelete.TabIndex = 30;
             btnDelete.Text = "Xóa";
             btnDelete.UseVisualStyleBackColor = true;
@@ -404,7 +404,7 @@ namespace StudentCourseManagement.Presentation.Forms.Student
             // 
             btnRefresh.Location = new Point(612, 318);
             btnRefresh.Name = "btnRefresh";
-            btnRefresh.Size = new Size(120, 34);
+            btnRefresh.Size = new Size(120, 45);
             btnRefresh.TabIndex = 31;
             btnRefresh.Text = "Làm mới";
             btnRefresh.UseVisualStyleBackColor = true;
@@ -428,12 +428,12 @@ namespace StudentCourseManagement.Presentation.Forms.Student
             dgvStudents.BackgroundColor = Color.White;
             dgvStudents.ColumnHeadersHeight = 29;
             dgvStudents.Dock = DockStyle.Fill;
-            dgvStudents.Location = new Point(3, 26);
+            dgvStudents.Location = new Point(3, 30);
             dgvStudents.Name = "dgvStudents";
             dgvStudents.RowHeadersVisible = false;
             dgvStudents.RowHeadersWidth = 51;
             dgvStudents.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvStudents.Size = new Size(1245, 229);
+            dgvStudents.Size = new Size(1245, 225);
             dgvStudents.TabIndex = 0;
             dgvStudents.CellClick += dgvStudents_CellClick;
             dgvStudents.CellContentClick += dgvStudents_CellContentClick;
@@ -444,7 +444,7 @@ namespace StudentCourseManagement.Presentation.Forms.Student
             lblSearch.Font = new Font("Segoe UI", 10F);
             lblSearch.Location = new Point(20, 12);
             lblSearch.Name = "lblSearch";
-            lblSearch.Size = new Size(147, 23);
+            lblSearch.Size = new Size(168, 28);
             lblSearch.TabIndex = 0;
             lblSearch.Text = "Tìm kiếm (Mã SV):";
             lblSearch.Click += lblSearch_Click;
@@ -453,7 +453,7 @@ namespace StudentCourseManagement.Presentation.Forms.Student
             // 
             txtSearch.Location = new Point(185, 10);
             txtSearch.Name = "txtSearch";
-            txtSearch.Size = new Size(681, 30);
+            txtSearch.Size = new Size(681, 34);
             txtSearch.TabIndex = 1;
             // 
             // btnSearch
@@ -461,7 +461,7 @@ namespace StudentCourseManagement.Presentation.Forms.Student
             btnSearch.FlatStyle = FlatStyle.Flat;
             btnSearch.Location = new Point(880, 9);
             btnSearch.Name = "btnSearch";
-            btnSearch.Size = new Size(100, 30);
+            btnSearch.Size = new Size(100, 44);
             btnSearch.TabIndex = 2;
             btnSearch.Text = "Tìm kiếm";
             btnSearch.UseVisualStyleBackColor = true;
@@ -475,7 +475,7 @@ namespace StudentCourseManagement.Presentation.Forms.Student
             pnlSearch.Dock = DockStyle.Top;
             pnlSearch.Location = new Point(0, 0);
             pnlSearch.Name = "pnlSearch";
-            pnlSearch.Size = new Size(1251, 45);
+            pnlSearch.Size = new Size(1251, 61);
             pnlSearch.TabIndex = 0;
             // 
             // FrmStudentManagement
@@ -491,11 +491,11 @@ namespace StudentCourseManagement.Presentation.Forms.Student
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Hệ thống Quản lý Sinh viên";
             grpPhoto.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)picStudent).EndInit();
+            ((ISupportInitialize)picStudent).EndInit();
             grpDetail.ResumeLayout(false);
             grpDetail.PerformLayout();
             grpList.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)dgvStudents).EndInit();
+            ((ISupportInitialize)dgvStudents).EndInit();
             pnlSearch.ResumeLayout(false);
             pnlSearch.PerformLayout();
             ResumeLayout(false);

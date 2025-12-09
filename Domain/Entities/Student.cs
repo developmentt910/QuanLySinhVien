@@ -18,6 +18,7 @@ namespace StudentCourseManagement.Domain.Entities
         // =====================
         // ✅ QUAN HỆ HỌC TẬP
         // =====================
+        public Guid? FacultyId { get; set; }
         public Guid? ClassId { get; set; }
         public Guid? MajorId { get; set; }
         public Guid? SpecializationId { get; set; }

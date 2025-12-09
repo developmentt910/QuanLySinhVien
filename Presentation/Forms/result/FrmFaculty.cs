@@ -134,6 +134,13 @@ namespace StudentCourseManagement.Presentation.Forms.result
 
                 if (!_isEditing) // ADD
                 {
+                    var exist = await _facultyService.GetByCodeAsync(txtMaKhoa.Text.Trim());
+                    if (exist != null)
+                    {
+                        MessageBox.Show("Mã khoa đã tồn tại!");
+                        return;
+                    }
+
                     await _facultyService.CreateAsync(faculty);
                     MessageBox.Show("Thêm khoa thành công!");
                 }
@@ -177,7 +184,7 @@ namespace StudentCourseManagement.Presentation.Forms.result
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi: " + ex.Message);
+                MessageBox.Show("Lỗi Khoa đã có chuyên ngành không thể xóa!");
             }
         }
     }

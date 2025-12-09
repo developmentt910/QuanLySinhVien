@@ -104,9 +104,9 @@
             btnBack.FlatAppearance.BorderSize = 0;
             btnBack.FlatStyle = FlatStyle.Flat;
             btnBack.ForeColor = Color.FromArgb(0, 102, 204);
-            btnBack.Location = new Point(702, 335);
+            btnBack.Location = new Point(664, 335);
             btnBack.Name = "btnBack";
-            btnBack.Size = new Size(171, 31);
+            btnBack.Size = new Size(214, 31);
             btnBack.TabIndex = 11;
             btnBack.Text = "<- Quay lại đăng nhập";
             btnBack.UseVisualStyleBackColor = false;

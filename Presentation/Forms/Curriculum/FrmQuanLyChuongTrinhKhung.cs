@@ -65,18 +65,27 @@ public partial class FrmQuanLyChuongTrinhKhung : Form
     private void LoadHocKyData()
     {
         DataTable dtSemesters = _scheduleService.GetSemesters();
+
         if (dtSemesters != null && dtSemesters.Rows.Count > 0)
         {
             if (!dtSemesters.Columns.Contains("DisplayName"))
             {
-                dtSemesters.Columns.Add("DisplayName", typeof(string), "SemesterName + ' (' + AcademicYear + ')'");
+                // Hiển thị: 2024_HK1 (Học kỳ 1)
+                dtSemesters.Columns.Add(
+                    "DisplayName",
+                    typeof(string),
+                    "SemesterCode + ' (' + SemesterName + ')'"
+                );
             }
         }
+
+        // ===== CHỈ DÙNG SEMESTERCODE =====
         cboHocKy.DisplayMember = "DisplayName";
-        cboHocKy.ValueMember = "SemesterName";
+        cboHocKy.ValueMember = "SemesterCode";   // ⭐ PHẢI SỬA CHỖ NÀY
         cboHocKy.DataSource = dtSemesters;
         cboHocKy.SelectedIndex = -1;
     }
+
 
     private void LoadFilteredMonHocData(Guid majorId, Guid specializationId)
     {
@@ -123,7 +132,7 @@ public partial class FrmQuanLyChuongTrinhKhung : Form
         }
 
         currentSpecializationId = (Guid)cboChuyenNganh.SelectedValue;
-        currentHocKy = cboHocKy.Text;
+        currentHocKy = cboHocKy.SelectedValue.ToString();
 
         string tenChuyenNganh = cboChuyenNganh.Text;
         string tenHocKy = cboHocKy.Text;

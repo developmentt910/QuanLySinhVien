@@ -19,6 +19,49 @@ namespace StudentCourseManagement.Infrastructure.Repositories.An
         private SqlConnection CreateConnection()
             => _conn.Create();
 
+        public List<CurriculumSubjectDto> GetSubjectsForSemester(
+    Guid specializationId,
+    string semesterCode)
+        {
+            var list = new List<CurriculumSubjectDto>();
+
+            using (SqlConnection con = CreateConnection())
+            {
+                con.Open();
+
+                string query = @"
+            SELECT 
+                s.Id AS SubjectId,
+                s.SubjectName,
+                s.Credit
+            FROM Curriculum cs
+            JOIN Subject s ON cs.SubjectId = s.Id
+            WHERE cs.SpecializationId = @spec
+              AND cs.Semester = @sem";
+
+                var cmd = new SqlCommand(query, con);
+                cmd.Parameters.AddWithValue("@spec", specializationId);
+                cmd.Parameters.AddWithValue("@sem", semesterCode);
+
+                using (var rd = cmd.ExecuteReader())
+                {
+                    while (rd.Read())
+                    {
+                        list.Add(new CurriculumSubjectDto
+                        {
+                            SubjectId = rd.GetGuid(rd.GetOrdinal("SubjectId")),
+                            SubjectName = rd["SubjectName"].ToString(),
+                            ClassName = "",        // Không tồn tại trong DB
+                            Credits = Convert.ToInt32(rd["Credit"])
+                        });
+                    }
+                }
+            }
+
+            return list;
+        }
+
+
         // =============== FIND STUDENT ====================
         public StudentDtos FindByMSV(string msv)
         {
@@ -28,28 +71,29 @@ namespace StudentCourseManagement.Infrastructure.Repositories.An
 
                 string query = @"
     SELECT 
-        u.Id,
-        u.StudentCode,
-        u.FullName,
-        u.Gender,
-        u.Address,
-        u.CohortYear,
+    u.Id,
+    u.StudentCode,
+    u.FullName,
+    u.Gender,
+    u.Address,
+    u.CohortYear,
 
-        c.ClassName,
-        m.MajorName,
-        sp.SpecializationName,
-        f.FacultyName,
+    c.ClassName,
+    m.MajorName,
+    sp.SpecializationName,
+    f.FacultyName,
 
-        u.ClassId,
-        u.MajorId,
-        u.SpecializationId,
-        u.FacultyId
-    FROM Users u
-    LEFT JOIN Class c ON u.ClassId = c.Id
-    LEFT JOIN Major m ON u.MajorId = m.Id
-    LEFT JOIN Specialization sp ON u.SpecializationId = sp.Id
-    LEFT JOIN Faculty f ON u.FacultyId = f.Id
-    WHERE u.StudentCode = @msv";
+    u.ClassId,
+    u.MajorId,
+    u.SpecializationId,
+    u.FacultyId
+FROM Users u
+LEFT JOIN Class c ON u.ClassId = c.Id
+LEFT JOIN Major m ON u.MajorId = m.Id
+LEFT JOIN Specialization sp ON u.SpecializationId = sp.Id
+LEFT JOIN Faculty f ON u.FacultyId = f.Id
+WHERE u.StudentCode = @msv;
+";
 
 
                 using (var cmd = new SqlCommand(query, con))
@@ -63,22 +107,48 @@ namespace StudentCourseManagement.Infrastructure.Repositories.An
                         return new StudentDtos
                         {
                             Id = rd.GetGuid(rd.GetOrdinal("Id")),
-                            StudentCode = rd["StudentCode"].ToString(),
-                            FullName = rd["FullName"].ToString(),
-                            Gender = rd["Gender"].ToString(),
-                            Address = rd["Address"].ToString(),
-                            CohortYear = rd["CohortYear"] as int?,
+                            StudentCode = rd["StudentCode"]?.ToString(),
+                            FullName = rd["FullName"]?.ToString(),
+                            Gender = rd["Gender"]?.ToString(),
+                            Address = rd["Address"]?.ToString(),
 
-                            ClassName = rd["ClassName"]?.ToString(),
-                            MajorName = rd["MajorName"]?.ToString(),
-                            SpecializationName = rd["SpecializationName"]?.ToString(),
-                            FacultyName = rd["FacultyName"]?.ToString(),
+                            CohortYear = rd.IsDBNull(rd.GetOrdinal("CohortYear"))
+                    ? null
+                    : rd.GetInt32(rd.GetOrdinal("CohortYear")),
 
-                            ClassId = rd.GetGuid(rd.GetOrdinal("ClassId")),
-                            MajorId = rd.GetGuid(rd.GetOrdinal("MajorId")),
-                            SpecializationId = rd.GetGuid(rd.GetOrdinal("SpecializationId")),
-                            FacultyId = rd.GetGuid(rd.GetOrdinal("FacultyId"))
+                            ClassName = rd.IsDBNull(rd.GetOrdinal("ClassName"))
+                    ? null
+                    : rd["ClassName"].ToString(),
+
+                            MajorName = rd.IsDBNull(rd.GetOrdinal("MajorName"))
+                    ? null
+                    : rd["MajorName"].ToString(),
+
+                            SpecializationName = rd.IsDBNull(rd.GetOrdinal("SpecializationName"))
+                    ? null
+                    : rd["SpecializationName"].ToString(),
+
+                            FacultyName = rd.IsDBNull(rd.GetOrdinal("FacultyName"))
+                    ? null
+                    : rd["FacultyName"].ToString(),
+
+                            ClassId = rd.IsDBNull(rd.GetOrdinal("ClassId"))
+                    ? Guid.Empty
+                    : rd.GetGuid(rd.GetOrdinal("ClassId")),
+
+                            MajorId = rd.IsDBNull(rd.GetOrdinal("MajorId"))
+                    ? Guid.Empty
+                    : rd.GetGuid(rd.GetOrdinal("MajorId")),
+
+                            SpecializationId = rd.IsDBNull(rd.GetOrdinal("SpecializationId"))
+                    ? Guid.Empty
+                    : rd.GetGuid(rd.GetOrdinal("SpecializationId")),
+
+                            FacultyId = rd.IsDBNull(rd.GetOrdinal("FacultyId"))
+                    ? Guid.Empty
+                    : rd.GetGuid(rd.GetOrdinal("FacultyId")),
                         };
+
                     }
                 }
             }
@@ -90,17 +160,23 @@ namespace StudentCourseManagement.Infrastructure.Repositories.An
         {
             var list = new List<string>();
 
+            if (cohortYear == null)
+                return list;
+
             using (SqlConnection con = CreateConnection())
             {
                 con.Open();
+
                 string query = @"
-                    SELECT SemesterCode
-                    FROM Semesters
-                    WHERE CohortYear = @year
-                    ORDER BY SemesterCode";
+            SELECT SemesterCode
+            FROM Semester
+            WHERE LEFT(AcademicYear, 4) >= @startYear 
+              AND LEFT(AcademicYear, 4) <= @endYear
+            ORDER BY SemesterCode";
 
                 var cmd = new SqlCommand(query, con);
-                cmd.Parameters.AddWithValue("@year", cohortYear);
+                cmd.Parameters.AddWithValue("@startYear", cohortYear.Value);
+                cmd.Parameters.AddWithValue("@endYear", DateTime.Now.Year);
 
                 using (var rd = cmd.ExecuteReader())
                 {
@@ -111,6 +187,7 @@ namespace StudentCourseManagement.Infrastructure.Repositories.An
 
             return list;
         }
+
 
         // =============== GET SUBJECTS ====================
         public List<CurriculumSubjectDto> GetSubjectsForStudent(Guid specializationId)
@@ -124,7 +201,7 @@ namespace StudentCourseManagement.Infrastructure.Repositories.An
                 string query = @"
                     SELECT s.Id AS SubjectId, s.SubjectName, cs.ClassName, s.Credits
                     FROM Curriculum cs
-                    JOIN Subjects s ON cs.SubjectId = s.Id
+                    JOIN Subject s ON cs.SubjectId = s.Id
                     WHERE cs.SpecializationId = @specId";
 
                 var cmd = new SqlCommand(query, con);
@@ -175,16 +252,30 @@ namespace StudentCourseManagement.Infrastructure.Repositories.An
                             Id = rd.GetGuid(rd.GetOrdinal("Id")),
                             UserId = userId,
                             SubjectId = rd.GetGuid(rd.GetOrdinal("SubjectId")),
-                            Midterm = rd["Midterm"] as float?,
-                            Final = rd["Final"] as float?,
-                            Other = rd["Other"] as float?,
-                            FinalNumeric = rd["FinalNumeric"] as float?,
-                            LetterGrade = rd["LetterGrade"]?.ToString(),
-                            Passed = rd["Passed"] as bool?,
+
+                            Midterm = rd.IsDBNull(rd.GetOrdinal("Midterm"))
+                                ? null : (float?)Convert.ToSingle(rd["Midterm"]),
+
+                            Other = rd.IsDBNull(rd.GetOrdinal("Other"))
+                                ? null : (float?)Convert.ToSingle(rd["Other"]),
+
+                            Final = rd.IsDBNull(rd.GetOrdinal("Final"))
+                                ? null : (float?)Convert.ToSingle(rd["Final"]),
+
+                            FinalNumeric = rd.IsDBNull(rd.GetOrdinal("FinalNumeric"))
+                                ? null : (float?)Convert.ToSingle(rd["FinalNumeric"]),
+
+                            LetterGrade = rd.IsDBNull(rd.GetOrdinal("LetterGrade"))
+                                ? null : rd["LetterGrade"].ToString(),
+
+                            Passed = rd.IsDBNull(rd.GetOrdinal("Passed"))
+                                ? null : (bool?)rd.GetBoolean(rd.GetOrdinal("Passed")),
+
                             UpdatedAtUtc = rd["UpdatedAtUtc"] as DateTime?
                         });
                     }
-                }
+
+            }
             }
 
             return list;
@@ -197,7 +288,7 @@ namespace StudentCourseManagement.Infrastructure.Repositories.An
             {
                 con.Open();
 
-                string query = @"SELECT TOP 1 Id FROM Subjects WHERE SubjectName = @name";
+                string query = @"SELECT TOP 1 Id FROM Subject WHERE SubjectName = @name";
 
                 var cmd = new SqlCommand(query, con);
                 cmd.Parameters.AddWithValue("@name", subjectName);

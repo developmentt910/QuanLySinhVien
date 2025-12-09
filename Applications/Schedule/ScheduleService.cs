@@ -70,5 +70,10 @@ namespace StudentCourseManagement.Applications.Schedule
         {
             return _scheduleRepository.GetAllSubjectDetailsBySpecialization(majorId, specializationId);
         }
+        public bool IsTeacherBusy(string teacherName, DateTime lessonDate, int startPeriod, int endPeriod, string? ignoreScheduleId = null)
+        {
+            return _scheduleRepository.IsTeacherBusy(teacherName, lessonDate, startPeriod, endPeriod, ignoreScheduleId);
+        }
+
     }
 }

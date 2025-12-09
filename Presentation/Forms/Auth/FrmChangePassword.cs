@@ -1,8 +1,11 @@
 ﻿
+using StudentCourseManagement.Applications.Services;
+
 namespace StudentCourseManagement.Forms.Auth
 {
     public partial class FrmChangePassword : Form
     {
+        private readonly AdminService _userService;
         private readonly PasswordChangeService _changeService;
         private readonly Guid _currentUserId;
 
@@ -48,7 +51,8 @@ namespace StudentCourseManagement.Forms.Auth
 
             ShowMessage("Đổi mật khẩu thành công!", Color.Green);
             ClearInputs();
-
+            FrmAdminDashboard frm = new FrmAdminDashboard(_userService,_currentUserId);
+            frm.ShowDialog();
         }
 
         private void ShowMessage(string text, Color? color = null)

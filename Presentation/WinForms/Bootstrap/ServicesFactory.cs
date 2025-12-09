@@ -37,7 +37,7 @@ namespace StudentCourseManagement.Presentation.WinForms.Bootstrap
 
         public static IRosterWriter CreateUsersWriter() => new RosterWriter(Db);
         public static IRosterReader CreateRosterReader() => new RosterReader(Db);
-       
+
         public static AdminService CreateAdminService()
         {
             return new AdminService(CreateRosterReader(), CreateUsersWriter());
@@ -73,12 +73,12 @@ namespace StudentCourseManagement.Presentation.WinForms.Bootstrap
 
         public static ISemesterReader CreateSemesterReader() => new SemesterReader(Db);
         public static ISemesterWriter CreateSemesterWriter() => new SemesterWriter(Db);
-      public static SemesterService CreateSemesterService() => new SemesterService(
-            CreateSemesterReader(),
-        CreateSemesterWriter()
-     );
+        public static SemesterService CreateSemesterService() => new SemesterService(
+              CreateSemesterReader(),
+          CreateSemesterWriter()
+       );
 
-  public static IMajorReader CreateMajorReader() => new MajorReader(Db);
+        public static IMajorReader CreateMajorReader() => new MajorReader(Db);
         public static IMajorWriter CreateMajorWriter() => new MajorWriter(Db);
         public static MajorService CreateMajorService() => new MajorService(
         CreateMajorReader(),
@@ -86,20 +86,20 @@ namespace StudentCourseManagement.Presentation.WinForms.Bootstrap
          CreateFacultyReader()
         );
 
-   public static IFacultyReader CreateFacultyReader() => new FacultyReader(Db);
+        public static IFacultyReader CreateFacultyReader() => new FacultyReader(Db);
         public static IFacultyWriter CreateFacultyWriter() => new FacultyWriter(Db);
-    public static FacultyService CreateFacultyService() => new FacultyService(
-   CreateFacultyReader(),
-            CreateFacultyWriter()
-        );
+        public static FacultyService CreateFacultyService() => new FacultyService(
+       CreateFacultyReader(),
+                CreateFacultyWriter()
+            );
 
-    public static ISpecializationReader CreateSpecializationReader() => new SpecializationReader(Db);
+        public static ISpecializationReader CreateSpecializationReader() => new SpecializationReader(Db);
         public static ISpecializationWriter CreateSpecializationWriter() => new SpecializationWriter(Db);
-      public static SpecializationService CreateSpecializationService() => new SpecializationService(
-CreateSpecializationReader(),
-     CreateSpecializationWriter(),
- CreateMajorReader()
-        );
+        public static SpecializationService CreateSpecializationService() => new SpecializationService(
+  CreateSpecializationReader(),
+       CreateSpecializationWriter(),
+   CreateMajorReader()
+          );
 
         public static IConductEvaluationRepository CreateConductEvaluationService()
       => new ConductEvaluationRepository(Db);

@@ -368,7 +368,8 @@ partial class FrmQuanLyChuongTrinhKhung
         // 
         lblTitle.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
         lblTitle.Font = new Font("Microsoft Sans Serif", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
-        lblTitle.Location = new Point(12, 11);
+        lblTitle.Location = new Point(15, 14);
+        lblTitle.Margin = new Padding(4, 0, 4, 0);
         lblTitle.Name = "lblTitle";
         lblTitle.Size = new Size(801, 40);
         lblTitle.TabIndex = 4;

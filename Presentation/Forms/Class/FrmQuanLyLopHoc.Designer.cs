@@ -21,7 +21,6 @@ namespace StudentCourseManagement.Presentation.Forms.Class
         {
             dgvLopHoc = new DataGridView();
             groupBox1 = new GroupBox();
-            btnTaiLop = new Button();
             txtCoVan = new TextBox();
             label7 = new Label();
             cboChuyenNganh = new ComboBox();
@@ -36,6 +35,7 @@ namespace StudentCourseManagement.Presentation.Forms.Class
             label3 = new Label();
             label2 = new Label();
             label1 = new Label();
+            btnTaiLop = new Button();
             btnThem = new Button();
             btnSua = new Button();
             btnXoa = new Button();
@@ -92,18 +92,6 @@ namespace StudentCourseManagement.Presentation.Forms.Class
             groupBox1.TabIndex = 1;
             groupBox1.TabStop = false;
             groupBox1.Text = "Thông tin lớp học";
-            // 
-            // btnTaiLop
-            // 
-            btnTaiLop.Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            btnTaiLop.Location = new Point(848, 364);
-            btnTaiLop.Margin = new Padding(3, 5, 3, 5);
-            btnTaiLop.Name = "btnTaiLop";
-            btnTaiLop.Size = new Size(112, 58);
-            btnTaiLop.TabIndex = 16;
-            btnTaiLop.Text = "Tải Lớp";
-            btnTaiLop.UseVisualStyleBackColor = true;
-            btnTaiLop.Click += btnTaiLop_Click;
             // 
             // txtCoVan
             // 
@@ -236,6 +224,18 @@ namespace StudentCourseManagement.Presentation.Forms.Class
             label1.TabIndex = 0;
             label1.Text = "Mã lớp:";
             // 
+            // btnTaiLop
+            // 
+            btnTaiLop.Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            btnTaiLop.Location = new Point(848, 364);
+            btnTaiLop.Margin = new Padding(3, 5, 3, 5);
+            btnTaiLop.Name = "btnTaiLop";
+            btnTaiLop.Size = new Size(112, 58);
+            btnTaiLop.TabIndex = 16;
+            btnTaiLop.Text = "Tải Lớp";
+            btnTaiLop.UseVisualStyleBackColor = true;
+            btnTaiLop.Click += btnTaiLop_Click;
+            // 
             // btnThem
             // 
             btnThem.Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
@@ -299,7 +299,8 @@ namespace StudentCourseManagement.Presentation.Forms.Class
             // lblTitle
             // 
             lblTitle.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            lblTitle.Font = new Font("Microsoft Sans Serif", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblTitle.Font = new Font("Segoe UI", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblTitle.ForeColor = SystemColors.Highlight;
             lblTitle.Location = new Point(16, 11);
             lblTitle.Name = "lblTitle";
             lblTitle.Size = new Size(970, 40);

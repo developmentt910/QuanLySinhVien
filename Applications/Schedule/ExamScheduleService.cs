@@ -32,5 +32,10 @@ namespace StudentCourseManagement.Applications.Schedule
         {
             _examRepository.RemoveExamSchedule(examId);
         }
+        public bool IsRoomConflict(Guid? examId, string room, DateTime examDate, int examDuration)
+        {
+            return _examRepository.IsRoomConflict(examId, room, examDate, examDuration);
+        }
+
     }
 }

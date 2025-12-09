@@ -11,5 +11,7 @@ namespace StudentCourseManagement.Domain.Abstractions.Repositories
         void RemoveClass(Guid classId);
         bool CheckClassCodeExists(string classCode, Guid? currentId = null);
         DataTable GetFilteredClasses(Guid? facultyId, Guid? majorId, Guid? specializationId);
+        bool CheckClassNameExists(string className, Guid? currentId = null);
+
     }
 }
