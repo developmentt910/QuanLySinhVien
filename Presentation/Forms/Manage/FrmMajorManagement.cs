@@ -40,7 +40,8 @@ namespace StudentCourseManagement.Presentation.Forms.Manage
 
         private async void FrmMajorManagement_Load(object sender, EventArgs e)
         {
-      try
+            StyleHelper.ApplyFormStyle(this);
+            try
   {
                 await LoadFacultiesAsync();
        }

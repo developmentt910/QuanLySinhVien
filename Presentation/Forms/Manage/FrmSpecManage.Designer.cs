@@ -61,10 +61,11 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label3.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label3.ForeColor = SystemColors.Highlight;
             label3.Location = new Point(279, 22);
             label3.Name = "label3";
-            label3.Size = new Size(224, 28);
+            label3.Size = new Size(331, 41);
             label3.TabIndex = 2;
             label3.Text = "Quản lý chuyên ngành";
             // 

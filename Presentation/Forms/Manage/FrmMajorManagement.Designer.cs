@@ -46,21 +46,13 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Font = new Font("Segoe UI", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label1.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label1.ForeColor = SystemColors.Highlight;
             label1.Location = new Point(300, 30);
             label1.Name = "label1";
-            label1.Size = new Size(190, 32);
+            label1.Size = new Size(223, 41);
             label1.TabIndex = 0;
             label1.Text = "Quản lý ngành";
-            // 
-            // inputKhoa
-            // 
-            inputKhoa.AutoSize = true;
-            inputKhoa.Location = new Point(50, 100);
-            inputKhoa.Name = "inputKhoa";
-            inputKhoa.Size = new Size(82, 20);
-            inputKhoa.TabIndex = 3;
-            inputKhoa.Text = "Chọn khoa:";
             // 
             // comboBox1
             // 
@@ -70,23 +62,14 @@
             comboBox1.Size = new Size(450, 28);
             comboBox1.TabIndex = 2;
             // 
-            // label2
+            // inputKhoa
             // 
-            label2.AutoSize = true;
-            label2.Location = new Point(50, 145);
-            label2.Name = "label2";
-            label2.Size = new Size(130, 20);
-            label2.TabIndex = 9;
-            label2.Text = "Danh sách ngành:";
-            // 
-            // listNganh
-            // 
-            listNganh.FormattingEnabled = true;
-            listNganh.ItemHeight = 20;
-            listNganh.Location = new Point(50, 170);
-            listNganh.Name = "listNganh";
-            listNganh.Size = new Size(350, 204);
-            listNganh.TabIndex = 10;
+            inputKhoa.AutoSize = true;
+            inputKhoa.Location = new Point(50, 100);
+            inputKhoa.Name = "inputKhoa";
+            inputKhoa.Size = new Size(82, 20);
+            inputKhoa.TabIndex = 3;
+            inputKhoa.Text = "Chọn khoa:";
             // 
             // groupBox1
             // 
@@ -99,23 +82,31 @@
             groupBox1.TabStop = false;
             groupBox1.Text = "Thông tin ngành";
             // 
-            // lblFacultyName
-            // 
-            lblFacultyName.AutoSize = true;
-            lblFacultyName.Location = new Point(20, 35);
-            lblFacultyName.Name = "lblFacultyName";
-            lblFacultyName.Size = new Size(60, 20);
-            lblFacultyName.TabIndex = 0;
-            lblFacultyName.Text = "Khoa: -";
-            // 
             // lblMajorName
             // 
             lblMajorName.AutoSize = true;
             lblMajorName.Location = new Point(20, 70);
             lblMajorName.Name = "lblMajorName";
-            lblMajorName.Size = new Size(70, 20);
+            lblMajorName.Size = new Size(66, 20);
             lblMajorName.TabIndex = 1;
             lblMajorName.Text = "Ngành: -";
+            // 
+            // lblFacultyName
+            // 
+            lblFacultyName.AutoSize = true;
+            lblFacultyName.Location = new Point(20, 35);
+            lblFacultyName.Name = "lblFacultyName";
+            lblFacultyName.Size = new Size(56, 20);
+            lblFacultyName.TabIndex = 0;
+            lblFacultyName.Text = "Khoa: -";
+            // 
+            // listNganh
+            // 
+            listNganh.FormattingEnabled = true;
+            listNganh.Location = new Point(50, 170);
+            listNganh.Name = "listNganh";
+            listNganh.Size = new Size(350, 204);
+            listNganh.TabIndex = 10;
             // 
             // addBtn
             // 
@@ -152,6 +143,15 @@
             refreshBtn.TabIndex = 8;
             refreshBtn.Text = "Làm mới";
             refreshBtn.UseVisualStyleBackColor = true;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(50, 145);
+            label2.Name = "label2";
+            label2.Size = new Size(125, 20);
+            label2.TabIndex = 9;
+            label2.Text = "Danh sách ngành:";
             // 
             // FrmMajorManagement
             // 

@@ -1,9 +1,4 @@
 
-using System;
-using System.Windows.Forms;
-using Microsoft.Extensions.Configuration;
-using StudentCourseManagement.Presentation.WinForms.Bootstrap;
- using StudentCourseManagement.Presentation.Forms.Auth; 
 
 namespace StudentCourseManagement
 {
@@ -12,6 +7,7 @@ namespace StudentCourseManagement
         [STAThread]
         static void Main()
         {
+            // Cấu hình appsettings.json
             var config = new ConfigurationBuilder()
                 .SetBasePath(AppContext.BaseDirectory)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
@@ -23,6 +19,7 @@ namespace StudentCourseManagement
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new FrmLogin());
+
         }
     }
 }

@@ -45,6 +45,7 @@ namespace StudentCourseManagement.Presentation.Forms.Manage
 
         private async void FrmSpecManage_Load(object sender, EventArgs e)
         {
+            StyleHelper.ApplyFormStyle(this);
             try
             {
                 await LoadFacultiesAsync();

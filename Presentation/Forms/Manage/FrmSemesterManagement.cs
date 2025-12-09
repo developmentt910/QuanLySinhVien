@@ -35,6 +35,7 @@ namespace StudentCourseManagement.Presentation.Forms.Manage
 
         private async void FrmSemesterManagement_Load(object sender, EventArgs e)
         {
+            StyleHelper.ApplyFormStyle(this);
             try
             {
                 await LoadSemestersAsync();
@@ -245,10 +246,11 @@ namespace StudentCourseManagement.Presentation.Forms.Manage
             // label1
             // 
             label1.AutoSize = true;
-            label1.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
+            label1.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label1.ForeColor = SystemColors.Highlight;
             label1.Location = new Point(315, 51);
             label1.Name = "label1";
-            label1.Size = new Size(183, 32);
+            label1.Size = new Size(225, 41);
             label1.TabIndex = 0;
             label1.Text = "Quản lý học kỳ";
             // 

@@ -2,7 +2,7 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace StudentCourseManagement.Applications.Auth
+namespace StudentCourseManagement.Infrastructure.Repositories.AuthAdmin
 {
     public static class PasswordHelper
     {
