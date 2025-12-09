@@ -349,12 +349,15 @@ namespace StudentCourseManagement.Presentation.Forms.Student
                 StudentId = txtStudentId.Text.Trim(),
                 FullName = txtFullName.Text.Trim(),
 
-                // ✅ BẮT BUỘC PHẢI LẤY SelectedValue (KHÔNG LẤY TEXT)
+                // ✅✅✅ BỔ SUNG DÒNG QUAN TRỌNG NHẤT
+                FacultyId = cmbFacultySql.SelectedValue is Guid f ? f : (Guid?)null,
+
+                // ✅ GIỮ NGUYÊN CÁC DÒNG NÀY
                 MajorId = cmbMajorSql.SelectedValue is Guid m ? m : (Guid?)null,
                 SpecializationId = cmbSpecializationSql.SelectedValue is Guid s ? s : (Guid?)null,
                 ClassId = cmbClassSql.SelectedValue is Guid c ? c : (Guid?)null,
 
-                // ✅ VẪN GIỮ TEXT ĐỂ HIỂN THỊ
+                // ✅ TEXT CHỈ ĐỂ HIỂN THỊ
                 Faculty = cmbFacultySql.Text,
                 Major = cmbMajorSql.Text,
                 Specialization = cmbSpecializationSql.Text,
@@ -373,10 +376,8 @@ namespace StudentCourseManagement.Presentation.Forms.Student
                 },
 
                 ProfileImage = _selectedImageBytes
-    ?? (dgvStudents.CurrentRow?.DataBoundItem as StudentDto)?.ProfileImage,
+                    ?? (dgvStudents.CurrentRow?.DataBoundItem as StudentDto)?.ProfileImage,
 
-
-                // ✅ EMAIL TỰ SINH (nếu chưa có form nhập email)
                 Email = txtStudentId.Text.Trim() + "@epu.edu.vn",
 
                 Password = string.IsNullOrWhiteSpace(txtPassword.Text)

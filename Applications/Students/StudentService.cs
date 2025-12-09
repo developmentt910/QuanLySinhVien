@@ -137,12 +137,15 @@ namespace StudentCourseManagement.Applications.Students
             {
                 StudentId = dto.StudentId,
                 FullName = dto.FullName,
+
                 Faculty = dto.Faculty,
                 Major = dto.Major,
                 Specialization = dto.Specialization,
                 ClassName = dto.ClassName,
 
-                // ✅ 3 ID QUAN TRỌNG BỊ THIẾU
+                // ✅✅✅ THÊM DÒNG QUAN TRỌNG NHẤT
+                FacultyId = dto.FacultyId,
+
                 ClassId = dto.ClassId,
                 MajorId = dto.MajorId,
                 SpecializationId = dto.SpecializationId,
@@ -150,17 +153,16 @@ namespace StudentCourseManagement.Applications.Students
                 Gender = dto.Gender,
                 Phone = dto.Phone,
                 CCCD = dto.CCCD,
-                //Email = dto.Email,
                 Address = dto.Address,
 
                 Status = dto.Status,
                 Year = dto.Year,
 
-                // ✅ PASSWORD: CHO PHÉP NULL ĐỂ SQL GIỮ NGUYÊN
                 PasswordHash = dto.Password,
                 ProfileImage = dto.ProfileImage
             };
         }
+
 
 
 

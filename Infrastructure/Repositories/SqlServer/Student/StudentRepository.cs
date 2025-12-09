@@ -163,7 +163,7 @@ WHERE u.StudentCode = @id;
         // =========================
         // ✅ HASH MẬT KHẨU
         // =========================
-       
+
 
         // =========================
         // ✅ INSERT
@@ -172,6 +172,7 @@ WHERE u.StudentCode = @id;
 INSERT INTO dbo.Users(
     Id, StudentCode, FullName, Gender, Phone164, CCCD, EmailSchool, [Address],
     CohortYear, Role, PasswordHash,
+    FacultyId,        -- ✅✅✅ THÊM DÒNG NÀY
     ClassId, MajorId, SpecializationId,
     CreatedAtUtc, UpdatedAtUtc, IsLocked
 )
@@ -187,6 +188,7 @@ VALUES(
     @year,
     'USER',
     @password,
+    @facultyId,       -- ✅✅✅ THÊM DÒNG NÀY
     @classId,
     @majorId,
     @specializationId,
@@ -202,19 +204,25 @@ VALUES(
             conn.Open();
 
             using var cmd = new SqlCommand(InsertSql, conn);
+
             cmd.Parameters.AddWithValue("@code", s.StudentId ?? "");
             cmd.Parameters.AddWithValue("@fullName", s.FullName ?? "");
             cmd.Parameters.AddWithValue("@gender", s.Gender ?? "Nam");
             cmd.Parameters.AddWithValue("@phone", s.Phone ?? "");
             cmd.Parameters.AddWithValue("@cccd", s.CCCD ?? "");
+
             cmd.Parameters.AddWithValue("@mail",
-    string.IsNullOrWhiteSpace(s.Email)
-        ? s.StudentId + "@epu.edu.vn"
-        : s.Email);
+                string.IsNullOrWhiteSpace(s.Email)
+                    ? s.StudentId + "@epu.edu.vn"
+                    : s.Email
+            );
 
             cmd.Parameters.AddWithValue("@addr", s.Address ?? "");
             cmd.Parameters.AddWithValue("@year", s.Year ?? "");
             cmd.Parameters.AddWithValue("@password", s.PasswordHash ?? "");
+
+            // ✅✅✅ DÒNG BẮT BUỘC – NẾU THIẾU LÀ FACULTYID = 0
+            cmd.Parameters.AddWithValue("@facultyId", (object?)s.FacultyId ?? DBNull.Value);
 
             cmd.Parameters.AddWithValue("@classId", (object?)s.ClassId ?? DBNull.Value);
             cmd.Parameters.AddWithValue("@majorId", (object?)s.MajorId ?? DBNull.Value);
@@ -222,6 +230,7 @@ VALUES(
 
             cmd.ExecuteNonQuery();
         }
+
 
         // =========================
         // ✅ UPDATE
@@ -235,11 +244,15 @@ UPDATE dbo.Users SET
     CCCD = @cccd,
     [Address] = @addr,
     CohortYear = @year,
-   
 
     PasswordHash = CASE 
         WHEN @password IS NULL THEN PasswordHash 
         ELSE @password 
+    END,
+
+    -- ✅✅✅ THÊM FacultyId
+    FacultyId = CASE 
+        WHEN @facultyId IS NULL THEN FacultyId ELSE @facultyId 
     END,
 
     ClassId = CASE 
@@ -253,22 +266,22 @@ UPDATE dbo.Users SET
     SpecializationId = CASE 
         WHEN @specializationId IS NULL THEN SpecializationId ELSE @specializationId 
     END,
-    Role = CASE 
-    WHEN @status = 'ALUMNI' THEN 'ALUMNI'
-    WHEN @status = 'PAUSED' THEN 'PAUSED'
-    ELSE 'USER'
-END,
 
-    
+    Role = CASE 
+        WHEN @status = 'ALUMNI' THEN 'ALUMNI'
+        WHEN @status = 'PAUSED' THEN 'PAUSED'
+        ELSE 'USER'
+    END,
+
     ProfileImage = CASE 
         WHEN @img IS NULL THEN ProfileImage 
         ELSE @img 
     END,
 
-
     UpdatedAtUtc = SYSUTCDATETIME()
 WHERE StudentCode = @oldCode;
 ";
+
 
 
 
@@ -289,11 +302,15 @@ WHERE StudentCode = @oldCode;
             cmd.Parameters.Add("@cccd", SqlDbType.VarChar).Value = s.CCCD ?? "";
             cmd.Parameters.Add("@addr", SqlDbType.NVarChar).Value = s.Address ?? "";
             cmd.Parameters.Add("@year", SqlDbType.VarChar).Value = s.Year ?? "";
-            
+
             if (s.PasswordHash == null)
                 cmd.Parameters.Add("@password", SqlDbType.VarChar).Value = DBNull.Value;
             else
                 cmd.Parameters.Add("@password", SqlDbType.VarChar).Value = s.PasswordHash;
+
+            // ✅✅✅ BẮT BUỘC PHẢI CÓ – ĐỂ KHÔNG MẤT FacultyId KHI UPDATE
+            cmd.Parameters.Add("@facultyId", SqlDbType.UniqueIdentifier).Value =
+                s.FacultyId ?? (object)DBNull.Value;
 
             cmd.Parameters.Add("@classId", SqlDbType.UniqueIdentifier).Value =
                 s.ClassId ?? (object)DBNull.Value;
@@ -303,14 +320,15 @@ WHERE StudentCode = @oldCode;
 
             cmd.Parameters.Add("@specializationId", SqlDbType.UniqueIdentifier).Value =
                 s.SpecializationId ?? (object)DBNull.Value;
-            cmd.Parameters.Add("@status", SqlDbType.NVarChar).Value = s.Status;
 
+            cmd.Parameters.Add("@status", SqlDbType.NVarChar).Value = s.Status;
 
             cmd.Parameters.Add("@img", SqlDbType.VarBinary).Value =
                 s.ProfileImage ?? (object)DBNull.Value;
 
             cmd.ExecuteNonQuery();
         }
+
 
 
 
