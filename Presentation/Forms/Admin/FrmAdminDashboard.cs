@@ -209,13 +209,18 @@ namespace StudentCourseManagement.Presentation.Forms.Admin
                 doc.Add(title);
 
                 // AVATAR
+                // AVATAR
                 if (pictureBoxProfile.Image != null)
                 {
                     using (MemoryStream ms = new MemoryStream())
                     {
-                        pictureBoxProfile.Image.Save(ms, pictureBoxProfile.Image.RawFormat);
-                        iTextSharp.text.Image avatar = iTextSharp.text.Image.GetInstance(ms.ToArray());
+                        // CLONE để tránh bị lock bởi Image.FromFile()
+                        using (Bitmap clone = new Bitmap(pictureBoxProfile.Image))
+                        {
+                            clone.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                        }
 
+                        iTextSharp.text.Image avatar = iTextSharp.text.Image.GetInstance(ms.ToArray());
                         avatar.ScaleToFit(150, 150);
                         avatar.Alignment = Element.ALIGN_CENTER;
 
@@ -223,6 +228,7 @@ namespace StudentCourseManagement.Presentation.Forms.Admin
                         doc.Add(new Paragraph("\n"));
                     }
                 }
+
 
                 // THÔNG TIN QUẢN LÝ
                 doc.Add(new Paragraph("Họ tên: " + txtFullName.Text, normalFont));

@@ -44,44 +44,50 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label1.Location = new Point(290, 22);
+            label1.ForeColor = SystemColors.Highlight;
+            label1.Location = new Point(380, 32);
+            label1.Margin = new Padding(4, 0, 4, 0);
             label1.Name = "label1";
-            label1.Size = new Size(184, 31);
+            label1.Size = new Size(226, 38);
             label1.TabIndex = 0;
             label1.Text = "ĐỔI MẬT KHẨU";
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(66, 98);
+            label2.Location = new Point(82, 122);
+            label2.Margin = new Padding(4, 0, 4, 0);
             label2.Name = "label2";
-            label2.Size = new Size(89, 20);
+            label2.Size = new Size(109, 25);
             label2.TabIndex = 1;
             label2.Text = "Mật khẩu cũ";
             // 
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(66, 156);
+            label3.Location = new Point(82, 195);
+            label3.Margin = new Padding(4, 0, 4, 0);
             label3.Name = "label3";
-            label3.Size = new Size(100, 20);
+            label3.Size = new Size(122, 25);
             label3.TabIndex = 2;
             label3.Text = "Mật khẩu mới";
             // 
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(66, 213);
+            label4.Location = new Point(82, 266);
+            label4.Margin = new Padding(4, 0, 4, 0);
             label4.Name = "label4";
-            label4.Size = new Size(161, 20);
+            label4.Size = new Size(195, 25);
             label4.TabIndex = 3;
             label4.Text = "Xác thực mật khẩu mới";
             // 
             // btnChange
             // 
-            btnChange.Location = new Point(180, 289);
+            btnChange.Location = new Point(225, 361);
+            btnChange.Margin = new Padding(4, 4, 4, 4);
             btnChange.Name = "btnChange";
-            btnChange.Size = new Size(143, 38);
+            btnChange.Size = new Size(179, 48);
             btnChange.TabIndex = 4;
             btnChange.Text = "Đổi mật khẩu";
             btnChange.UseVisualStyleBackColor = true;
@@ -89,31 +95,35 @@
             // 
             // txtOldPassword
             // 
-            txtOldPassword.Location = new Point(334, 91);
+            txtOldPassword.Location = new Point(418, 114);
+            txtOldPassword.Margin = new Padding(4, 4, 4, 4);
             txtOldPassword.Name = "txtOldPassword";
-            txtOldPassword.Size = new Size(387, 27);
+            txtOldPassword.Size = new Size(483, 31);
             txtOldPassword.TabIndex = 5;
             // 
             // txtNewPassword
             // 
-            txtNewPassword.Location = new Point(334, 149);
+            txtNewPassword.Location = new Point(418, 186);
+            txtNewPassword.Margin = new Padding(4, 4, 4, 4);
             txtNewPassword.Name = "txtNewPassword";
-            txtNewPassword.Size = new Size(387, 27);
+            txtNewPassword.Size = new Size(483, 31);
             txtNewPassword.TabIndex = 6;
             // 
             // txtConfirmPassword
             // 
-            txtConfirmPassword.Location = new Point(334, 206);
+            txtConfirmPassword.Location = new Point(418, 258);
+            txtConfirmPassword.Margin = new Padding(4, 4, 4, 4);
             txtConfirmPassword.Name = "txtConfirmPassword";
-            txtConfirmPassword.Size = new Size(387, 27);
+            txtConfirmPassword.Size = new Size(483, 31);
             txtConfirmPassword.TabIndex = 7;
             // 
             // linkLabel1
             // 
             linkLabel1.AutoSize = true;
-            linkLabel1.Location = new Point(448, 307);
+            linkLabel1.Location = new Point(560, 384);
+            linkLabel1.Margin = new Padding(4, 0, 4, 0);
             linkLabel1.Name = "linkLabel1";
-            linkLabel1.Size = new Size(129, 20);
+            linkLabel1.Size = new Size(156, 25);
             linkLabel1.TabIndex = 8;
             linkLabel1.TabStop = true;
             linkLabel1.Text = "Quay lại trang chủ";
@@ -122,16 +132,17 @@
             // lblMessage
             // 
             lblMessage.AutoSize = true;
-            lblMessage.Location = new Point(12, 421);
+            lblMessage.Location = new Point(15, 526);
+            lblMessage.Margin = new Padding(4, 0, 4, 0);
             lblMessage.Name = "lblMessage";
-            lblMessage.Size = new Size(0, 20);
+            lblMessage.Size = new Size(0, 25);
             lblMessage.TabIndex = 9;
             // 
             // FrmChangePassword
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(1000, 562);
             Controls.Add(lblMessage);
             Controls.Add(linkLabel1);
             Controls.Add(txtConfirmPassword);
@@ -142,6 +153,7 @@
             Controls.Add(label3);
             Controls.Add(label2);
             Controls.Add(label1);
+            Margin = new Padding(4, 4, 4, 4);
             Name = "FrmChangePassword";
             Text = "ChangePasswordForm";
             ResumeLayout(false);

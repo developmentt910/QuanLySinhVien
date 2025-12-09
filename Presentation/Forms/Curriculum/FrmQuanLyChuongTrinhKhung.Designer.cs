@@ -378,7 +378,8 @@ partial class FrmQuanLyChuongTrinhKhung
         // lblTitle
         // 
         lblTitle.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-        lblTitle.Font = new Font("Microsoft Sans Serif", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
+        lblTitle.Font = new Font("Segoe UI", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
+        lblTitle.ForeColor = SystemColors.Highlight;
         lblTitle.Location = new Point(15, 14);
         lblTitle.Margin = new Padding(4, 0, 4, 0);
         lblTitle.Name = "lblTitle";
