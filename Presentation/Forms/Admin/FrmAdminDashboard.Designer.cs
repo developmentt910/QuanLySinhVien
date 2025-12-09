@@ -133,6 +133,7 @@
             họcKỳToolStripMenuItem.Name = "họcKỳToolStripMenuItem";
             họcKỳToolStripMenuItem.Size = new Size(190, 26);
             họcKỳToolStripMenuItem.Text = "Học kỳ";
+            họcKỳToolStripMenuItem.Click += họcKỳToolStripMenuItem_Click;
             // 
             // khoaToolStripMenuItem
             // 
@@ -145,12 +146,14 @@
             ngànhToolStripMenuItem.Name = "ngànhToolStripMenuItem";
             ngànhToolStripMenuItem.Size = new Size(190, 26);
             ngànhToolStripMenuItem.Text = "Ngành";
+            ngànhToolStripMenuItem.Click += ngànhToolStripMenuItem_Click;
             // 
             // chuyênNgànhToolStripMenuItem
             // 
             chuyênNgànhToolStripMenuItem.Name = "chuyênNgànhToolStripMenuItem";
             chuyênNgànhToolStripMenuItem.Size = new Size(190, 26);
             chuyênNgànhToolStripMenuItem.Text = "Chuyên ngành";
+            chuyênNgànhToolStripMenuItem.Click += chuyênNgànhToolStripMenuItem_Click;
             // 
             // lớpHọcToolStripMenuItem
             // 
