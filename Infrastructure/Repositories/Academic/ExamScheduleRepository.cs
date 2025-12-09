@@ -145,5 +145,34 @@ namespace StudentCourseManagement.Infrastructure.Repositories.Academic
             };
             ExecuteCommand(query, parameters);
         }
+        public bool IsRoomConflict(Guid? examId, string room, DateTime examDate, int examDuration)
+        {
+            string query = @"
+        SELECT COUNT(*) 
+        FROM dbo.ExamSchedule
+        WHERE Room = @Room
+        AND (
+            (@ExamDate BETWEEN ExamDate AND DATEADD(MINUTE, ExamDuration, ExamDate))
+            OR
+            (ExamDate BETWEEN @ExamDate AND DATEADD(MINUTE, @Duration, @ExamDate))
+        )
+        AND (@ExamId IS NULL OR Id <> @ExamId)
+    ";
+
+            using (SqlConnection conn = _dbFactory.Create())
+            {
+                conn.Open();
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@Room", room);
+                    cmd.Parameters.AddWithValue("@ExamDate", examDate);
+                    cmd.Parameters.AddWithValue("@Duration", examDuration);
+                    cmd.Parameters.AddWithValue("@ExamId", (object?)examId ?? DBNull.Value);
+
+                    int count = (int)cmd.ExecuteScalar();
+                    return count > 0;
+                }
+            }
+        }
     }
 }

@@ -264,7 +264,8 @@ namespace StudentCourseManagement.Presentation.Forms.Class
 
         private void btnLuu_Click(object sender, EventArgs e)
         {
-            if (cboChuyenNganh.SelectedValue == null || cboNganh.SelectedValue == null || string.IsNullOrWhiteSpace(txtMaLop.Text) || string.IsNullOrWhiteSpace(txtTenLop.Text))
+            if (cboChuyenNganh.SelectedValue == null || cboNganh.SelectedValue == null ||
+                string.IsNullOrWhiteSpace(txtMaLop.Text) || string.IsNullOrWhiteSpace(txtTenLop.Text))
             {
                 MessageBox.Show("Vui lòng nhập đầy đủ thông tin (Khoa, Ngành, Chuyên ngành, Mã lớp, Tên lớp).", "Lỗi");
                 return;
@@ -276,13 +277,18 @@ namespace StudentCourseManagement.Presentation.Forms.Class
             string className = txtTenLop.Text.Trim();
             int studentCount = (int)numSiSo.Value;
             string advisorName = txtCoVan.Text.Trim();
-
             if (isAdding)
             {
                 if (_classService.CheckClassCodeExists(classCode))
                 {
                     MessageBox.Show("Mã lớp này đã tồn tại. Vui lòng nhập mã khác.", "Lỗi");
                     txtMaLop.Focus();
+                    return;
+                }
+                if (_classService.CheckClassNameExists(className))
+                {
+                    MessageBox.Show("Tên lớp này đã tồn tại!", "Lỗi trùng tên");
+                    txtTenLop.Focus();
                     return;
                 }
 
@@ -298,7 +304,23 @@ namespace StudentCourseManagement.Presentation.Forms.Class
                     return;
                 }
 
-                _classService.UpdateClass(selectedClassId, classCode, className, studentCount, advisorName, majorId, specializationId);
+                if (_classService.CheckClassNameExists(className, selectedClassId))
+                {
+                    MessageBox.Show("Tên lớp này đã tồn tại!", "Lỗi trùng tên");
+                    txtTenLop.Focus();
+                    return;
+                }
+
+                _classService.UpdateClass(
+                    selectedClassId,
+                    classCode,
+                    className,
+                    studentCount,
+                    advisorName,
+                    majorId,
+                    specializationId
+                );
+
                 MessageBox.Show("Cập nhật thành công!");
             }
 
@@ -307,6 +329,7 @@ namespace StudentCourseManagement.Presentation.Forms.Class
             isAdding = false;
             isEditing = false;
         }
+
 
         private void btnHuy_Click(object sender, EventArgs e)
         {

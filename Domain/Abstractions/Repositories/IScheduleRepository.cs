@@ -18,5 +18,7 @@ namespace StudentCourseManagement.Domain.Abstractions.Repositories
         void UpdateSchedule(string scheduleId, string subjectId, string teacherName, string room, DateTime lessonDate, int startPeriod, int endPeriod);
         DataTable GetSubjectsBySpecialization(Guid majorId, Guid specializationId);
         DataTable GetAllSubjectDetailsBySpecialization(Guid majorId, Guid specializationId);
+        bool IsTeacherBusy(string teacherName, DateTime lessonDate, int startPeriod, int endPeriod, string? ignoreScheduleId = null);
+
     }
 }

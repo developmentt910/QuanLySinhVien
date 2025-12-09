@@ -247,6 +247,7 @@
             dtpExamDateTime.Name = "dtpExamDateTime";
             dtpExamDateTime.Size = new Size(248, 30);
             dtpExamDateTime.TabIndex = 5;
+            dtpExamDateTime.Value = new DateTime(2025, 12, 9, 21, 48, 5, 0);
             // 
             // label3
             // 

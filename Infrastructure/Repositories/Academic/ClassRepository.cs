@@ -211,5 +211,31 @@ namespace StudentCourseManagement.Infrastructure.Repositories.Academic
 
             return GetData(query, parameters.ToArray());
         }
+        public bool CheckClassNameExists(string className, Guid? currentId = null)
+        {
+            string query = "SELECT 1 FROM dbo.Class WHERE ClassName = @ClassName";
+
+            if (currentId.HasValue)
+            {
+                query += " AND Id <> @Id";
+            }
+
+            var paramList = new List<SqlParameter>
+    {
+        new SqlParameter("@ClassName", className)
+    };
+
+            if (currentId.HasValue)
+            {
+                paramList.Add(new SqlParameter("@Id", SqlDbType.UniqueIdentifier)
+                {
+                    Value = currentId.Value
+                });
+            }
+
+            object? result = ExecuteScalar(query, paramList.ToArray());
+            return result != null && result != DBNull.Value;
+        }
+
     }
 }
