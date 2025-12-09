@@ -106,6 +106,8 @@
             thôngTinSinhViênToolStripMenuItem.Name = "thôngTinSinhViênToolStripMenuItem";
             thôngTinSinhViênToolStripMenuItem.Size = new Size(216, 26);
             thôngTinSinhViênToolStripMenuItem.Text = "Thông tin sinh viên";
+            thôngTinSinhViênToolStripMenuItem.Click += thôngTinSinhViênToolStripMenuItem_Click;
+
             // 
             // kếtQuảHọcTậpToolStripMenuItem
             // 

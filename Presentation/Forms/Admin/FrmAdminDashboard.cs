@@ -15,6 +15,7 @@ using System.Windows.Forms;
 using StudentCourseManagement.Presentation.Forms.Class;
 using StudentCourseManagement.Presentation.Forms.Help;
 using StudentCourseManagement.Presentation.Forms.Schedule;
+using StudentCourseManagement.Presentation.Forms.Student;
 namespace StudentCourseManagement.Presentation.Forms.Admin
 {
     public partial class FrmAdminDashboard : Form
@@ -272,6 +273,11 @@ namespace StudentCourseManagement.Presentation.Forms.Admin
         private void troGiupToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FrmHelp frm = new FrmHelp();
+            frm.ShowDialog();
+        }
+        private void thôngTinSinhViênToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmStudentManagement frm = new FrmStudentManagement();
             frm.ShowDialog();
         }
     }
