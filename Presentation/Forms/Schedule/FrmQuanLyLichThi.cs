@@ -36,7 +36,7 @@ namespace StudentCourseManagement.Presentation.Forms.Schedule
             LoadKhoaData();
             LoadHinhThucThiData();
             LoadSemesterData();
-
+            StyleHelper.ApplyFormStyle(this);
             SetControlState(false);
         }
 

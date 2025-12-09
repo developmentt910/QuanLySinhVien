@@ -184,6 +184,7 @@ partial class FrmQuanLyChuongTrinhKhung
         dgvChuongTrinhKhung.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
         dgvChuongTrinhKhung.Size = new Size(1001, 280);
         dgvChuongTrinhKhung.TabIndex = 1;
+        dgvChuongTrinhKhung.CellClick += dgvChuongTrinhKhung_CellClick;
         // 
         // groupBoxActions
         // 

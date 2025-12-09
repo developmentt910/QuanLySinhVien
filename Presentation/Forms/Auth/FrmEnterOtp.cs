@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 using StudentCourseManagement.Domain.Abstractions.Repositories;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace StudentCourseManagement.Presentation.Forms.Auth
 {
@@ -9,8 +10,6 @@ namespace StudentCourseManagement.Presentation.Forms.Auth
     {
         private readonly string _email;
         private readonly IForgotPasswordService _service;
-        private Guid currentUserId;
-        private PasswordChangeService changeService;
 
         public FrmEnterOtp(string email, IForgotPasswordService service)
         {
@@ -46,8 +45,7 @@ namespace StudentCourseManagement.Presentation.Forms.Auth
                 return;
             }
 
-            // Mở form đặt lại mật khẩu
-            var frm = new FrmChangePassword(changeService, currentUserId);
+            var frm = new FrmInputPassword( _service,  _email);
             frm.Show();
             this.Hide();
         }

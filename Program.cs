@@ -1,9 +1,9 @@
+
 using System;
 using System.Windows.Forms;
 using Microsoft.Extensions.Configuration;
 using StudentCourseManagement.Presentation.WinForms.Bootstrap;
-using StudentCourseManagement.Presentation.Forms.Auth;
-using StudentCourseManagement.Presentation.Forms.Manage;
+ using StudentCourseManagement.Presentation.Forms.Auth; 
 
 namespace StudentCourseManagement
 {
@@ -17,11 +17,12 @@ namespace StudentCourseManagement
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .Build();
 
+
             ServicesFactory.UseConfiguration(config);
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FrmSpecManage());
+            Application.Run(new FrmLogin());
         }
     }
 }

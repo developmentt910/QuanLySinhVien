@@ -74,7 +74,7 @@ namespace StudentCourseManagement.Presentation.Forms.Schedule
             groupBoxFilter.Margin = new Padding(4, 5, 4, 5);
             groupBoxFilter.Name = "groupBoxFilter";
             groupBoxFilter.Padding = new Padding(4, 5, 4, 5);
-            groupBoxFilter.Size = new Size(1394, 195);
+            groupBoxFilter.Size = new Size(1436, 195);
             groupBoxFilter.TabIndex = 0;
             groupBoxFilter.TabStop = false;
             groupBoxFilter.Text = "Bộ lọc Thời khóa biểu";
@@ -92,8 +92,8 @@ namespace StudentCourseManagement.Presentation.Forms.Schedule
             // 
             // cboKyHoc
             // 
-            this.cboKyHoc.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.cboKyHoc.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            cboKyHoc.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            cboKyHoc.AutoCompleteSource = AutoCompleteSource.ListItems;
             cboKyHoc.FormattingEnabled = true;
             cboKyHoc.Location = new Point(680, 128);
             cboKyHoc.Margin = new Padding(4, 5, 4, 5);
@@ -113,8 +113,8 @@ namespace StudentCourseManagement.Presentation.Forms.Schedule
             // 
             // cboLopHoc
             // 
-            this.cboLopHoc.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.cboLopHoc.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            cboLopHoc.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            cboLopHoc.AutoCompleteSource = AutoCompleteSource.ListItems;
             cboLopHoc.FormattingEnabled = true;
             cboLopHoc.Location = new Point(94, 128);
             cboLopHoc.Margin = new Padding(4, 5, 4, 5);
@@ -134,8 +134,8 @@ namespace StudentCourseManagement.Presentation.Forms.Schedule
             // 
             // cboChuyenNganh
             // 
-            this.cboChuyenNganh.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.cboChuyenNganh.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            cboChuyenNganh.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            cboChuyenNganh.AutoCompleteSource = AutoCompleteSource.ListItems;
             cboChuyenNganh.FormattingEnabled = true;
             cboChuyenNganh.Location = new Point(855, 61);
             cboChuyenNganh.Margin = new Padding(4, 5, 4, 5);
@@ -156,8 +156,8 @@ namespace StudentCourseManagement.Presentation.Forms.Schedule
             // 
             // cboNganh
             // 
-            this.cboNganh.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.cboNganh.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            cboNganh.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            cboNganh.AutoCompleteSource = AutoCompleteSource.ListItems;
             cboNganh.FormattingEnabled = true;
             cboNganh.Location = new Point(425, 61);
             cboNganh.Margin = new Padding(4, 5, 4, 5);
@@ -178,8 +178,8 @@ namespace StudentCourseManagement.Presentation.Forms.Schedule
             // 
             // cboKhoa
             // 
-            this.cboKhoa.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.cboKhoa.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            cboKhoa.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            cboKhoa.AutoCompleteSource = AutoCompleteSource.ListItems;
             cboKhoa.FormattingEnabled = true;
             cboKhoa.Location = new Point(94, 61);
             cboKhoa.Margin = new Padding(4, 5, 4, 5);
@@ -213,7 +213,7 @@ namespace StudentCourseManagement.Presentation.Forms.Schedule
             dgvSchedules.RowHeadersWidth = 51;
             dgvSchedules.RowTemplate.Height = 24;
             dgvSchedules.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvSchedules.Size = new Size(1392, 363);
+            dgvSchedules.Size = new Size(1436, 363);
             dgvSchedules.TabIndex = 1;
             dgvSchedules.CellClick += dgvSchedules_CellClick;
             // 
@@ -241,14 +241,15 @@ namespace StudentCourseManagement.Presentation.Forms.Schedule
             groupBoxAdd.Margin = new Padding(4, 5, 4, 5);
             groupBoxAdd.Name = "groupBoxAdd";
             groupBoxAdd.Padding = new Padding(4, 5, 4, 5);
-            groupBoxAdd.Size = new Size(1394, 273);
+            groupBoxAdd.Size = new Size(1438, 273);
             groupBoxAdd.TabIndex = 2;
             groupBoxAdd.TabStop = false;
             groupBoxAdd.Text = "Thêm/Xóa/Sửa môn học";
             // 
             // numEndPeriod
             // 
-            numEndPeriod.Location = new Point(680, 200);
+            numEndPeriod.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            numEndPeriod.Location = new Point(690, 203);
             numEndPeriod.Margin = new Padding(4, 5, 4, 5);
             numEndPeriod.Maximum = new decimal(new int[] { 14, 0, 0, 0 });
             numEndPeriod.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
@@ -269,7 +270,8 @@ namespace StudentCourseManagement.Presentation.Forms.Schedule
             // 
             // numStartPeriod
             // 
-            numStartPeriod.Location = new Point(436, 200);
+            numStartPeriod.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            numStartPeriod.Location = new Point(435, 205);
             numStartPeriod.Margin = new Padding(4, 5, 4, 5);
             numStartPeriod.Maximum = new decimal(new int[] { 14, 0, 0, 0 });
             numStartPeriod.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
@@ -291,7 +293,7 @@ namespace StudentCourseManagement.Presentation.Forms.Schedule
             // dtpLessonDate
             // 
             dtpLessonDate.Format = DateTimePickerFormat.Short;
-            dtpLessonDate.Location = new Point(129, 200);
+            dtpLessonDate.Location = new Point(129, 205);
             dtpLessonDate.Margin = new Padding(4, 5, 4, 5);
             dtpLessonDate.Name = "dtpLessonDate";
             dtpLessonDate.Size = new Size(193, 30);
@@ -389,8 +391,8 @@ namespace StudentCourseManagement.Presentation.Forms.Schedule
             // 
             // cboMonHoc
             // 
-            this.cboMonHoc.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.cboMonHoc.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            cboMonHoc.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            cboMonHoc.AutoCompleteSource = AutoCompleteSource.ListItems;
             cboMonHoc.FormattingEnabled = true;
             cboMonHoc.Location = new Point(129, 61);
             cboMonHoc.Margin = new Padding(4, 5, 4, 5);
@@ -414,7 +416,7 @@ namespace StudentCourseManagement.Presentation.Forms.Schedule
             lblTitle.Font = new Font("Microsoft Sans Serif", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblTitle.Location = new Point(15, 9);
             lblTitle.Name = "lblTitle";
-            lblTitle.Size = new Size(1394, 32);
+            lblTitle.Size = new Size(1438, 32);
             lblTitle.TabIndex = 3;
             lblTitle.Text = "QUẢN LÝ THỜI KHÓA BIỂU";
             lblTitle.TextAlign = ContentAlignment.MiddleCenter;
@@ -423,7 +425,7 @@ namespace StudentCourseManagement.Presentation.Forms.Schedule
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1422, 919);
+            ClientSize = new Size(1466, 919);
             Controls.Add(lblTitle);
             Controls.Add(groupBoxAdd);
             Controls.Add(dgvSchedules);

@@ -1,6 +1,7 @@
 ﻿using System.Data;
 using Microsoft.Data.SqlClient;
 using System;
+using System.Windows.Forms; 
 using StudentCourseManagement.Infrastructure.Data;
 using StudentCourseManagement.Domain.Abstractions.Repositories;
 
@@ -64,6 +65,7 @@ namespace StudentCourseManagement.Infrastructure.Repositories.Academic
             string query = @"
                 SELECT 
                     c.Id AS CurriculumId, 
+                    c.Semester, 
                     s.Id AS SubjectId, 
                     s.SubjectCode, 
                     s.SubjectName, 
@@ -75,15 +77,25 @@ namespace StudentCourseManagement.Infrastructure.Repositories.Academic
                 JOIN 
                     dbo.Subject s ON c.SubjectId = s.Id
                 WHERE 
-                    c.SpecializationId = @SpecializationId AND c.Semester = @Semester
-                ORDER BY s.SubjectName";
-
-            var parameters = new[]
+                    c.SpecializationId = @SpecializationId";
+            if (!string.IsNullOrEmpty(semester))
             {
-                new SqlParameter("@SpecializationId", SqlDbType.UniqueIdentifier) { Value = specializationId },
-                new SqlParameter("@Semester", semester)
+                query += " AND c.Semester = @Semester";
+            }
+
+            query += " ORDER BY c.Semester, s.SubjectName";
+
+            var parameters = new System.Collections.Generic.List<SqlParameter>
+            {
+                new SqlParameter("@SpecializationId", SqlDbType.UniqueIdentifier) { Value = specializationId }
             };
-            return GetData(query, parameters);
+
+            if (!string.IsNullOrEmpty(semester))
+            {
+                parameters.Add(new SqlParameter("@Semester", semester));
+            }
+
+            return GetData(query, parameters.ToArray());
         }
 
         public void AddSubjectToCurriculum(Guid specializationId, Guid subjectId, string semester)
