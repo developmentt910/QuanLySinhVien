@@ -315,5 +315,10 @@ namespace StudentCourseManagement.Presentation.Forms.Admin
             frm.ShowDialog();
         }
 
+        private void kếtQuảHọcTậpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmResult frmResult = new FrmResult();
+            frmResult.ShowDialog();
+        }
     }
 }

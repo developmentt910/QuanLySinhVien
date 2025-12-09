@@ -113,6 +113,7 @@
             kếtQuảHọcTậpToolStripMenuItem.Name = "kếtQuảHọcTậpToolStripMenuItem";
             kếtQuảHọcTậpToolStripMenuItem.Size = new Size(224, 26);
             kếtQuảHọcTậpToolStripMenuItem.Text = "Kết quả học tập";
+            kếtQuảHọcTậpToolStripMenuItem.Click += kếtQuảHọcTậpToolStripMenuItem_Click;
             // 
             // đánhGiáRènLuyệnToolStripMenuItem
             // 
@@ -131,35 +132,35 @@
             // họcKỳToolStripMenuItem
             // 
             họcKỳToolStripMenuItem.Name = "họcKỳToolStripMenuItem";
-            họcKỳToolStripMenuItem.Size = new Size(224, 26);
+            họcKỳToolStripMenuItem.Size = new Size(190, 26);
             họcKỳToolStripMenuItem.Text = "Học kỳ";
             họcKỳToolStripMenuItem.Click += họcKỳToolStripMenuItem_Click;
             // 
             // khoaToolStripMenuItem
             // 
             khoaToolStripMenuItem.Name = "khoaToolStripMenuItem";
-            khoaToolStripMenuItem.Size = new Size(224, 26);
+            khoaToolStripMenuItem.Size = new Size(190, 26);
             khoaToolStripMenuItem.Text = "Khoa";
             khoaToolStripMenuItem.Click += khoaToolStripMenuItem_Click;
             // 
             // ngànhToolStripMenuItem
             // 
             ngànhToolStripMenuItem.Name = "ngànhToolStripMenuItem";
-            ngànhToolStripMenuItem.Size = new Size(224, 26);
+            ngànhToolStripMenuItem.Size = new Size(190, 26);
             ngànhToolStripMenuItem.Text = "Ngành";
             ngànhToolStripMenuItem.Click += ngànhToolStripMenuItem_Click;
             // 
             // chuyênNgànhToolStripMenuItem
             // 
             chuyênNgànhToolStripMenuItem.Name = "chuyênNgànhToolStripMenuItem";
-            chuyênNgànhToolStripMenuItem.Size = new Size(224, 26);
+            chuyênNgànhToolStripMenuItem.Size = new Size(190, 26);
             chuyênNgànhToolStripMenuItem.Text = "Chuyên ngành";
             chuyênNgànhToolStripMenuItem.Click += chuyênNgànhToolStripMenuItem_Click;
             // 
             // lớpHọcToolStripMenuItem
             // 
             lớpHọcToolStripMenuItem.Name = "lớpHọcToolStripMenuItem";
-            lớpHọcToolStripMenuItem.Size = new Size(224, 26);
+            lớpHọcToolStripMenuItem.Size = new Size(190, 26);
             lớpHọcToolStripMenuItem.Text = "Lớp học";
             lớpHọcToolStripMenuItem.Click += lopHocToolStripMenuItem_Click;
             // 
@@ -167,7 +168,7 @@
             // 
             mônHọcToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { chuongTrinhKhungToolStripMenuItem1 });
             mônHọcToolStripMenuItem.Name = "mônHọcToolStripMenuItem";
-            mônHọcToolStripMenuItem.Size = new Size(224, 26);
+            mônHọcToolStripMenuItem.Size = new Size(190, 26);
             mônHọcToolStripMenuItem.Text = "Môn học";
             // 
             // chuongTrinhKhungToolStripMenuItem1
@@ -181,7 +182,7 @@
             // 
             thờiKhóaBiểuToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { lichThiToolStripMenuItem, lichHocToolStripMenuItem });
             thờiKhóaBiểuToolStripMenuItem.Name = "thờiKhóaBiểuToolStripMenuItem";
-            thờiKhóaBiểuToolStripMenuItem.Size = new Size(224, 26);
+            thờiKhóaBiểuToolStripMenuItem.Size = new Size(190, 26);
             thờiKhóaBiểuToolStripMenuItem.Text = "Thời khóa biểu";
             // 
             // lichThiToolStripMenuItem
