@@ -349,7 +349,7 @@ namespace StudentCourseManagement.Presentation.Forms.Manage
             // 
             // FrmSemesterManagement
             // 
-            ClientSize = new Size(842, 501);
+            ClientSize = new Size(867, 506);
             Controls.Add(groupBox1);
             Controls.Add(button4);
             Controls.Add(button3);
@@ -455,8 +455,8 @@ namespace StudentCourseManagement.Presentation.Forms.Manage
     yPos += 50;
 
    // Buttons
-    btnOK = new Button { Text = "Lưu", Left = controlLeft, Top = yPos, Width = 90, DialogResult = DialogResult.OK };
-       btnCancel = new Button { Text = "Hủy", Left = controlLeft + 100, Top = yPos, Width = 90, DialogResult = DialogResult.Cancel };
+    btnOK = new Button { Text = "Lưu", Left = controlLeft, Top = yPos, Width = 90,Height = 40, DialogResult = DialogResult.OK };
+       btnCancel = new Button { Text = "Hủy", Left = controlLeft + 100, Top = yPos, Width = 90,Height = 40, DialogResult = DialogResult.Cancel };
       btnOK.Click += BtnOK_Click;
 
       this.Controls.Add(btnOK);

@@ -448,23 +448,25 @@ namespace StudentCourseManagement.Presentation.Forms.Student
             }
         }
 
-        // =========================
-        // ✅ CHỌN KHOA → LOAD NGÀNH
-        // =========================
         private void cmbFacultySql_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cmbFacultySql.SelectedValue is Guid facultyId)
             {
-                var majors = _service.GetMajorsByFaculty(facultyId);
-                cmbMajorSql.DataSource = new BindingSource(majors, null);
+                var majors = _service.GetMajorsByFaculty(facultyId); // Dictionary<Guid,string>
+
+                // ✅ CHUYỂN SANG LIST ĐỂ BIND CHO CHẮC
+                var majorList = majors.ToList();   // List<KeyValuePair<Guid,string>>
+
+                cmbMajorSql.DataSource = null;     // clear trước cho sạch
                 cmbMajorSql.DisplayMember = "Value";
                 cmbMajorSql.ValueMember = "Key";
+                cmbMajorSql.DataSource = majorList;
+
+                cmbMajorSql.SelectedIndex = -1;
             }
         }
 
-        // =========================
-        // ✅ CHỌN NGÀNH → LOAD CHUYÊN NGÀNH
-        // =========================
+
         private void cmbMajorSql_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cmbMajorSql.SelectedValue is Guid majorId)
@@ -522,9 +524,6 @@ namespace StudentCourseManagement.Presentation.Forms.Student
             }
         }
 
-        // =========================
-        // ✅ HIỂN THỊ ẢNH KHI CHỌN DÒNG
-        // =========================
         private void dgvStudents_SelectionChanged(object sender, EventArgs e)
         {
             if (dgvStudents.CurrentRow == null) return;

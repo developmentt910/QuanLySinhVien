@@ -5,7 +5,6 @@ using StudentCourseManagement.Applications.Curriculum;
 using StudentCourseManagement.Applications.Schedule;
 using StudentCourseManagement.Applications.SemesterApp;
 using StudentCourseManagement.Applications.MajorApp;
-using StudentCourseManagement.Applications.Faculty;
 using StudentCourseManagement.Applications.SpecializationApp;
 using StudentCourseManagement.Domain.Abstractions.Repositories;
 using StudentCourseManagement.Domain.Abstractions.Services;
