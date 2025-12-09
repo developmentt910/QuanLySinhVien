@@ -3,6 +3,10 @@ using Microsoft.VisualBasic.Devices;
 using StudentCourseManagement.Applications.Class;
 using StudentCourseManagement.Applications.Curriculum;
 using StudentCourseManagement.Applications.Schedule;
+using StudentCourseManagement.Applications.SemesterApp;
+using StudentCourseManagement.Applications.MajorApp;
+using StudentCourseManagement.Applications.Faculty;
+using StudentCourseManagement.Applications.SpecializationApp;
 using StudentCourseManagement.Domain.Abstractions.Repositories;
 using StudentCourseManagement.Domain.Abstractions.Services;
 using StudentCourseManagement.Infrastructure.Data;
@@ -64,5 +68,35 @@ namespace StudentCourseManagement.Presentation.WinForms.Bootstrap
         //THÊM MỚI CHO CLASS
         public static IClassRepository CreateClassRepository() => new ClassRepository(Db);
         public static IClassService CreateClassService() => new ClassService(CreateClassRepository());
+
+        public static ISemesterReader CreateSemesterReader() => new SemesterReader(Db);
+        public static ISemesterWriter CreateSemesterWriter() => new SemesterWriter(Db);
+      public static SemesterService CreateSemesterService() => new SemesterService(
+            CreateSemesterReader(),
+        CreateSemesterWriter()
+     );
+
+  public static IMajorReader CreateMajorReader() => new MajorReader(Db);
+        public static IMajorWriter CreateMajorWriter() => new MajorWriter(Db);
+        public static MajorService CreateMajorService() => new MajorService(
+        CreateMajorReader(),
+        CreateMajorWriter(),
+         CreateFacultyReader()
+        );
+
+   public static IFacultyReader CreateFacultyReader() => new FacultyReader(Db);
+        public static IFacultyWriter CreateFacultyWriter() => new FacultyWriter(Db);
+    public static FacultyService CreateFacultyService() => new FacultyService(
+   CreateFacultyReader(),
+            CreateFacultyWriter()
+        );
+
+    public static ISpecializationReader CreateSpecializationReader() => new SpecializationReader(Db);
+        public static ISpecializationWriter CreateSpecializationWriter() => new SpecializationWriter(Db);
+      public static SpecializationService CreateSpecializationService() => new SpecializationService(
+CreateSpecializationReader(),
+     CreateSpecializationWriter(),
+ CreateMajorReader()
+        );
     }
 }

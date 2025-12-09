@@ -3,7 +3,7 @@ using iTextSharp.text.pdf;
 using StudentCourseManagement.Applications.Services;
 using System.IO;
 using System.Windows.Forms;
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -16,6 +16,8 @@ using StudentCourseManagement.Presentation.Forms.Class;
 using StudentCourseManagement.Presentation.Forms.Help;
 using StudentCourseManagement.Presentation.Forms.Schedule;
 using StudentCourseManagement.Presentation.Forms.Student;
+using StudentCourseManagement.Presentation.Forms.Manage;
+
 namespace StudentCourseManagement.Presentation.Forms.Admin
 {
     public partial class FrmAdminDashboard : Form
@@ -278,6 +280,27 @@ namespace StudentCourseManagement.Presentation.Forms.Admin
         private void thôngTinSinhViênToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FrmStudentManagement frm = new FrmStudentManagement();
+            frm.ShowDialog();
+        }
+
+        // Sự kiện mở Form Quản lý Học kỳ
+        private void họcKỳToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmSemesterManagement frm = new FrmSemesterManagement();
+            frm.ShowDialog();
+        }
+
+        // Sự kiện mở Form Quản lý Ngành
+        private void ngànhToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmMajorManagement frm = new FrmMajorManagement();
+            frm.ShowDialog();
+        }
+
+        // Sự kiện mở Form Quản lý Chuyên ngành
+        private void chuyênNgànhToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmSpecManage frm = new FrmSpecManage();
             frm.ShowDialog();
         }
     }

@@ -16,7 +16,10 @@ namespace StudentCourseManagement.Presentation.Forms.Student
         private byte[] _selectedImageBytes;
         private string _oldStudentCode;
 
-
+        public void FrmStudentManagement_Load(object sender, EventArgs e)
+        {
+            StyleHelper.ApplyFormStyle(this);
+        }
         public FrmStudentManagement()
         {
             InitializeComponent();

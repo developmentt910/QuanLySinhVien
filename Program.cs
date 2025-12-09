@@ -3,11 +3,7 @@ using System;
 using System.Windows.Forms;
 using Microsoft.Extensions.Configuration;
 using StudentCourseManagement.Presentation.WinForms.Bootstrap;
-using StudentCourseManagement.Presentation.Forms.Auth; 
-﻿using Microsoft.Extensions.Configuration;
-using StudentCourseManagement.Presentation.Forms.Student;
-using System;
-using System.Windows.Forms;
+ using StudentCourseManagement.Presentation.Forms.Auth; 
 
 namespace StudentCourseManagement
 {
@@ -27,17 +23,6 @@ namespace StudentCourseManagement
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new FrmLogin());
-            Application.SetHighDpiMode(HighDpiMode.SystemAware);
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            //Application.Run(new FrmRegister());
-            Application.Run(new FrmStudentManagement());
-
-
-
-
-
-
         }
     }
 }
