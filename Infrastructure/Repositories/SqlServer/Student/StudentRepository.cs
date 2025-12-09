@@ -423,5 +423,21 @@ AND StudentCode <> @oldCode";
             return count > 0;
         }
 
+        // ✅ KIỂM TRA MÃ SINH VIÊN TỒN TẠI (DÙNG KHI ADD)
+        public bool IsStudentCodeExists(string studentCode)
+        {
+            using var conn = _factory.Create();
+            conn.Open();
+
+            var sql = @"SELECT COUNT(*) FROM dbo.Users WHERE StudentCode = @code";
+
+            using var cmd = new SqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("@code", studentCode);
+
+            int count = (int)cmd.ExecuteScalar();
+            return count > 0;
+        }
+
+
     }
 }

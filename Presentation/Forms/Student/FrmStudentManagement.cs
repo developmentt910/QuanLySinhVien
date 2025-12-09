@@ -426,14 +426,30 @@ namespace StudentCourseManagement.Presentation.Forms.Student
         // =========================
         private void btnSelectPhoto_Click(object sender, EventArgs e)
         {
+            // ✅ CHẶN KHI CHƯA NHẬP MÃ SINH VIÊN
+            if (string.IsNullOrWhiteSpace(txtStudentId.Text))
+            {
+                MessageBox.Show(
+                    "Vui lòng nhập Mã sinh viên trước khi chọn ảnh!",
+                    "Thiếu dữ liệu",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                );
+                txtStudentId.Focus();
+                return;
+            }
+
             using var ofd = new OpenFileDialog();
             ofd.Filter = "Ảnh (*.jpg;*.png)|*.jpg;*.png";
+
             if (ofd.ShowDialog() == DialogResult.OK)
             {
+                picStudent.Image?.Dispose();                 // ✅ GIẢI PHÓNG ẢNH CŨ
                 picStudent.ImageLocation = ofd.FileName;
                 _selectedImageBytes = File.ReadAllBytes(ofd.FileName);
             }
         }
+
         // =========================
         // ✅ CHỌN KHOA → LOAD NGÀNH
         // =========================
@@ -539,6 +555,22 @@ namespace StudentCourseManagement.Presentation.Forms.Student
             }
 
             _selectedImageBytes = null;
+        }
+        private bool CanUploadImage()
+        {
+            if (string.IsNullOrWhiteSpace(txtStudentId.Text))
+            {
+                MessageBox.Show(
+                    "Vui lòng nhập Mã sinh viên trước khi chọn ảnh!",
+                    "Thiếu dữ liệu",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                );
+                txtStudentId.Focus();
+                return false;
+            }
+
+            return true;
         }
 
 
