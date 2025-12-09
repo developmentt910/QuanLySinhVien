@@ -277,7 +277,7 @@
             cboHocKi.Name = "cboHocKi";
             cboHocKi.Size = new Size(290, 28);
             cboHocKi.TabIndex = 21;
-            cboHocKi.SelectedIndexChanged += cboHocKi_SelectedIndexChanged;
+            //cboHocKi.SelectedIndexChanged += cboHocKi_SelectedIndexChanged;
             // 
             // btnTimKiem
             // 

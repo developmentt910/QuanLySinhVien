@@ -1,11 +1,13 @@
-﻿using System.Data;
-using Microsoft.Data.SqlClient;
-using System;
-using StudentCourseManagement.Infrastructure.Data;
+﻿using Microsoft.Data.SqlClient;
 using StudentCourseManagement.Domain.Abstractions.Repositories;
 using StudentCourseManagement.Domain.Entities;
+using StudentCourseManagement.Infrastructure.Data;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Windows.Forms;
 
-namespace StudentCourseManagement.Infrastructure.Repositories.An // Namespace Auth
+namespace StudentCourseManagement.Infrastructure.Repositories
 {
     public class ConductEvaluationRepository : IConductEvaluationRepository
     {
@@ -18,154 +20,161 @@ namespace StudentCourseManagement.Infrastructure.Repositories.An // Namespace Au
 
         private DataTable GetData(string query, SqlParameter[]? parameters = null)
         {
-            DataTable dataTable = new DataTable();
+            var dt = new DataTable();
+
             try
             {
-                using (SqlConnection conn = _dbFactory.Create())
-                {
-                    conn.Open();
-                    using (SqlCommand cmd = new SqlCommand(query, conn))
-                    {
-                        if (parameters != null)
-                            cmd.Parameters.AddRange(parameters);
-                        SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                        adapter.Fill(dataTable);
-                    }
-                }
+                using var conn = _dbFactory.Create();
+                conn.Open();
+
+                using var cmd = new SqlCommand(query, conn);
+                if (parameters != null)
+                    cmd.Parameters.AddRange(parameters);
+
+                new SqlDataAdapter(cmd).Fill(dt);
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi tải dữ liệu: " + ex.Message, "Lỗi CSDL", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Lỗi tải dữ liệu: " + ex.Message);
             }
-            return dataTable;
+
+            return dt;
         }
 
-        private void ExecuteCommand(string query, SqlParameter[] parameters)
+        private void Execute(string query, SqlParameter[] parameters)
         {
             try
             {
-                using (SqlConnection conn = _dbFactory.Create())
-                {
-                    conn.Open();
-                    using (SqlCommand cmd = new SqlCommand(query, conn))
-                    {
-                        cmd.Parameters.AddRange(parameters);
-                        cmd.ExecuteNonQuery();
-                    }
-                }
+                using var conn = _dbFactory.Create();
+                conn.Open();
+
+                using var cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddRange(parameters);
+                cmd.ExecuteNonQuery();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi thực thi: " + ex.Message, "Lỗi CSDL", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Lỗi thực thi: " + ex.Message);
             }
         }
 
         public DataRow GetStudentInfoByCode(string studentCode)
         {
             string query = @"
-                SELECT R.Id, R.FullName, C.ClassName, F.FacultyName
-                FROM dbo.Users R
-                LEFT JOIN dbo.Class C ON R.ClassId = C.Id
-                LEFT JOIN dbo.Major M ON C.MajorId = M.Id
-                LEFT JOIN dbo.Faculty F ON M.FacultyId = F.Id
-                WHERE R.StudentCode = @StudentCode";
+                SELECT R.Id, R.FullName, C.ClassName, F.FacultyName, R.CohortYear
+                FROM Users R
+                LEFT JOIN Class C ON R.ClassId = C.Id
+                LEFT JOIN Major M ON C.MajorId = M.Id
+                LEFT JOIN Faculty F ON M.FacultyId = F.Id
+                WHERE R.StudentCode = @Code";
 
-            var parameters = new[]
-            {
-                new SqlParameter("@StudentCode", studentCode)
-            };
+            var dt = GetData(query, new[] { new SqlParameter("@Code", studentCode) });
 
-            DataTable dt = GetData(query, parameters);
-            if (dt.Rows.Count > 0)
-            {
-                return dt.Rows[0];
-            }
-            return null;
+            return dt.Rows.Count > 0 ? dt.Rows[0] : null;
         }
 
-        public List<TrainingEvaluation> GetEvaluations(Guid rosterId)
+        public DataTable GetSemestersForEvaluation(Guid userId)
         {
-            var list = new List<TrainingEvaluation>();
+            string queryGetYear = "SELECT CohortYear FROM Users WHERE Id = @Id";
+
+            var dtYear = GetData(queryGetYear, new[] {
+                new SqlParameter("@Id", userId)
+            });
+
+            if (dtYear.Rows.Count == 0)
+                return new DataTable();
+
+            int startYear = Convert.ToInt32(dtYear.Rows[0]["CohortYear"]);
+            int currentYear = DateTime.Now.Year;
+
+            string querySemester = @"
+                SELECT Id,
+                       SemesterName + ' (' + AcademicYear + ')' AS DisplayName
+                FROM Semester
+                WHERE CAST(SUBSTRING(AcademicYear, 1, 4) AS INT) BETWEEN @StartYear AND @CurrentYear
+                ORDER BY AcademicYear DESC, SemesterName";
+
+            return GetData(querySemester, new[]
+            {
+                new SqlParameter("@StartYear", startYear),
+                new SqlParameter("@CurrentYear", currentYear)
+            });
+        }
+
+        public List<TrainingEvaluation> GetEvaluations(Guid userId)
+        {
             string query = @"
                 SELECT T.Id, T.UserId, T.SemesterId, T.Score, T.Comment, T.EvaluatedAtUtc,
                        S.SemesterName + ' (' + S.AcademicYear + ')' AS SemesterName
-                FROM dbo.TrainingEvaluation T
-                JOIN dbo.Semester S ON T.SemesterId = S.Id
-                WHERE T.UserId = @UserId
-                ORDER BY S.AcademicYear, S.SemesterName";
+                FROM TrainingEvaluation T
+                JOIN Semester S ON T.SemesterId = S.Id
+                WHERE T.UserId = @User
+                ORDER BY S.AcademicYear DESC, S.SemesterName";
 
-            var parameters = new[]
-            {
-                new SqlParameter("@UserId", SqlDbType.UniqueIdentifier) { Value = rosterId }
-            };
+            var table = GetData(query, new[] {
+                new SqlParameter("@User", userId)
+            });
 
-            DataTable dt = GetData(query, parameters);
+            var list = new List<TrainingEvaluation>();
 
-            foreach (DataRow row in dt.Rows)
+            foreach (DataRow r in table.Rows)
             {
                 list.Add(new TrainingEvaluation
                 {
-                    Id = (Guid)row["Id"],
-                    UserId = (Guid)row["UserId"],
-                    SemesterId = (Guid)row["SemesterId"],
-                    Score = (int)row["Score"],
-                    Comment = row["Comment"]?.ToString(),
-                    SemesterName = row["SemesterName"]?.ToString(),
-                    EvaluatedAtUtc = (DateTime)row["EvaluatedAtUtc"]
+                    Id = (Guid)r["Id"],
+                    UserId = (Guid)r["UserId"],
+                    SemesterId = (Guid)r["SemesterId"],
+                    Score = (int)r["Score"],
+                    Comment = r["Comment"]?.ToString(),
+                    SemesterName = r["SemesterName"].ToString(),
+                    EvaluatedAtUtc = (DateTime)r["EvaluatedAtUtc"]
                 });
             }
+
             return list;
         }
 
         public void AddEvaluation(TrainingEvaluation eval)
         {
-            string query = @"
-                INSERT INTO dbo.TrainingEvaluation (Id, UserId, SemesterId, Score, Comment, EvaluatedAtUtc)
-                VALUES (NEWID(), @UserId, @SemesterId, @Score, @Comment, @EvaluatedAtUtc)";
+            string q = @"
+                INSERT INTO TrainingEvaluation (Id, UserId, SemesterId, Score, Comment, EvaluatedAtUtc)
+                VALUES (NEWID(), @UserId, @SemId, @Score, @Comment, @Time)";
 
-            var parameters = new[]
+            Execute(q, new[]
             {
-                new SqlParameter("@UserId", SqlDbType.UniqueIdentifier) { Value = eval.UserId },
-                new SqlParameter("@SemesterId", SqlDbType.UniqueIdentifier) { Value = eval.SemesterId },
+                new SqlParameter("@UserId", eval.UserId),
+                new SqlParameter("@SemId", eval.SemesterId),
                 new SqlParameter("@Score", eval.Score),
                 new SqlParameter("@Comment", (object)eval.Comment ?? DBNull.Value),
-                new SqlParameter("@EvaluatedAtUtc", DateTime.UtcNow)
-            };
-            ExecuteCommand(query, parameters);
+                new SqlParameter("@Time", DateTime.UtcNow)
+            });
         }
 
         public void UpdateEvaluation(TrainingEvaluation eval)
         {
-            string query = @"
-                UPDATE dbo.TrainingEvaluation
-                SET SemesterId = @SemesterId, Score = @Score, Comment = @Comment, EvaluatedAtUtc = @EvaluatedAtUtc
+            string q = @"
+                UPDATE TrainingEvaluation
+                SET SemesterId = @SemId, Score = @Score, Comment = @Comment, EvaluatedAtUtc = @Time
                 WHERE Id = @Id";
 
-            var parameters = new[]
+            Execute(q, new[]
             {
-                new SqlParameter("@Id", SqlDbType.UniqueIdentifier) { Value = eval.Id },
-                new SqlParameter("@SemesterId", SqlDbType.UniqueIdentifier) { Value = eval.SemesterId },
+                new SqlParameter("@Id", eval.Id),
+                new SqlParameter("@SemId", eval.SemesterId),
                 new SqlParameter("@Score", eval.Score),
                 new SqlParameter("@Comment", (object)eval.Comment ?? DBNull.Value),
-                new SqlParameter("@EvaluatedAtUtc", DateTime.UtcNow)
-            };
-            ExecuteCommand(query, parameters);
+                new SqlParameter("@Time", DateTime.UtcNow)
+            });
         }
 
         public void DeleteEvaluation(Guid evaluationId)
         {
-            string query = "DELETE FROM dbo.TrainingEvaluation WHERE Id = @Id";
-            var parameters = new[]
+            string q = "DELETE FROM TrainingEvaluation WHERE Id = @Id";
+
+            Execute(q, new[]
             {
-                new SqlParameter("@Id", SqlDbType.UniqueIdentifier) { Value = evaluationId }
-            };
-            ExecuteCommand(query, parameters);
-        }
-        public DataTable GetSemestersForEvaluation()
-        {
-            string query = "SELECT Id, (SemesterName + ' (' + AcademicYear + ')') AS DisplayName FROM dbo.Semester ORDER BY AcademicYear DESC, SemesterName";
-            return GetData(query, null);
+                new SqlParameter("@Id", evaluationId)
+            });
         }
     }
 }
-

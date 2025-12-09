@@ -1,19 +1,22 @@
 ﻿using System;
 using System.Data;
-using StudentCourseManagement.Domain.Entities;
 using System.Collections.Generic;
+using StudentCourseManagement.Domain.Entities;
 
 namespace StudentCourseManagement.Domain.Abstractions.Repositories
 {
     public interface IConductEvaluationRepository
     {
         DataRow GetStudentInfoByCode(string studentCode);
-        List<TrainingEvaluation> GetEvaluations(Guid rosterId);
+
+        List<TrainingEvaluation> GetEvaluations(Guid userId);
+
         void AddEvaluation(TrainingEvaluation eval);
+
         void UpdateEvaluation(TrainingEvaluation eval);
+
         void DeleteEvaluation(Guid evaluationId);
 
-        // [THÊM HÀM MỚI]
-        DataTable GetSemestersForEvaluation();
+        DataTable GetSemestersForEvaluation(Guid userId); 
     }
 }

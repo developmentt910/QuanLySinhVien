@@ -2,7 +2,7 @@
 using StudentCourseManagement.Applications;
 using StudentCourseManagement.Domain.Abstractions.Repositories;
 using StudentCourseManagement.Infrastructure.Data;
-using StudentCourseManagement.Infrastructure.Repositories.An;
+using StudentCourseManagement.Infrastructure.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;

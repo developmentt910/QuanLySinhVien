@@ -26,7 +26,7 @@ namespace StudentCourseManagement
 
             //System.Windows.Forms.Application.Run(new FrmConductEvaluation());
 
-            System.Windows.Forms.Application.Run(new Frmpointmanager());
+            System.Windows.Forms.Application.Run(new FrmConductEvaluation());
 
         }
     }

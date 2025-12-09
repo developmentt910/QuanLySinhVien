@@ -43,9 +43,9 @@ namespace StudentCourseManagement.Applications // Namespace Cũ: Applications.Au
         {
             _conductRepository.DeleteEvaluation(evaluationId);
         }
-        public DataTable GetSemestersForEvaluation()
+        public DataTable GetSemestersForEvaluation(Guid userId)
         {
-            return _conductRepository.GetSemestersForEvaluation();
+            return _conductRepository.GetSemestersForEvaluation(userId);
         }
     }
 }

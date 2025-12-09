@@ -6,19 +6,22 @@ using System.Threading.Tasks;
 
 namespace StudentCourseManagement.Domain.Entities
 {
-    public class StudentInfo
+    using System;
+
+    namespace StudentCourseManagement.Domain.Entities
     {
-        public Guid Id { get; set; }
-        public string? FullName { get; set; }
-        public string? ClassId { get; set; }
-        public string? ClassName { get; set; }
-        public string? MajorName { get; set; }
-        public string? SpecializationName { get; set; }
-        public string StudentCode;
-
-        
-                    public Guid SpecializationId { get; set; }
-
+        public class StudentInfo
+        {
+            public Guid Id { get; set; }
+            public string FullName { get; set; }
+            public string ClassId { get; set; }
+            public string ClassName { get; set; }
+            public string MajorName { get; set; }
+            public string SpecializationName { get; set; }
+            public Guid SpecializationId { get; set; }
+            public string StudentCode { get; set; }
+        }
     }
+
 
 }
