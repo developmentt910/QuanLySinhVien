@@ -1,5 +1,7 @@
 ﻿
 
+using StudentCourseManagement.Infrastructure.Repositories.AuthAdmin;
+
 namespace StudentCourseManagement.Applications.Auth
 {
     public class PasswordChangeService

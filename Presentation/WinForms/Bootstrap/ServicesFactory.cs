@@ -15,6 +15,7 @@ using System;
 
 using StudentCourseManagement.Applications.Services;
 using StudentCourseManagement.Infrastructure.Security;
+using StudentCourseManagement.Infrastructure.Repositories.AuthAdmin;
 
 namespace StudentCourseManagement.Presentation.WinForms.Bootstrap
 {
@@ -98,5 +99,11 @@ CreateSpecializationReader(),
      CreateSpecializationWriter(),
  CreateMajorReader()
         );
+
+        public static IConductEvaluationRepository CreateConductEvaluationService()
+      => new ConductEvaluationRepository(Db);
+
     }
+
+
 }

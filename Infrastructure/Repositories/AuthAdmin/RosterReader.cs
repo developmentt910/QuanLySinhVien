@@ -1,4 +1,4 @@
-﻿namespace StudentCourseManagement.Infrastructure.Repositories
+﻿namespace StudentCourseManagement.Infrastructure.Repositories.AuthAdmin
 {
     public sealed class RosterReader : IRosterReader
     {
