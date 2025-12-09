@@ -1,17 +1,6 @@
 ﻿using iTextSharp.text;
 using iTextSharp.text.pdf;
 using StudentCourseManagement.Applications.Services;
-using System.IO;
-using System.Windows.Forms;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using StudentCourseManagement.Presentation.Forms.Class;
 using StudentCourseManagement.Presentation.Forms.Help;
 using StudentCourseManagement.Presentation.Forms.Schedule;
@@ -26,6 +15,7 @@ namespace StudentCourseManagement.Presentation.Forms.Admin
         private readonly AdminService _userService;
         private Roster _currentUser;
         private Guid _currentUserId;
+        private FacultyService facultyService;
 
         public FrmAdminDashboard(AdminService userService, Guid userId)
         {
@@ -135,7 +125,6 @@ namespace StudentCourseManagement.Presentation.Forms.Admin
                 _currentUser.Phone164 = txtPhone.Text.Trim();
                 _currentUser.EmailSchool = txtEmail.Text.Trim();
 
-                // ====== FIX GDI+ khi LƯU ======
                 if (pictureBoxProfile.Image != null)
                 {
                     using Bitmap bmp = new Bitmap(pictureBoxProfile.Image);
@@ -317,5 +306,14 @@ namespace StudentCourseManagement.Presentation.Forms.Admin
             FrmConductEvaluation frm = new FrmConductEvaluation();
             frm.ShowDialog();
         }
+
+        private void khoaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var facultyService = ServicesFactory.CreateFacultyService();
+
+            FrmFaculty frm = new FrmFaculty(facultyService);
+            frm.ShowDialog();
+        }
+
     }
 }

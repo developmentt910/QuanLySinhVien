@@ -349,7 +349,7 @@ namespace StudentCourseManagement.Presentation.Forms.Manage
             // 
             // FrmSemesterManagement
             // 
-            ClientSize = new Size(842, 501);
+            ClientSize = new Size(867, 506);
             Controls.Add(groupBox1);
             Controls.Add(button4);
             Controls.Add(button3);

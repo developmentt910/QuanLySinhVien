@@ -7,10 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using StudentCourseManagement.Applications.Faculty;
 using StudentCourseManagement.Applications.MajorApp;
 using StudentCourseManagement.Applications.SpecializationApp;
-using StudentCourseManagement.Presentation.WinForms.Bootstrap;
 
 namespace StudentCourseManagement.Presentation.Forms.Manage
 {

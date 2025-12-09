@@ -29,9 +29,9 @@ private readonly IMajorWriter _majorWriter;
         return Result<Guid>.Fail("Tên ngành không ???c ?? tr?ng");
 
             // Check if faculty exists
-   var faculty = await _facultyReader.FindByIdAsync(facultyId, ct);
-        if (faculty is null)
-    return Result<Guid>.Fail("Khoa không t?n t?i");
+   //var faculty = await _facultyReader.FindByIdAsync(facultyId, ct);
+   //     if (faculty is null)
+   // return Result<Guid>.Fail("Khoa không ton tai");
 
        // Check if major name already exists for this faculty
    var exists = await _majorReader.MajorNameExistsAsync(majorName, facultyId, ct);
@@ -65,9 +65,9 @@ private readonly IMajorWriter _majorWriter;
           return Result.Fail("Ngành không t?n t?i");
 
     // Check if faculty exists
-       var faculty = await _facultyReader.FindByIdAsync(facultyId, ct);
-   if (faculty is null)
-  return Result.Fail("Khoa không t?n t?i");
+  //     var faculty = await _facultyReader.FindByIdAsync(facultyId, ct);
+  // if (faculty is null)
+  //return Result.Fail("Khoa không t?n t?i");
 
             // Check if major name already exists for this faculty (excluding current id)
             var exists = await _majorReader.MajorNameExistsExcludingIdAsync(majorName, facultyId, id, ct);
