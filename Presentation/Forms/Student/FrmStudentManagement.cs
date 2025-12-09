@@ -158,10 +158,14 @@ namespace StudentCourseManagement.Presentation.Forms.Student
         {
             try
             {
+                // ✅ CHẶN NẾU CHƯA ĐIỀN ĐỦ
+                if (!IsValidStudentInput())
+                    return;
+
                 var dto = GetDtoFromForm();
                 _service.AddStudent(dto);
 
-                LoadStudents();     // ✅ LOAD LẠI NGAY
+                LoadStudents();
                 ClearForm();
 
                 MessageBox.Show("✅ Thêm sinh viên thành công");
@@ -171,6 +175,7 @@ namespace StudentCourseManagement.Presentation.Forms.Student
                 MessageBox.Show("❌ Lỗi thêm: " + ex.Message);
             }
         }
+
 
 
         // =========================
@@ -299,7 +304,7 @@ namespace StudentCourseManagement.Presentation.Forms.Student
             if (sv == null)
             {
                 MessageBox.Show("Không tìm thấy!");
-                ClearStudentImage();
+                ClearStudentImage();   // ✅ Bắt buộc clear khi không có
                 return;
             }
 
@@ -312,24 +317,27 @@ namespace StudentCourseManagement.Presentation.Forms.Student
             cmbGender.Text = sv.Gender;
             txtPhone.Text = sv.Phone;
             txtCCCD.Text = sv.CCCD;
-            //txtEmail.Text = sv.Email;
             txtYear.Text = sv.Year;
             txtAddress.Text = sv.Address;
             cmbStatus.Text = sv.Status;
+
             _oldStudentCode = sv.StudentId;
 
+            // ✅✅✅ PHẦN QUAN TRỌNG NHẤT – LOAD ẢNH
             if (sv.ProfileImage != null && sv.ProfileImage.Length > 0)
             {
                 using var ms = new MemoryStream(sv.ProfileImage);
                 picStudent.Image?.Dispose();
                 picStudent.Image = Image.FromStream(ms);
-                _selectedImageBytes = sv.ProfileImage;
+
+                _selectedImageBytes = sv.ProfileImage; // ✅ BẮT BUỘC GÁN LẠI
             }
             else
             {
-                ClearStudentImage();  // ✅ CLEAR ẢNH KHI SV KHÔNG CÓ ẢNH
+                ClearStudentImage();
             }
         }
+
 
         // =========================
         // DTO TỪ FORM
@@ -568,6 +576,98 @@ namespace StudentCourseManagement.Presentation.Forms.Student
             }
 
             return true;
+        }
+
+        private bool IsValidStudentInput()
+        {
+            if (string.IsNullOrWhiteSpace(txtStudentId.Text))
+            {
+                MessageBox.Show("Vui lòng nhập Mã sinh viên!");
+                txtStudentId.Focus();
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(txtFullName.Text))
+            {
+                MessageBox.Show("Vui lòng nhập Họ và tên!");
+                txtFullName.Focus();
+                return false;
+            }
+
+            if (cmbFacultySql.SelectedIndex == -1)
+            {
+                MessageBox.Show("Vui lòng chọn Khoa!");
+                return false;
+            }
+
+            if (cmbMajorSql.SelectedIndex == -1)
+            {
+                MessageBox.Show("Vui lòng chọn Ngành!");
+                return false;
+            }
+
+            if (cmbSpecializationSql.SelectedIndex == -1)
+            {
+                MessageBox.Show("Vui lòng chọn Chuyên ngành!");
+                return false;
+            }
+
+            if (cmbClassSql.SelectedIndex == -1)
+            {
+                MessageBox.Show("Vui lòng chọn Lớp!");
+                return false;
+            }
+
+            if (cmbGender.SelectedIndex == -1)
+            {
+                MessageBox.Show("Vui lòng chọn Giới tính!");
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(txtPhone.Text))
+            {
+                MessageBox.Show("Vui lòng nhập Số điện thoại!");
+                txtPhone.Focus();
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(txtCCCD.Text))
+            {
+                MessageBox.Show("Vui lòng nhập CCCD!");
+                txtCCCD.Focus();
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(txtYear.Text))
+            {
+                MessageBox.Show("Vui lòng nhập Năm học!");
+                txtYear.Focus();
+                return false;
+            }
+
+            // ✅ BỔ SUNG: MẬT KHẨU
+            if (string.IsNullOrWhiteSpace(txtPassword.Text))
+            {
+                MessageBox.Show("Vui lòng nhập Mật khẩu!");
+                txtPassword.Focus();
+                return false;
+            }
+
+            // ✅ BỔ SUNG: ĐỊA CHỈ
+            if (string.IsNullOrWhiteSpace(txtAddress.Text))
+            {
+                MessageBox.Show("Vui lòng nhập Địa chỉ!");
+                txtAddress.Focus();
+                return false;
+            }
+
+            if (cmbStatus.SelectedIndex == -1)
+            {
+                MessageBox.Show("Vui lòng chọn Trạng thái!");
+                return false;
+            }
+
+            return true; // ✅ ĐẦY ĐỦ → CHO PHÉP THÊM
         }
 
 

@@ -437,6 +437,40 @@ AND StudentCode <> @oldCode";
             int count = (int)cmd.ExecuteScalar();
             return count > 0;
         }
+        // ✅ KIỂM TRA CCCD CÓ TỒN TẠI (DÙNG KHI ADD)
+        public bool IsCccdExists(string cccd)
+        {
+            using var conn = _factory.Create();
+            conn.Open();
+
+            var sql = @"SELECT COUNT(*) FROM dbo.Users WHERE CCCD = @cccd";
+
+            using var cmd = new SqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("@cccd", cccd);
+
+            int count = (int)cmd.ExecuteScalar();
+            return count > 0;
+        }
+
+        // ✅ KIỂM TRA CCCD CÓ TỒN TẠI (DÙNG KHI UPDATE)
+        public bool IsCccdExistsForUpdate(string newCccd, string oldStudentCode)
+        {
+            using var conn = _factory.Create();
+            conn.Open();
+
+            var sql = @"
+SELECT COUNT(*)
+FROM dbo.Users
+WHERE CCCD = @cccd
+AND StudentCode <> @oldCode";
+
+            using var cmd = new SqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("@cccd", newCccd);
+            cmd.Parameters.AddWithValue("@oldCode", oldStudentCode);
+
+            int count = (int)cmd.ExecuteScalar();
+            return count > 0;
+        }
 
 
     }

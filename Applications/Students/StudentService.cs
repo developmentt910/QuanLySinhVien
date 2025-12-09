@@ -68,27 +68,36 @@ namespace StudentCourseManagement.Applications.Students
                 Specialization = s.Specialization,
                 ClassName = s.ClassName,
 
-                Gender = s.Gender,
+                ClassId = s.ClassId,                     // ✅ BỔ SUNG
+                MajorId = s.MajorId,                     // ✅ BỔ SUNG
+                SpecializationId = s.SpecializationId,   // ✅ BỔ SUNG
 
+                Gender = s.Gender,
                 Phone = s.Phone,
                 CCCD = s.CCCD,
-                //Email = s.Email,
                 Address = s.Address,
 
                 Status = s.Status,
                 Year = s.Year,
 
-                Password = s.PasswordHash
+                Password = s.PasswordHash,
+
+                ProfileImage = s.ProfileImage            // ✅✅✅ QUAN TRỌNG NHẤT
             };
         }
 
+
         public bool AddStudent(StudentDto dto)
         {
-            // ✅ CHẶN TRÙNG MÃ SINH VIÊN
-            if ((_repository as StudentRepository)!.IsStudentCodeExists(dto.StudentId))
-            {
-                throw new Exception("Mã sinh viên đã tồn tại, không thể thêm!");
-            }
+            var repo = (_repository as StudentRepository)!;
+
+            // ✅ CHẶN TRÙNG MÃ SV
+            if (repo.IsStudentCodeExists(dto.StudentId))
+                throw new Exception("Mã sinh viên đã tồn tại!");
+
+            // ✅✅✅ CHẶN TRÙNG CCCD
+            if (repo.IsCccdExists(dto.CCCD))
+                throw new Exception("CCCD đã tồn tại, không thể thêm!");
 
             var entity = MapToEntity(dto);
             _repository.Add(entity);
@@ -96,17 +105,24 @@ namespace StudentCourseManagement.Applications.Students
         }
 
 
+
         public bool UpdateStudent(StudentDto dto, string oldCode)
         {
-            if (_repository.IsStudentCodeExistsForUpdate(dto.StudentId, oldCode))
-            {
-                throw new Exception("Mã sinh viên đã tồn tại, không thể cập nhật!");
-            }
+            var repo = (_repository as StudentRepository)!;
+
+            // ✅ CHẶN TRÙNG MÃ SV
+            if (repo.IsStudentCodeExistsForUpdate(dto.StudentId, oldCode))
+                throw new Exception("Mã sinh viên đã tồn tại!");
+
+            // ✅✅✅ CHẶN TRÙNG CCCD (TRỪ CHÍNH NÓ)
+            if (repo.IsCccdExistsForUpdate(dto.CCCD, oldCode))
+                throw new Exception("CCCD đã tồn tại, không thể cập nhật!");
 
             var entity = MapToEntity(dto);
             _repository.Update(entity, oldCode);
             return true;
         }
+
 
 
         public bool DeleteStudent(string studentId)
@@ -121,7 +137,6 @@ namespace StudentCourseManagement.Applications.Students
             {
                 StudentId = dto.StudentId,
                 FullName = dto.FullName,
-
                 Faculty = dto.Faculty,
                 Major = dto.Major,
                 Specialization = dto.Specialization,
