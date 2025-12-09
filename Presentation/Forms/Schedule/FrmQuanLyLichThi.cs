@@ -31,6 +31,7 @@ namespace StudentCourseManagement.Presentation.Forms.Schedule
         {
             dtpExamDateTime.Format = DateTimePickerFormat.Custom;
             dtpExamDateTime.CustomFormat = "dd/MM/yyyy HH:mm";
+            dtpExamDateTime.ShowUpDown = true;
 
             LoadData();
             LoadKhoaData();
@@ -363,6 +364,14 @@ namespace StudentCourseManagement.Presentation.Forms.Schedule
             int thoiGian = (int)numThoiGianLamBai.Value;
             string hinhThuc = cboHinhThucThi.SelectedItem.ToString()!;
             string phongThi = txtPhongThi.Text.Trim();
+            bool isConflict = _examScheduleService.IsRoomConflict(isEditing ? selectedExam_ID : null,phongThi,examDate,thoiGian);
+
+            if (isConflict)
+            {
+                MessageBox.Show("Phòng thi đã có ca thi!", "Lỗi trùng phòng");
+                return;
+            }
+
 
             if (isAdding)
             {

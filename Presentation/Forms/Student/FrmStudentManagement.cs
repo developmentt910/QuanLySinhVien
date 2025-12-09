@@ -27,7 +27,7 @@ namespace StudentCourseManagement.Presentation.Forms.Student
             cmbSpecializationSql.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbMajorSql.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbFacultySql.DropDownStyle = ComboBoxStyle.DropDownList;
-            
+
 
             // Load config SQL
             var config = new ConfigurationBuilder()
@@ -41,7 +41,7 @@ namespace StudentCourseManagement.Presentation.Forms.Student
 
             SetupCombobox();
             LoadStudents();
-            
+
         }
 
         // =========================
@@ -141,7 +141,7 @@ namespace StudentCourseManagement.Presentation.Forms.Student
                 dgvStudents.Columns["Address"].HeaderText = "Địa chỉ";
                 dgvStudents.Columns["Status"].HeaderText = "Trạng thái";
                 dgvStudents.Columns["Year"].HeaderText = "Năm học";
-                dgvStudents.Columns["Password"].HeaderText = "Mật khẩu"; 
+                dgvStudents.Columns["Password"].HeaderText = "Mật khẩu";
 
                 dgvStudents.ClearSelection();
             }
@@ -400,7 +400,7 @@ namespace StudentCourseManagement.Presentation.Forms.Student
             txtPassword.Clear();
             txtPhone.Clear();
             txtCCCD.Clear();
-            
+
             txtYear.Clear();
             txtAddress.Clear();
 
@@ -577,6 +577,7 @@ namespace StudentCourseManagement.Presentation.Forms.Student
 
             return true;
         }
+
 
         private bool IsValidStudentInput()
         {

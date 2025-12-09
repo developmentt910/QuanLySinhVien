@@ -20,6 +20,7 @@ namespace StudentCourseManagement.Presentation.Forms.Schedule
             InitializeComponent();
             _scheduleService = ServicesFactory.CreateScheduleService();
         }
+
         private void FrmQuanLyThoiKhoaBieu_Load(object sender, EventArgs e)
         {
             dtpLessonDate.Format = DateTimePickerFormat.Short;
@@ -32,8 +33,6 @@ namespace StudentCourseManagement.Presentation.Forms.Schedule
             groupBoxAdd.Enabled = false;
         }
 
-        #region Load ComboBox Data
-
         private void LoadKhoaData()
         {
             cboKhoa.DataSource = _scheduleService.GetFaculties();
@@ -41,13 +40,12 @@ namespace StudentCourseManagement.Presentation.Forms.Schedule
             cboKhoa.ValueMember = "Id";
             cboKhoa.SelectedIndex = -1;
         }
+
         private void cboKhoa_SelectedIndexChanged(object sender, EventArgs e)
         {
             string? facultyId = null;
             if (cboKhoa.SelectedItem is DataRowView drv)
-            {
                 facultyId = drv["Id"]?.ToString();
-            }
 
             if (!string.IsNullOrEmpty(facultyId))
             {
@@ -64,13 +62,12 @@ namespace StudentCourseManagement.Presentation.Forms.Schedule
                 cboLopHoc.Enabled = false;
             }
         }
+
         private void cboNganh_SelectedIndexChanged(object sender, EventArgs e)
         {
             string? majorIdStr = null;
             if (cboNganh.SelectedItem is DataRowView drv)
-            {
                 majorIdStr = drv["Id"]?.ToString();
-            }
 
             if (!string.IsNullOrEmpty(majorIdStr))
             {
@@ -83,7 +80,6 @@ namespace StudentCourseManagement.Presentation.Forms.Schedule
             }
             else
             {
-                currentMajorId = Guid.Empty;
                 cboChuyenNganh.Enabled = false;
                 cboLopHoc.Enabled = false;
             }
@@ -91,33 +87,15 @@ namespace StudentCourseManagement.Presentation.Forms.Schedule
 
         private void cboChuyenNganh_SelectedIndexChanged(object sender, EventArgs e)
         {
-            string? specializationIdStr = null;
-            if (cboChuyenNganh.SelectedItem is DataRowView drv)
-            {
-                specializationIdStr = drv["Id"]?.ToString();
-            }
+            if (cboChuyenNganh.SelectedItem is not DataRowView drv) return;
 
-            if (!string.IsNullOrEmpty(specializationIdStr))
-            {
-                currentSpecializationId = new Guid(specializationIdStr);
-                cboLopHoc.DataSource = _scheduleService.GetClassesBySpecialization(specializationIdStr);
-                cboLopHoc.DisplayMember = "ClassName";
-                cboLopHoc.ValueMember = "Id";
-                cboLopHoc.SelectedIndex = -1;
-                cboLopHoc.Enabled = true;
+            currentSpecializationId = new Guid(drv["Id"].ToString());
 
-                // Tải môn học (nếu đã tải TKB)
-                if (!string.IsNullOrEmpty(currentClassId) && !string.IsNullOrEmpty(currentSemesterId))
-                {
-                    LoadAvailableSubjects();
-                }
-            }
-            else
-            {
-                currentSpecializationId = Guid.Empty;
-                cboLopHoc.Enabled = false;
-                cboMonHoc.DataSource = null; // Xóa môn học
-            }
+            cboLopHoc.DataSource = _scheduleService.GetClassesBySpecialization(currentSpecializationId.ToString());
+            cboLopHoc.DisplayMember = "ClassName";
+            cboLopHoc.ValueMember = "Id";
+            cboLopHoc.SelectedIndex = -1;
+            cboLopHoc.Enabled = true;
         }
 
         private void LoadKyHocData()
@@ -128,49 +106,20 @@ namespace StudentCourseManagement.Presentation.Forms.Schedule
             cboKyHoc.SelectedIndex = -1;
         }
 
-        #endregion
-
-        private void ResetInputFields()
-        {
-            cboMonHoc.SelectedIndex = -1;
-            txtGiaoVien.Clear();
-            txtPhongHoc.Clear();
-            dtpLessonDate.Value = DateTime.Now;
-            numStartPeriod.Value = 1;
-            numEndPeriod.Value = 1;
-        }
-
-        private void btnReload_Click(object sender, EventArgs e)
-        {
-            ResetInputFields();
-        }
-
         private void btnLoad_Click(object sender, EventArgs e)
         {
-            string? classId = null;
-            if (cboLopHoc.SelectedItem is DataRowView drvClass)
+            if (cboLopHoc.SelectedItem == null || cboKyHoc.SelectedItem == null)
             {
-                classId = drvClass["Id"]?.ToString();
-            }
-
-            string? semesterId = null;
-            if (cboKyHoc.SelectedItem is DataRowView drvSemester)
-            {
-                semesterId = drvSemester["Id"]?.ToString();
-            }
-
-            if (string.IsNullOrEmpty(classId) || string.IsNullOrEmpty(semesterId))
-            {
-                MessageBox.Show("Vui lòng chọn Lớp học và Học kỳ.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Vui lòng chọn Lớp học và Học kỳ!");
                 return;
             }
-            currentClassId = classId;
-            currentSemesterId = semesterId;
+
+            currentClassId = ((DataRowView)cboLopHoc.SelectedItem)["Id"].ToString();
+            currentSemesterId = ((DataRowView)cboKyHoc.SelectedItem)["Id"].ToString();
 
             LoadScheduleData(currentClassId, currentSemesterId);
-            LoadAvailableSubjects();
+            LoadAllSubjects();
             groupBoxAdd.Enabled = true;
-            ResetInputFields();
         }
 
         private void LoadScheduleData(string classId, string semesterId)
@@ -181,37 +130,22 @@ namespace StudentCourseManagement.Presentation.Forms.Schedule
             {
                 dgvSchedules.Columns["Id"].Visible = false;
                 dgvSchedules.Columns["SubjectId"].Visible = false;
+
                 dgvSchedules.Columns["ClassName"].HeaderText = "Lớp";
-                dgvSchedules.Columns["ClassName"].DisplayIndex = 0;
-                dgvSchedules.Columns["SubjectCode"].HeaderText = "Mã Môn Học";
-                dgvSchedules.Columns["SubjectName"].HeaderText = "Tên Môn Học";
+                dgvSchedules.Columns["SubjectCode"].HeaderText = "Mã môn";
+                dgvSchedules.Columns["SubjectName"].HeaderText = "Tên môn học";
                 dgvSchedules.Columns["TeacherName"].HeaderText = "Giáo viên";
-                dgvSchedules.Columns["Room"].HeaderText = "Phòng";
-                dgvSchedules.Columns["Credit"].HeaderText = "Tín chỉ";
-                dgvSchedules.Columns["LectureHours"].HeaderText = "Giờ LT";
-                dgvSchedules.Columns["PracticeHours"].HeaderText = "Giờ TH";
+                dgvSchedules.Columns["Room"].HeaderText = "Phòng học";
                 dgvSchedules.Columns["Semester"].HeaderText = "Học kỳ";
                 dgvSchedules.Columns["LessonDate"].HeaderText = "Ngày học";
                 dgvSchedules.Columns["StartPeriod"].HeaderText = "Tiết BĐ";
                 dgvSchedules.Columns["EndPeriod"].HeaderText = "Tiết KT";
             }
         }
-        private void LoadAvailableSubjects()
-        {
-            // Kiểm tra xem đã có đủ thông tin để lọc chưa
-            if (string.IsNullOrEmpty(currentClassId) ||
-                string.IsNullOrEmpty(currentSemesterId) ||
-                currentMajorId == Guid.Empty ||
-                currentSpecializationId == Guid.Empty)
-            {
-                cboMonHoc.DataSource = null;
-                return;
-            }
 
-            // Gọi hàm mới với đầy đủ tham số
-            dtAvailableSubjects = _scheduleService.GetAvailableSubjects(
-                currentClassId,
-                currentSemesterId,
+        private void LoadAllSubjects()
+        {
+            dtAvailableSubjects = _scheduleService.GetAllSubjectDetailsBySpecialization(
                 currentMajorId,
                 currentSpecializationId);
 
@@ -221,183 +155,156 @@ namespace StudentCourseManagement.Presentation.Forms.Schedule
             cboMonHoc.SelectedIndex = -1;
         }
 
+
+        private void btnReload_Click(object sender, EventArgs e)
+        {
+            cboMonHoc.SelectedIndex = -1;
+            txtGiaoVien.Clear();
+            txtPhongHoc.Clear();
+            numStartPeriod.Value = 1;
+            numEndPeriod.Value = 1;
+            dtpLessonDate.Value = DateTime.Today;
+        }
+
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            string? subjectId = null;
-            if (cboMonHoc.SelectedItem is DataRowView drvSubject)
+            if (cboMonHoc.SelectedItem == null)
             {
-                subjectId = drvSubject["Id"]?.ToString();
-            }
-
-            if (string.IsNullOrEmpty(subjectId))
-            {
-                MessageBox.Show("Vui lòng chọn một môn học để thêm.", "Thông báo");
+                MessageBox.Show("Vui lòng chọn môn học!");
                 return;
             }
 
-            if (numEndPeriod.Value < numStartPeriod.Value)
-            {
-                MessageBox.Show("Tiết kết thúc không thể sớm hơn tiết bắt đầu.", "Lỗi");
-                return;
-            }
-
+            string subjectId = ((DataRowView)cboMonHoc.SelectedItem)["Id"].ToString();
             string teacherName = txtGiaoVien.Text.Trim();
             string room = txtPhongHoc.Text.Trim();
-            DateTime lessonDate = dtpLessonDate.Value;
+            DateTime lessonDate = dtpLessonDate.Value.Date;
             int startPeriod = (int)numStartPeriod.Value;
             int endPeriod = (int)numEndPeriod.Value;
 
             foreach (DataGridViewRow row in dgvSchedules.Rows)
             {
-                string gridSubjectId = row.Cells["SubjectId"].Value?.ToString() ?? "";
-                DateTime gridLessonDate = Convert.ToDateTime(row.Cells["LessonDate"].Value);
-                int gridStartPeriod = Convert.ToInt32(row.Cells["StartPeriod"].Value);
-                int gridEndPeriod = Convert.ToInt32(row.Cells["EndPeriod"].Value);
+                if (row.IsNewRow) continue;
 
-                if (gridSubjectId == subjectId && gridLessonDate.Date == lessonDate.Date)
+                DateTime gridDate = Convert.ToDateTime(row.Cells["LessonDate"].Value).Date;
+                int gridStart = Convert.ToInt32(row.Cells["StartPeriod"].Value);
+                int gridEnd = Convert.ToInt32(row.Cells["EndPeriod"].Value);
+
+                bool trungNgay = gridDate == lessonDate;
+                bool trungGiaoNhau = startPeriod <= gridEnd && endPeriod >= gridStart;
+                bool trungTrungCap = startPeriod == gridStart && endPeriod == gridEnd;
+
+                if (trungNgay && (trungGiaoNhau || trungTrungCap))
                 {
-                    if (startPeriod <= gridEndPeriod && endPeriod >= gridStartPeriod)
-                    {
-                        MessageBox.Show(
-                            $"Lỗi: Môn học này đã bị trùng lịch (Tiết {gridStartPeriod}-{gridEndPeriod}) vào ngày {gridLessonDate.ToShortDateString()}.",
-                            "Trùng lịch học",
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Error);
-                        return;
-                    }
+                    MessageBox.Show("Khung tiết này trong ngày đã tồn tại!");
+                    return;
                 }
             }
 
-            _scheduleService.AddSchedule(currentClassId, subjectId, teacherName, room,
-                                         currentSemesterId, lessonDate, startPeriod, endPeriod);
+            if (_scheduleService.IsTeacherBusy(teacherName, lessonDate, startPeriod, endPeriod))
+            {
+                MessageBox.Show("Giáo viên đã có lớp khác trùng tiết trong thời gian này!");
+                return;
+            }
+
+            _scheduleService.AddSchedule(
+                currentClassId, subjectId, teacherName, room,
+                currentSemesterId, lessonDate, startPeriod, endPeriod);
 
             LoadScheduleData(currentClassId, currentSemesterId);
-            LoadAvailableSubjects();
-        }
+            LoadAllSubjects();
 
-        private void btnRemove_Click(object sender, EventArgs e)
-        {
-            if (dgvSchedules.SelectedRows.Count == 0)
-            {
-                MessageBox.Show("Vui lòng chọn một môn học từ lưới để xóa.", "Thông báo");
-                return;
-            }
-
-            var cellValue = dgvSchedules.SelectedRows[0].Cells["Id"].Value;
-            string? scheduleId = cellValue?.ToString();
-
-            if (string.IsNullOrEmpty(scheduleId))
-            {
-                MessageBox.Show("Không thể lấy ID của lịch học. Dữ liệu có thể bị lỗi.", "Lỗi");
-                return;
-            }
-
-            if (MessageBox.Show("Bạn có chắc chắn muốn xóa môn học này khỏi thời khóa biểu không?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
-            {
-                return;
-            }
-
-            _scheduleService.RemoveSchedule(scheduleId);
-
-            LoadScheduleData(currentClassId, currentSemesterId);
-            LoadAvailableSubjects();
-        }
-
-        private void dgvSchedules_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex >= 0)
-            {
-                DataGridViewRow row = dgvSchedules.Rows[e.RowIndex];
-                string subjectId = row.Cells["SubjectId"].Value?.ToString();
-                string subjectName = row.Cells["SubjectName"].Value?.ToString();
-                if (!string.IsNullOrEmpty(subjectId) && dtAvailableSubjects != null)
-                {
-                    DataRow[] foundRows = dtAvailableSubjects.Select($"Id = '{subjectId}'");
-
-                    if (foundRows.Length == 0)
-                    {
-                        DataRow newRow = dtAvailableSubjects.NewRow();
-                        newRow["Id"] = subjectId;
-                        newRow["SubjectName"] = subjectName;
-                        dtAvailableSubjects.Rows.InsertAt(newRow, 0);
-                    }
-                    cboMonHoc.SelectedValue = subjectId;
-                }
-                txtGiaoVien.Text = row.Cells["TeacherName"].Value?.ToString();
-                txtPhongHoc.Text = row.Cells["Room"].Value?.ToString();
-                if (row.Cells["LessonDate"].Value != DBNull.Value && row.Cells["LessonDate"].Value != null)
-                {
-                    dtpLessonDate.Value = Convert.ToDateTime(row.Cells["LessonDate"].Value);
-                }
-                else
-                {
-                    dtpLessonDate.Value = DateTime.Now;
-                }
-                if (row.Cells["StartPeriod"].Value != DBNull.Value)
-                    numStartPeriod.Value = Convert.ToDecimal(row.Cells["StartPeriod"].Value);
-                else
-                    numStartPeriod.Value = 1;
-
-                if (row.Cells["EndPeriod"].Value != DBNull.Value)
-                    numEndPeriod.Value = Convert.ToDecimal(row.Cells["EndPeriod"].Value);
-                else
-                    numEndPeriod.Value = 1;
-            }
+            MessageBox.Show("✅ Thêm lịch học thành công!");
         }
 
         private void btnSua_Click(object sender, EventArgs e)
         {
             if (dgvSchedules.SelectedRows.Count == 0)
             {
-                MessageBox.Show("Vui lòng chọn một lịch học trên lưới để sửa.", "Thông báo");
+                MessageBox.Show("Vui lòng chọn lịch học để sửa!");
                 return;
             }
 
-            string? scheduleId = dgvSchedules.SelectedRows[0].Cells["Id"].Value?.ToString();
-            if (string.IsNullOrEmpty(scheduleId))
-            {
-                MessageBox.Show("Không thể lấy ID của lịch học. Dữ liệu lỗi.", "Lỗi");
-                return;
-            }
-
-            string? subjectId = null;
-            if (cboMonHoc.SelectedItem is DataRowView drvSubject)
-            {
-                subjectId = drvSubject["Id"]?.ToString();
-            }
-
-            if (string.IsNullOrEmpty(subjectId))
-            {
-                MessageBox.Show("Vui lòng chọn một môn học (mới hoặc cũ) từ ComboBox.", "Lỗi");
-                return;
-            }
-
-            if (numEndPeriod.Value < numStartPeriod.Value)
-            {
-                MessageBox.Show("Tiết kết thúc không thể sớm hơn tiết bắt đầu.", "Lỗi");
-                return;
-            }
-
+            string scheduleId = dgvSchedules.SelectedRows[0].Cells["Id"].Value.ToString();
+            string subjectId = ((DataRowView)cboMonHoc.SelectedItem)["Id"].ToString();
             string teacherName = txtGiaoVien.Text.Trim();
             string room = txtPhongHoc.Text.Trim();
-            DateTime lessonDate = dtpLessonDate.Value;
+            DateTime lessonDate = dtpLessonDate.Value.Date;
             int startPeriod = (int)numStartPeriod.Value;
             int endPeriod = (int)numEndPeriod.Value;
 
-            try
+            foreach (DataGridViewRow row in dgvSchedules.Rows)
             {
-                _scheduleService.UpdateSchedule(scheduleId, subjectId, teacherName, room,
-                                                lessonDate, startPeriod, endPeriod);
+                if (row.IsNewRow) continue;
 
-                LoadScheduleData(currentClassId, currentSemesterId);
-                LoadAvailableSubjects();
-                MessageBox.Show("Cập nhật lịch học thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                ResetInputFields();
+                string gridScheduleId = row.Cells["Id"].Value.ToString();
+                if (gridScheduleId == scheduleId) continue;
+
+                DateTime gridDate = Convert.ToDateTime(row.Cells["LessonDate"].Value).Date;
+                int gridStart = Convert.ToInt32(row.Cells["StartPeriod"].Value);
+                int gridEnd = Convert.ToInt32(row.Cells["EndPeriod"].Value);
+
+                bool trungNgay = gridDate == lessonDate;
+                bool trungGiaoNhau = startPeriod <= gridEnd && endPeriod >= gridStart;
+                bool trungTrungCap = startPeriod == gridStart && endPeriod == gridEnd;
+
+                if (trungNgay && (trungGiaoNhau || trungTrungCap))
+                {
+                    MessageBox.Show("Khung tiết sửa bị trùng lịch!");
+                    return;
+                }
             }
-            catch (Exception ex)
+
+            if (_scheduleService.IsTeacherBusy(teacherName, lessonDate, startPeriod, endPeriod, scheduleId))
             {
-                MessageBox.Show("Lỗi khi cập nhật: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Giáo viên đã có lớp khác trùng tiết trong thời gian này!");
+                return;
             }
+
+            _scheduleService.UpdateSchedule(
+                scheduleId, subjectId, teacherName, room,
+                lessonDate, startPeriod, endPeriod);
+
+            LoadScheduleData(currentClassId, currentSemesterId);
+            LoadAllSubjects();
+
+            MessageBox.Show("✅ Cập nhật lịch học thành công!");
         }
+
+
+        private void btnRemove_Click(object sender, EventArgs e)
+        {
+            if (dgvSchedules.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Vui lòng chọn lịch học để xóa!");
+                return;
+            }
+
+            if (MessageBox.Show("Bạn có chắc chắn muốn xóa không?",
+                "Xác nhận", MessageBoxButtons.YesNo) == DialogResult.No)
+                return;
+
+            string scheduleId = dgvSchedules.SelectedRows[0].Cells["Id"].Value.ToString();
+
+            _scheduleService.RemoveSchedule(scheduleId);
+
+            LoadScheduleData(currentClassId, currentSemesterId);
+            LoadAllSubjects();
+
+            MessageBox.Show("✅ Xóa lịch học thành công!");
+        }
+
+        private void dgvSchedules_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
+
+            DataGridViewRow row = dgvSchedules.Rows[e.RowIndex];
+
+            txtGiaoVien.Text = row.Cells["TeacherName"].Value.ToString();
+            txtPhongHoc.Text = row.Cells["Room"].Value.ToString();
+            dtpLessonDate.Value = Convert.ToDateTime(row.Cells["LessonDate"].Value);
+            numStartPeriod.Value = Convert.ToDecimal(row.Cells["StartPeriod"].Value);
+            numEndPeriod.Value = Convert.ToDecimal(row.Cells["EndPeriod"].Value);
+        }
+
     }
 }

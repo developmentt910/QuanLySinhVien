@@ -1,5 +1,4 @@
 
-
 namespace StudentCourseManagement
 {
     internal static class Program

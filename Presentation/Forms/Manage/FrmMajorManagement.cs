@@ -327,8 +327,8 @@ _selectedFaculty!.Id);
             this.Controls.Add(txtMajorName);
      yPos += 50;
 
-   btnOK = new Button { Text = "Lưu", Left = controlLeft, Top = yPos, Width = 90, DialogResult = DialogResult.OK };
-     btnCancel = new Button { Text = "Hủy", Left = controlLeft + 100, Top = yPos, Width = 90, DialogResult = DialogResult.Cancel };
+   btnOK = new Button { Text = "Lưu", Left = controlLeft, Top = yPos, Width = 90,Height = 40, DialogResult = DialogResult.OK };
+     btnCancel = new Button { Text = "Hủy", Left = controlLeft + 100, Top = yPos, Width = 90,Height = 40, DialogResult = DialogResult.Cancel };
      btnOK.Click += BtnOK_Click;
 
          this.Controls.Add(btnOK);

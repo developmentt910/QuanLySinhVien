@@ -23,6 +23,9 @@ public sealed class FacultyService
         if (string.IsNullOrWhiteSpace(faculty.FacultyName))
             throw new ArgumentException("Tên khoa không được để trống.");
 
+        if (await _reader.FindByCodeAsync(faculty.FacultyCode, ct) != null)
+            throw new InvalidOperationException("Mã khoa đã tồn tại.");
+
         if (await _reader.FacultyNameExistsAsync(faculty.FacultyName, ct))
             throw new InvalidOperationException("Tên khoa đã tồn tại.");
 

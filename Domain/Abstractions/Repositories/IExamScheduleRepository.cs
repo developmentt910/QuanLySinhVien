@@ -15,5 +15,7 @@ namespace StudentCourseManagement.Domain.Abstractions.Repositories
 
         // Xóa lịch thi
         void RemoveExamSchedule(Guid examId);
+        bool IsRoomConflict(Guid? examId, string room, DateTime examDate, int examDuration);
+
     }
 }

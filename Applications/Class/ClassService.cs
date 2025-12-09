@@ -42,5 +42,10 @@ namespace StudentCourseManagement.Applications.Class
         {
             return _classRepository.GetFilteredClasses(facultyId, majorId, specializationId);
         }
+        public bool CheckClassNameExists(string className, Guid? currentId = null)
+        {
+            return _classRepository.CheckClassNameExists(className, currentId);
+        }
+
     }
 }
